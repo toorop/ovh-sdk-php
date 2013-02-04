@@ -58,11 +58,21 @@ class Vps
      *
      */
 
+    /**
+     * Set domain
+     *
+     * @param string $domain
+     */
     public function setDomain($domain)
     {
         $this->domain = $domain;
     }
 
+    /**
+     * Get domain
+     *
+     * @return null | string domain
+     */
     public function getDomain()
     {
         return $this->domain;
@@ -83,6 +93,8 @@ class Vps
      *
      *  @return object
      *
+     * @todo class 4 response
+     *
      */
     public function  getProperties()
     {
@@ -102,6 +114,7 @@ class Vps
 
 
     /**
+     * @todo err 500
      *  Get monitoring
      *
      * @param string $period "lastday" or "lastmonth" or "lastweek" or "lastyear" or "today"
@@ -110,13 +123,17 @@ class Vps
      */
     public function getMonitoring($period, $type)
     {
+        #throw new NotImplementedYetByOvhException;
         return json_decode(self::getClient()->getMonitoring($this->getDomain(), $period, $type));
     }
 
-    // get use
+    /**
+     * @param $type
+     * @return mixed
+     */
     public function getCurrentMonitoring($type)
     {
-        return self::getClient()->getCurrentMonitoring($this->getDomain(), $type);
+        return json_decode(self::getClient()->getCurrentMonitoring($this->getDomain(), $type));
     }
 
 
@@ -152,6 +169,10 @@ class Vps
         return new Task(self::getClient()->reboot($this->getDomain()));
     }
 
+    /**
+     * @param $password
+     * @throws \Ovh\Common\Exception\NotImplementedYetException
+     */
     public function setRootPassword($password)
     {
         throw new NotImplementedYetException;
@@ -192,7 +213,7 @@ class Vps
     }
 
     /**
-     * @todo : Waiting for OVH
+     * @todo : Waiting for OVH  : 500 ftpbackup option is not orderable
      *
      * @return mixed
      */
@@ -221,7 +242,7 @@ class Vps
      */
     public function orderFtpBackup()
     {
-        throw new NotImplementedYetByOvhException;
+        throw new NotImplementedYetException;
         return self::getClient()->orderFtpBackup($this->getDomain());
     }
 
@@ -230,7 +251,7 @@ class Vps
     /**
      * Return disks ID
      *
-     * @return array
+     * @return array  of disk id
      */
     public function getDisks()
     {
@@ -240,33 +261,29 @@ class Vps
 
     /**
      * Return disk properties
-     * @todo : badsig
      *
      * @param $diskId
      * @return object disk (@todo object disk)
      */
     public function getDiskProperties($diskId)
     {
-        throw new NotImplementedYetException;
        return json_decode(self::getClient()->getDiskProperties($this->getDomain(), $diskId));
     }
 
     /**
-     *
-     * @todo : badsig
+     * Get disk usage
      *
      * @param $diskId
      * @param $type
-     * @return mixed
+     * @return object
      */
     public function getDiskUsage($diskId, $type)
     {
-        throw new NotImplementedYetException;
         return json_decode(self::getClient()->getDiskUsage($this->getDomain(), $diskId, $type));
     }
 
     /**
-     * @todo badsig
+     * @todo HTTP/1.1 500 Internal Server Error
      * @param $diskId
      * @param $period
      * @param $type
@@ -274,7 +291,7 @@ class Vps
      */
     public function getDiskMonitoring($diskId, $period, $type)
     {
-        throw new NotImplementedYetException;
+        throw new NotImplementedYetByOvhException;
         return json_decode(self::getClient()->getDiskMonitoring($this->getDomain(), $diskId, $period, $type));
     }
 

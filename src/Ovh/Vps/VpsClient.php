@@ -75,20 +75,20 @@ class vpsClient extends AbstractClient
     }
 
 
+
+
+
+
     /**
-     *
-     *
      * @param string $domain
      * @param string $period "lastday" or "lastmonth" or "lastweek" or "lastyear" or "today"
      * @param string $type "cpu:max" or "cpu:used" or "mem:max" or "mem:used" or "net:rx" or "net:tx"
-     * @return mixed
+     * @return json encoded propertui
      * @throws \Ovh\Common\Exception\BadMethodCallException
-     * @throws \Ovh\Common\Exception\NotImplementedYetException
+     * @throws Exception\VpsException
      */
     public function getMonitoring($domain, $period, $type)
     {
-        throw new NotImplementedYetException();
-        $domain = (string)$domain;
         $period = strtolower($period);
         $type = strtolower($type);
         if (!$domain)
@@ -100,36 +100,34 @@ class vpsClient extends AbstractClient
         try {
             $r = $this->get('vps/' . $domain . '/monitoring?period=' . $period . '&type=' . $type)->send();
         } catch (\Exception $e) {
-            throw new VpsException($e->getMessage(), $e->getCode());
+            throw new VpsException($e->getMessage(), $e->getCode(),$e);
         }
         return $r->getBody();
     }
 
 
     /**
-     * Get current monitoring by type
+     * Get current monitoring
      *
      * @param string $domain
      * @param string $type "cpu:max" or "cpu:used" or "mem:max" or "mem:used" or "net:rx" or "net:tx"
-     * @return mixed
+     * @return string json encoded
+     * @throws \Ovh\Common\Exception\BadMethodCallException
      * @throws Exception\VpsException
-     * @throws \BadMethodCallException
-     * @throws Exception\VpsNotFoundException
      */
     public function getCurrentMonitoring($domain, $type)
     {
-        $domain = (string)$domain;
         $type = strtolower($type);
         if (!$domain)
-            throw new \BadMethodCallException('Parameter $domain is missing.');
+            throw new BadMethodCallException('Parameter $domain is missing.');
         if (!in_array($type, array('cpu:max', 'cpu:used', 'mem:max', 'mem:used', 'net:rx', 'net:tx')))
-            throw new \BadMethodCallException('Parameter $type must be "cpu:max" or "cpu:used" or "mem:max" or "mem:used" or "net:rx" or "net:tx". "' . $type . '" given.');
+            throw new BadMethodCallException('Parameter $type must be "cpu:max" or "cpu:used" or "mem:max" or "mem:used" or "net:rx" or "net:tx". "' . $type . '" given.');
         try {
             $r = $this->get('vps/' . $domain . '/use?type=' . $type)->send();
         } catch (\Exception $e) {
-            throw new VpsException($e->getMessage(), $e->getCode());
+            throw new VpsException($e->getMessage(), $e->getCode(),$e);
         }
-        return $r;
+        return $r->getBody();
     }
 
 
@@ -298,7 +296,6 @@ class vpsClient extends AbstractClient
      */
     public function orderCpanelLicense($domain)
     {
-        throw new NotImplementedYetByOvhException(); // bad reponse ftpbackucp
         $domain = (string)$domain;
         if (!$domain)
             throw new \BadMethodCallException('Parameter $domain is missing.');
@@ -322,7 +319,6 @@ class vpsClient extends AbstractClient
      */
     public function orderPleskLicense($domain, $qty)
     {
-        throw new NotImplementedYetByOvhException(); // Item parameter invalid"
         $domain = (string)$domain;
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
@@ -350,7 +346,6 @@ class vpsClient extends AbstractClient
      */
     public function orderFtpBackup($domain)
     {
-        throw new NotImplementedYetByOvhException(); // Only Cloud model are able to order a snapshot
         $domain = (string)$domain;
         if (!$domain)
             throw new \BadMethodCallException('Parameter $domain is missing.');
@@ -421,7 +416,6 @@ class vpsClient extends AbstractClient
      */
     public function getDiskUsage($domain, $diskId, $type)
     {
-        throw new NotImplementedYetByOvhException();
         $domain = (string)$domain;
         if (!$domain)
             throw new \BadMethodCallException('Parameter $domain is missing.');
@@ -438,12 +432,11 @@ class vpsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new VpsException($e->getMessage(), $e->getCode(), $e);
         }
-        return $r;
+        return $r->getBody();
     }
 
 
     /**
-     * @todo badsig
      * @param string $domain
      * @param int|string $diskId (will be casted ti string)
      * @param string $period
@@ -455,7 +448,6 @@ class vpsClient extends AbstractClient
      */
     public function getDiskMonitoring($domain, $diskId, $period, $type)
     {
-        throw new NotImplementedYetByOvhException();
         $domain = (string)$domain;
         if (!$domain)
             throw new \BadMethodCallException('Parameter $domain is missing.');
@@ -522,7 +514,7 @@ class vpsClient extends AbstractClient
         try {
             $r = $this->get('vps/' . $domain . '/tasks/' . $taskId)->send();
         } catch (\Exception $e) {
-            throw new VpsException($e->getMessage(), $e->getCode());
+            throw new VpsException($e->getMessage(), $e->getCode(),$e);
         }
         return $r->getBody();
     }
