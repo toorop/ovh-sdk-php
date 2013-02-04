@@ -3,6 +3,8 @@ OVH SDK for PHP
 
 PHP SDK to consume OVH web services
 
+**WARNING : This SDK is currently in development, some functions/methods are not (or not correctly) implemented. Use with care.**
+
 
 ## Before Using the SDK
 ### Get OVH credentials
