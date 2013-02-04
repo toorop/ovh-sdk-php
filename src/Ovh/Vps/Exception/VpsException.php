@@ -23,8 +23,9 @@ use Ovh\Common\Exception\InvalidSignatureException;
 
 use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
 use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
+use Ovh\Vps\Exception\TaskDoesNotExistsException;
 
-use Guzzle\Http\Message\Response;     // for debugging only
+use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
 class VpsException extends \RuntimeException
@@ -33,41 +34,43 @@ class VpsException extends \RuntimeException
     {
         #$pe=$this->getPrevious();
         #var_dump(get_class($prev));
-        $request=$prev->getRequest();
+        $request = $prev->getRequest();
         #print $request->getResource();
         #die();
-        $response=$prev->getResponse();
+        $response = $prev->getResponse();
         #var_dump($response->getBody());
 
-        $statusCode=$response->getStatusCode();
-        switch ($statusCode){
+        $statusCode = $response->getStatusCode();
+        switch ($statusCode) {
             case 404 :
                 // Bad Method or Ressource not available
-                if(stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist'))
-                    throw new InvalidResourceException('Ressource '.$request->getMethod().' '.$request->getResource().' does not exist',404);
+                if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist'))
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
 
                 // Snapshot not available - virtualServer::Snapshot' does not exist
-                if(stristr((string)$response->getBody(), "virtualServer::Snapshot' does not exist")) {
-                    throw new VpsSnapshotDoesNotExistsException('There is no snapshot available for VPS '.$this->getDomain($request->getPath()),404);
+                if (stristr((string)$response->getBody(), "virtualServer::Snapshot' does not exist")) {
+                    throw new VpsSnapshotDoesNotExistsException('There is no snapshot available for VPS ' . $this->getDomain($request->getPath()), 404);
                 }
 
-                else throw $prev;
-
+                // Task does not exists
+                if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
+                    $d = explode("/", $request->getPath());
+                    $taskId = $d[5];
+                    throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for VPS ' . $this->getDomain($request->getPath()), 404);
+                } else throw $prev;
 
 
             case 400 :
                 // Bad signature
-                if($response->getReasonPhrase()=="Bad Request - Invalid signature")
-                    throw new InvalidSignatureException('The request signature is not valid.',400);
+                if ($response->getReasonPhrase() == "Bad Request - Invalid signature")
+                    throw new InvalidSignatureException('The request signature is not valid.', 400);
 
                 // Snopshot only cloud - Only Cloud model are able to order a snapshot
-                if($response->getReasonPhrase()=="Only Cloud model are able to order a snapshot")
-                    throw new VpsSnapshotIsOnlyForCloudException('Only Cloud model are able to order a snapshot.',400);
-
+                if ($response->getReasonPhrase() == "Only Cloud model are able to order a snapshot")
+                    throw new VpsSnapshotIsOnlyForCloudException('Only Cloud model are able to order a snapshot.', 400);
 
 
                 else throw $prev;
-
 
 
             default :
@@ -82,16 +85,18 @@ class VpsException extends \RuntimeException
      * @param string $path
      * @return string domain
      */
-    private function getDomain($path){
-        $d=explode("/",$path);
+    private function getDomain($path)
+    {
+        $d = explode("/", $path);
         return $d[3];
     }
 
 
-    public function debug(){
-        $r=new Response();
+    public function debug()
+    {
+        $r = new Response();
         var_dump($r->getReasonPhrase());
-        $req= new Request();
+        $req = new Request();
         $req->getPath();
     }
 
