@@ -28,7 +28,7 @@ The recommended way to install OVH SDK is through [Composer](http://getcomposer.
 
         {
             "require": {
-                "toorop/ovh-sdk-php": "*"
+                "toorop/ovh-sdk-php": "dev-master"
             }
         }
 
