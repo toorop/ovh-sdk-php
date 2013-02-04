@@ -32,8 +32,7 @@ class OvhClient extends AbstractClient {
     public function getVpsList(){
         $request = $this->get('vps');
         $response=$request->send();
-        return $response->getBody();
-        #echo $response->getRawHeaders();
+        return $response->getBody(true);
     }
 
 

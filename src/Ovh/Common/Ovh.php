@@ -76,7 +76,7 @@ class Ovh
      */
     public function getVpsList()
     {
-        return self::getOvhClient()->getVpsList();
+        return json_decode(self::getOvhClient()->getVpsList());
     }
 
 
