@@ -33,6 +33,8 @@ class Ovh
 
 
     /**
+     * Constructor
+     *
      * @param array $config
      */
     public function __construct(array $config = array())
@@ -44,7 +46,6 @@ class Ovh
 
     }
 
-
     /**
      * Return list of VPS owned by user
      *
@@ -55,14 +56,16 @@ class Ovh
         return json_decode(self::getOvhClient()->getVpsList());
     }
 
-
+    /**
+     * Return a VPS object
+     *
+     * @param $domain
+     * @return \Ovh\Vps\Vps
+     */
     public function getVps($domain){
         return new \Ovh\Vps\Vps($domain);
     }
 
-
-
-    # Get clients
 
     /**
      * Common client (for no specific task)
@@ -74,6 +77,4 @@ class Ovh
             return self::$ovhClient;
         else return new OvhClient();
     }
-
-
 }
