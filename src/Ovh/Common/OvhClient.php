@@ -16,8 +16,6 @@
 
 namespace Ovh\Common;
 
-
-
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\AbstractClient;
 
