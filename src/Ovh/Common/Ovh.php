@@ -41,30 +41,6 @@ class Ovh
         Keyring::setAppKey($config['AK']);
         Keyring::setAppSecret($config['AS']);
         Keyring::setConsumerKey($config['CK']);
-        // Get credential
-        //$this->getCredential();
-
-        // Get VPS
-        #$this->getVps();
-    }
-
-    private function getCredential()
-    {
-        $client = new Client('https://api.ovh.com');
-        $headers = array('X-Ovh-Application' => Keyring::getAppKey(), 'Content-type' => 'application/json');
-        $request = $client->post('/1.0/auth/credential', $headers, '{"accessRules":[{"method":"GET","path":"/*"},{"method":"POST","path":"/*"},{"method":"PUT","path":"/*"},{"method":"DELETE","path":"/*"}]}');
-
-        $response = $request->send();
-
-        #echo $response->getBody();
-
-        #echo $response->getRawHeaders();
-
-        $data = $response->json();
-        var_dump($data);
-
-        $validationUrl=$data['validationUrl'];
-        #$this->config['CK']=$data['consumerKey'];
 
     }
 
