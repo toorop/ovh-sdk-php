@@ -290,7 +290,6 @@ class Vps
      */
     public function getDiskMonitoring($diskId, $period, $type)
     {
-        throw new NotImplementedYetByOvhException;
         return json_decode(self::getClient()->getDiskMonitoring($this->getDomain(), $diskId, $period, $type));
     }
 
