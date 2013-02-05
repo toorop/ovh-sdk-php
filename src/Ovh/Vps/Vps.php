@@ -30,7 +30,9 @@ class Vps
     private $domain = null;
     private static $vpsClient = null;
 
-
+    /**
+     * @param string $domain
+     */
     public function __construct($domain)
     {
         $this->setDomain($domain);
@@ -48,15 +50,6 @@ class Vps
             return self::$vpsClient;
         return new VpsClient();
     }
-
-
-    /**
-     *
-     *
-     * Getter & Setter
-     *
-     *
-     */
 
     /**
      * Set domain
@@ -80,20 +73,14 @@ class Vps
 
 
 
-    /**
-     *
-     *
-     * Mains methods from OVH Rest API
-     *
-     *
-     */
+     ###
+     # Mains methods from OVH Rest API
+     ##
 
     /**
      *  Get VPS properties
      *
      *  @return object
-     *
-     * @todo class 4 response
      *
      */
     public function  getProperties()
@@ -114,7 +101,6 @@ class Vps
 
 
     /**
-     * @todo err 500
      *  Get monitoring
      *
      * @param string $period "lastday" or "lastmonth" or "lastweek" or "lastyear" or "today"
@@ -282,7 +268,6 @@ class Vps
     }
 
     /**
-     * @todo HTTP/1.1 500 Internal Server Error
      * @param $diskId
      * @param $period
      * @param $type
