@@ -123,7 +123,6 @@ class Vps
      */
     public function getMonitoring($period, $type)
     {
-        #throw new NotImplementedYetByOvhException;
         return json_decode(self::getClient()->getMonitoring($this->getDomain(), $period, $type));
     }
 
