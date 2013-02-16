@@ -78,7 +78,7 @@ foreach($vpsList as $vpsDomain)
     print "$vpsDomain\n";
 
 // Init a VPS instance
-$vps=$ovh->getVps('vpsXXXX.ovh.net');
+$vps=$ovh->getVps($vpsDomain);
 
 // Get VPS properties
 $r=$vps->getProperties();
@@ -126,28 +126,28 @@ $r=$vps->orderFtpBackup();
 $disks=$vps->getDisks();
 
 // Get disk properties
-$properties=$vps->getDiskProperties(XXX);
+$properties=$vps->getDiskProperties($diskId);
 
 // Get disk usage
-$usage=$vps->getDiskUsage(XXX,'used');
+$usage=$vps->getDiskUsage($diskId,'used');
 
 // Get disk monitoring
-$monit=$vps->getDiskMonitoring(257,'lastday','max');
+$monit=$vps->getDiskMonitoring($diskId,'lastday','max');
 
 // Get current task
 $task=$vps->getTasks();
 
 // Get properties of a task
-$properties = $vps->getTaskProperties(404);
+$properties = $vps->getTaskProperties($taskId);
 
 // Get VPS IPs
 $ip=$vps->getIps();
 
 // Get IP properties
-$properties=$vps->getIpProperties('VPS IP');
+$properties=$vps->getIpProperties($ip);
 
 // Set IP properties
-$vps->setIpProperties('VPS IP ', array('reverse'=>'IP Reverse'));
+$vps->setIpProperties('$ip', array('reverse'=>'IP Reverse'));
 
 // Get snapshot properties
 $properties=$vps->getSnapshotProperties();
@@ -159,7 +159,7 @@ $order=$vps->orderSnapshot();
 $templates=$vps->getAvailableTemplates();
 
 // Get templates properties
-$properties=$vps->getTemplateProperties(156);
+$properties=$vps->getTemplateProperties($templateId);
 
 ```
 
