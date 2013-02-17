@@ -27,7 +27,7 @@ use Guzzle\Http\Url;
 use Guzzle\Http\Message\Request;
 
 
-class AbstractClient extends \Guzzle\Http\Client
+class AbstractClient extends Client
 {
 
     public function __construct()
