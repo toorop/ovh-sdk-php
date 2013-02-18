@@ -26,7 +26,6 @@ use Ovh\Common\Task;
 
 class Vps
 {
-
     private $domain = null;
     private static $vpsClient = null;
 

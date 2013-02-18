@@ -16,21 +16,19 @@
 
 namespace Ovh\Common;
 
-use Ovh\Common\Auth\Keyring;
-
 use Guzzle\Http\Client;
 
+use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
+
 
 class Ovh
 {
     // Version
     const VERSION = '0.1.1';
 
-
-    // Clients
+    // Client
     private static $ovhClient=null;
-
 
     /**
      * Constructor
@@ -39,6 +37,7 @@ class Ovh
      */
     public function __construct(array $config = array())
     {
+
         // Populate keyring
         Keyring::setAppKey($config['AK']);
         Keyring::setAppSecret($config['AS']);
