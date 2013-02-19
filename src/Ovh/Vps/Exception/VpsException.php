@@ -65,7 +65,7 @@ class VpsException extends \RuntimeException
                 if ($response->getReasonPhrase() == "Bad Request - Invalid signature")
                     throw new InvalidSignatureException('The request signature is not valid.', 400);
 
-                // Snopshot only cloud - Only Cloud model are able to order a snapshot
+                // Snapshot only cloud - Only Cloud model are able to order a snapshot
                 if ($response->getReasonPhrase() == "Only Cloud model are able to order a snapshot")
                     throw new VpsSnapshotIsOnlyForCloudException('Only Cloud model are able to order a snapshot.', 400);
 
@@ -97,7 +97,7 @@ class VpsException extends \RuntimeException
         $r = new Response();
         var_dump($r->getReasonPhrase());
         $req = new Request();
-        $req->getPath();
+        $req->getClient();
     }
 
 }

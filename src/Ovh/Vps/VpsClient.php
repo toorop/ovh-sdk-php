@@ -18,15 +18,13 @@
 namespace Ovh\Vps;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Http\Exception\BadResponseException;
-use Guzzle\Http\Exception\CurlException;
+#use Guzzle\Http\Exception\BadResponseException;
+#use Guzzle\Http\Exception\CurlException;
 use Guzzle\Http\Message\Response;
 
 use Ovh\Common\AbstractClient;
-use Ovh\Common\Exception\InvalidArgumentException;
 use Ovh\Common\Exception\BadMethodCallException;
 use Ovh\Common\Exception\NotImplementedYetException;
-use Ovh\Common\Exception\NotImplementedYetByOvhException;
 use Ovh\Vps\Exception\VpsNotFoundException;
 use Ovh\Vps\Exception\VpsException;
 

@@ -21,6 +21,4 @@ class VpsNotFoundException  extends \RuntimeException
     public function __construct($domain,$code=0,$prevException=null){
         parent::__construct("VPS ".$domain.' not found',$code,$prevException);
     }
-
-
 }

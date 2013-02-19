@@ -14,6 +14,10 @@
  * permissions and limitations under the License.
  */
 
+/**
+ * @todo remove NOT USED
+ */
+
 namespace Ovh\Vps\Exception;
 
 use Ovh\Vps\Exception\VpsException;
