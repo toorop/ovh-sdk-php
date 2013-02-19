@@ -14,32 +14,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Ovh\Common;
+namespace Ovh\Xdsl\Exception;
 
-use Ovh\Common\AbstractClient;
-
-class OvhClient extends AbstractClient {
-
-    /**
-     * Return VPS list
-     *
-     * @return mixed
-     */
-    public function getVpsList(){
-        $request = $this->get('vps');
-        $response=$request->send();
-        return $response->getBody(true);
-    }
-
-    /**
-     * Get XDSL Services
-     *
-     * @return json encoded string
-     */
-    public function getXdslServices(){
-        return $this->get('xdsl')->send()->getBody(true);
-    }
+class XdslNotificationAlreadyExistsException extends \RuntimeException
+{
 
 }
-
-

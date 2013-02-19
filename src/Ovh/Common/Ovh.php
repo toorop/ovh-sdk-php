@@ -20,6 +20,8 @@ use Guzzle\Http\Client;
 
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
+use Ovh\Vps\Vps;
+use Ovh\Xdsl\Xdsl;
 
 
 class Ovh
@@ -37,13 +39,39 @@ class Ovh
      */
     public function __construct(array $config = array())
     {
-
         // Populate keyring
         Keyring::setAppKey($config['AK']);
         Keyring::setAppSecret($config['AS']);
         Keyring::setConsumerKey($config['CK']);
-
     }
+
+
+
+    /**
+     *
+     *          Common
+     *
+     */
+
+    /**
+     * Common client (for no specific task)
+     *
+     * @return null|OvhClient
+     */
+    private static function getOvhClient(){
+        if(self::$ovhClient instanceof OvhClient)
+            return self::$ovhClient;
+        else return new OvhClient();
+    }
+
+
+
+    /**
+     *
+     *          VPS
+     *
+     */
+
 
     /**
      * Return list of VPS owned by user
@@ -62,18 +90,32 @@ class Ovh
      * @return \Ovh\Vps\Vps
      */
     public function getVps($domain){
-        return new \Ovh\Vps\Vps($domain);
+        return new Vps($domain);
     }
 
 
     /**
-     * Common client (for no specific task)
      *
-     * @return null|OvhClient
+     *          XDSL
+     *
      */
-    private static function getOvhClient(){
-        if(self::$ovhClient instanceof OvhClient)
-            return self::$ovhClient;
-        else return new OvhClient();
+
+    /**
+     * Return xdsl subscription/service
+     *
+     * @return array
+     */
+    public function getXdslServices(){
+        return json_decode(self::getOvhClient()->getXdslServices());
     }
+
+    /**
+     * @param $serviceId
+     * @return \Ovh\Xdsl\Xdsl
+     */
+    public function getXdsl($serviceId){
+        return new Xdsl($serviceId);
+    }
+
+
 }
