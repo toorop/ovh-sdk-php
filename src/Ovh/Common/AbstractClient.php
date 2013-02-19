@@ -60,9 +60,9 @@ class AbstractClient extends Client
         #var_dump($body);
         #print $body;
         #die();
-        if ($method == "POST")
-            $baseSig = Keyring::getAppSecret() . '+' . Keyring::getConsumerKey() . '+' . $method . '+' . $request->getUrl() . '+' . '' . '+' . $hTimestamp;
-        else
+        #if ($method == "POST")
+        #    $baseSig = Keyring::getAppSecret() . '+' . Keyring::getConsumerKey() . '+' . $method . '+' . $request->getUrl() . '+' . '' . '+' . $hTimestamp;
+        #else
             $baseSig = Keyring::getAppSecret() . '+' . Keyring::getConsumerKey() . '+' . $method . '+' . $request->getUrl() . '+' . $body . '+' . $hTimestamp;
         #
         #print $baseSig . "\n";
