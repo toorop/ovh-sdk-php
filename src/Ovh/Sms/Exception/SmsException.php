@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
@@ -13,20 +14,18 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-
 // @todo create a common exception client and extends from it
 
 namespace Ovh\Sms\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
-
-
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
 class SmsException extends \RuntimeException
 {
+
     public function __construct($message = '', $code = 0, $prev)
     {
 
@@ -34,24 +33,25 @@ class SmsException extends \RuntimeException
         $response = $prev->getResponse();
 
         $statusCode = $response->getStatusCode();
-        switch ($statusCode) {
+        switch ($statusCode)
+        {
             case 404 :
                 // Bad Method or Ressource not available
-                if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist')) {
+                if (stristr((string) $response->getBody(), 'The object') && stristr((string) $response->getBody(), 'does not exist')) {
                     throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
                 }
 
             case 400 :
                 // Bad signature
-                if ($response->getReasonPhrase() == "Bad Request - Invalid signature")
+                if ($response->getReasonPhrase() == "Bad Request - Invalid signature") {
                     throw new InvalidSignatureException('The request signature is not valid.', 400);
-                else throw $prev;
-
+                } else {
+                    throw $prev;
+                }
 
             default :
                 throw $prev;
         }
-
     }
 
     /**
@@ -65,7 +65,6 @@ class SmsException extends \RuntimeException
         $d = explode("/", $path);
         return $d[3];
     }
-
 
     public function debug()
     {

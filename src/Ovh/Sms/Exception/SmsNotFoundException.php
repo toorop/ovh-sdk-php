@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
@@ -16,11 +17,12 @@
 
 namespace Ovh\Sms\Exception;
 
-class SmsNotFoundException  extends \RuntimeException
+class SmsNotFoundException extends \RuntimeException
 {
-    public function __construct($domain,$code=0,$prevException=null){
-        parent::__construct("SMS ".$domain.' not found',$code,$prevException);
-    }
 
+    public function __construct($domain, $code = 0, $prevException = null)
+    {
+        parent::__construct("SMS " . $domain . ' not found', $code, $prevException);
+    }
 
 }

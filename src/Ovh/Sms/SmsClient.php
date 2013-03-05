@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
@@ -14,22 +15,11 @@
  * permissions and limitations under the License.
  */
 
-
 namespace Ovh\Sms;
 
-use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Http\Exception\BadResponseException;
-use Guzzle\Http\Exception\CurlException;
-use Guzzle\Http\Message\Response;
-
 use Ovh\Common\AbstractClient;
-use Ovh\Common\Exception\InvalidArgumentException;
 use Ovh\Common\Exception\BadMethodCallException;
-use Ovh\Common\Exception\NotImplementedYetException;
-use Ovh\Common\Exception\NotImplementedYetByOvhException;
-use Ovh\Sms\Exception\SmsNotFoundException;
 use Ovh\Sms\Exception\SmsException;
-
 
 class smsClient extends AbstractClient
 {
@@ -40,7 +30,6 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getProperties($domain)
     {
@@ -49,6 +38,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -58,7 +48,6 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getBlacklists($domain)
     {
@@ -67,6 +56,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -76,7 +66,6 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getHistories($domain)
     {
@@ -85,6 +74,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -95,7 +85,6 @@ class smsClient extends AbstractClient
      * @param integer $id
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getHistory($domain, $id)
     {
@@ -105,6 +94,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -114,7 +104,6 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getJobs($domain)
     {
@@ -123,6 +112,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -133,7 +123,6 @@ class smsClient extends AbstractClient
      * @param string $id
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getJob($domain, $id)
     {
@@ -143,6 +132,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -153,10 +143,8 @@ class smsClient extends AbstractClient
      * @param string $countryCurrencyPrice country code ISO 3166-2
      * @param integer $quantity
      * @param string $domain
-     *
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getSeeOffers($domain, $countryDestination, $countryCurrencyPrice, $quantity)
     {
@@ -169,12 +157,15 @@ class smsClient extends AbstractClient
         $quantities = array(100, 1000, 10000, 100000, 1000000, 200, 250, 2500, 25000, 500, 5000, 50000);
         $quantity = intval($quantity);
 
-        if (!in_array($countryDestination, $countriesDestination))
-            throw new BadMethodCallException('Parameter $countryDestination must be in array ('.implode(', ', $countriesDestination).'), "' . $countryDestination . '" given.');
-        if (!in_array($countryCurrencyPrice, $countriesCurrencyPrice))
-            throw new BadMethodCallException('Parameter $countryCurrencyPrice must be in array ('.implode(', ', $countriesCurrencyPrice).'), "' . $countryCurrencyPrice . '" given.');
-        if (!in_array($quantity, $quantities))
-            throw new BadMethodCallException('Parameter $quantity must be in array ('.implode(', ', $quantities).'), "' . $quantity . '" given.');
+        if (!in_array($countryDestination, $countriesDestination)) {
+            throw new BadMethodCallException('Parameter $countryDestination must be in array (' . implode(', ', $countriesDestination) . '), "' . $countryDestination . '" given.');
+        }
+        if (!in_array($countryCurrencyPrice, $countriesCurrencyPrice)) {
+            throw new BadMethodCallException('Parameter $countryCurrencyPrice must be in array (' . implode(', ', $countriesCurrencyPrice) . '), "' . $countryCurrencyPrice . '" given.');
+        }
+        if (!in_array($quantity, $quantities)) {
+            throw new BadMethodCallException('Parameter $quantity must be in array (' . implode(', ', $quantities) . '), "' . $quantity . '" given.');
+        }
 
         try {
 
@@ -182,6 +173,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -191,7 +183,6 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getSenders($domain)
     {
@@ -200,6 +191,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -210,7 +202,6 @@ class smsClient extends AbstractClient
      * @param string $sender
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getSender($domain, $sender)
     {
@@ -219,6 +210,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -228,7 +220,6 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getUsers($domain)
     {
@@ -237,6 +228,7 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
 
@@ -247,7 +239,6 @@ class smsClient extends AbstractClient
      * @param string $user
      * @return string Json
      * @throws Exception\SmsException
-     * @throws Exception\SmsNotFoundException
      */
     public function getUser($domain, $user)
     {
@@ -256,8 +247,8 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
+
         return $r->getBody(true);
     }
+
 }
-
-

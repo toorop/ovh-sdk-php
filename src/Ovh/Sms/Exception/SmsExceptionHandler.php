@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
@@ -21,15 +22,14 @@ use Ovh\Sms\Exception\SmsException;
 class SmsExceptionHandler
 {
 
-    public function  __construct()
+    public function __construct()
     {
 
     }
 
-    public static function handle($e,array $opt=array())
+    public static function handle($e, array $opt = array())
     {
-        throw new SmsException($e->getMessage(),$e->getCode());
+        throw new SmsException($e->getMessage(), $e->getCode());
     }
-
 
 }

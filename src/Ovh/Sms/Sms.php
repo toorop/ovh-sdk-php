@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
@@ -16,13 +17,7 @@
 
 namespace Ovh\Sms;
 
-
-use \Ovh\Common\Exception\NotImplementedYetException;
-use \Ovh\Common\Exception\NotImplementedYetByOvhException;
-
 use Ovh\Sms\SmsClient;
-use Ovh\Common\Task;
-
 
 class Sms
 {
@@ -31,6 +26,8 @@ class Sms
     private static $smsClient = null;
 
     /**
+     *
+     *
      * @param string $domain
      */
     public function __construct($domain)
@@ -38,11 +35,10 @@ class Sms
         $this->setDomain($domain);
     }
 
-
     /**
-     * Return Sms client
+     * Return SMS client
      *
-     * @return null|SmsClient
+     * @return SmsClient
      */
     private static function getClient()
     {
@@ -71,25 +67,22 @@ class Sms
         return $this->domain;
     }
 
-
-
-     ###
-     # Mains methods from OVH Rest API
-     ##
+    ###
+    # Mains methods from OVH Rest API
+    ##
 
     /**
-     *  Get SMS object properties
+     * Get SMS object properties
      *
-     *  @return object
-     *
+     * @return object
      */
-    public function  getProperties()
+    public function getProperties()
     {
         return json_decode(self::getClient()->getProperties($this->getDomain()));
     }
 
     /**
-     * Get Numbers blacklisted associated to the sms account
+     * Get numbers blacklisted associated to the SMS account
      *
      * @return object
      */
@@ -99,7 +92,7 @@ class Sms
     }
 
     /**
-     * Get Numbers blacklisted associated to the sms account
+     * Get SMS sent associated to the SMS account
      *
      * @return object
      */
@@ -119,7 +112,7 @@ class Sms
     }
 
     /**
-     * Get users associated to the sms account
+     * Get users associated to the SMS account
      *
      * @return object
      */
@@ -139,7 +132,7 @@ class Sms
     }
 
     /**
-     * Get job object properties
+     * Get SMS offers available
      *
      * @return object
      */
@@ -149,7 +142,7 @@ class Sms
     }
 
     /**
-     * Get senders allowed associated to the sms account
+     * Get senders allowed associated to the SMS account
      *
      * @return object
      */
@@ -169,7 +162,7 @@ class Sms
     }
 
     /**
-     * Get users associated to the sms account
+     * Get users associated to the SMS account
      *
      * @return object
      */
@@ -179,7 +172,7 @@ class Sms
     }
 
     /**
-     * Get users associated to the sms account
+     * Get user object properties
      *
      * @return object
      */
