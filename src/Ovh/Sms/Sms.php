@@ -118,4 +118,74 @@ class Sms
         return json_decode(self::getClient()->getHistory($this->getDomain(), $id));
     }
 
+    /**
+     * Get users associated to the sms account
+     *
+     * @return object
+     */
+    public function getJobs()
+    {
+        return json_decode(self::getClient()->getJobs($this->getDomain()));
+    }
+
+    /**
+     * Get job object properties
+     *
+     * @return object
+     */
+    public function getJob($id)
+    {
+        return json_decode(self::getClient()->getJob($this->getDomain(), $id));
+    }
+
+    /**
+     * Get job object properties
+     *
+     * @return object
+     */
+    public function getSeeOffers($countryDestination, $countryCurrencyPrice, $quantity)
+    {
+        return json_decode(self::getClient()->getSeeOffers($this->getDomain(), $countryDestination, $countryCurrencyPrice, $quantity));
+    }
+
+    /**
+     * Get senders allowed associated to the sms account
+     *
+     * @return object
+     */
+    public function getSenders()
+    {
+        return json_decode(self::getClient()->getSenders($this->getDomain()));
+    }
+
+    /**
+     * Get sender object properties
+     *
+     * @return object
+     */
+    public function getSender($sender)
+    {
+        return json_decode(self::getClient()->getSender($this->getDomain(), $sender));
+    }
+
+    /**
+     * Get users associated to the sms account
+     *
+     * @return object
+     */
+    public function getUsers()
+    {
+        return json_decode(self::getClient()->getUsers($this->getDomain()));
+    }
+
+    /**
+     * Get users associated to the sms account
+     *
+     * @return object
+     */
+    public function getUser($user)
+    {
+        return json_decode(self::getClient()->getUser($this->getDomain(), $user));
+    }
+
 }
