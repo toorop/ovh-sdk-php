@@ -33,12 +33,16 @@ class SmsException extends \RuntimeException
         $response = $prev->getResponse();
 
         $statusCode = $response->getStatusCode();
-        switch ($statusCode)
-        {
+        switch ($statusCode) {
             case 404 :
                 // Bad Method or Ressource not available
-                if (stristr((string) $response->getBody(), 'The object') && stristr((string) $response->getBody(), 'does not exist')) {
-                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
+                if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist')) {
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist.', 404);
+                } // bad sender
+                else {
+                    if ($response->getReasonPhrase() == "The requested object (Senders) does not exist") {
+                        throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Sender does not exists.', 404);
+                    }
                 }
 
             case 400 :
