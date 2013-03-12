@@ -21,7 +21,7 @@
 
 namespace Ovh\Xdsl;
 
-use \Ovh\Common\Exception\BadConstructorCallException;
+use Ovh\Common\Exception\BadConstructorCallException;
 use Ovh\Common\Exception\NotImplementedYetException;
 
 
