@@ -20,6 +20,7 @@ use Guzzle\Http\Client;
 
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
+use Ovh\Sms\Sms;
 use Ovh\Vps\Vps;
 use Ovh\Xdsl\Xdsl;
 
@@ -115,6 +116,29 @@ class Ovh
      */
     public function getXdsl($serviceId){
         return new Xdsl($serviceId);
+    }
+
+    /**
+     *
+     *      SMS
+     *
+     */
+    /**
+     * Return SMS subscriptions/Service (list of 'domains')
+     * @return array
+     */
+    public function getSmsServices(){
+        return json_decode(self::getOvhClient()->getSmsServices());
+    }
+
+    /**
+     * Get new SMS object
+     *
+     * @param $domain
+     * @return Sms
+     */
+    public function getSms($domain){
+        return new Sms($domain);
     }
 
 

@@ -41,6 +41,15 @@ class OvhClient extends AbstractClient {
     }
 
     /**
+     * Get SMS Services
+     *
+     * @return string (json encoded)
+     */
+    public function getSmsServices(){
+        return $this->get('sms')->send()->getBody(true);
+    }
+
+    /**
      * Get CDN services
      *
      * @return json string
