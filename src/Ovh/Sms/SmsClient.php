@@ -30,15 +30,17 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @return string Json
      * @throws Exception\SmsException
+     * @throws BadMethodCallException
      */
     public function getProperties($domain)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
         try {
             $r = $this->get('sms/' . $domain)->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $r->getBody(true);
     }
 
@@ -47,16 +49,18 @@ class smsClient extends AbstractClient
      *
      * @param string $domain
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getBlacklists($domain)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
         try {
             $r = $this->get('sms/' . $domain . '/blacklists')->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $r->getBody(true);
     }
 
@@ -65,10 +69,13 @@ class smsClient extends AbstractClient
      *
      * @param string $domain
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getHistories($domain)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
         try {
             $r = $this->get('sms/' . $domain . '/histories')->send();
         } catch (\Exception $e) {
@@ -84,10 +91,15 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @param integer $id
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getHistory($domain, $id)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if ($id!==0 && !$id)
+            throw new BadMethodCallException('Parameter $id is missing.');
         $id = intval($id);
         try {
             $r = $this->get('sms/' . $domain . '/histories/' . $id)->send();
@@ -103,10 +115,13 @@ class smsClient extends AbstractClient
      *
      * @param string $domain
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getJobs($domain)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
         try {
             $r = $this->get('sms/' . $domain . '/jobs')->send();
         } catch (\Exception $e) {
@@ -122,10 +137,15 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @param string $id
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getJob($domain, $id)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if ($id!==0 && !$id)
+            throw new BadMethodCallException('Parameter $id is missing.');
         $id = intval($id);
         try {
             $r = $this->get('sms/' . $domain . '/jobs/' . $id)->send();
@@ -144,6 +164,7 @@ class smsClient extends AbstractClient
      * @param integer $quantity
      * @param string $domain
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getSeeOffers($domain, $countryDestination, $countryCurrencyPrice, $quantity)
@@ -156,6 +177,9 @@ class smsClient extends AbstractClient
 
         $quantities = array(100, 1000, 10000, 100000, 1000000, 200, 250, 2500, 25000, 500, 5000, 50000);
         $quantity = intval($quantity);
+
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
 
         if (!in_array($countryDestination, $countriesDestination)) {
             throw new BadMethodCallException('Parameter $countryDestination must be in array (' . implode(', ', $countriesDestination) . '), "' . $countryDestination . '" given.');
@@ -182,10 +206,13 @@ class smsClient extends AbstractClient
      *
      * @param string $domain
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getSenders($domain)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
         try {
             $r = $this->get('sms/' . $domain . '/senders')->send();
         } catch (\Exception $e) {
@@ -201,10 +228,16 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @param string $sender
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getSender($domain, $sender)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$sender)
+            throw new BadMethodCallException('Parameter $sender is missing.');
+        $sender=urlencode($sender);
         try {
             $r = $this->get('sms/' . $domain . '/senders/' . $sender)->send();
         } catch (\Exception $e) {
@@ -219,16 +252,18 @@ class smsClient extends AbstractClient
      *
      * @param string $domain
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getUsers($domain)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
         try {
             $r = $this->get('sms/' . $domain . '/users')->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $r->getBody(true);
     }
 
@@ -238,16 +273,20 @@ class smsClient extends AbstractClient
      * @param string $domain
      * @param string $user
      * @return string Json
+     * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
     public function getUser($domain, $user)
     {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$user)
+            throw new BadMethodCallException('Parameter $user is missing.');
         try {
             $r = $this->get('sms/' . $domain . '/users/' . $user)->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $r->getBody(true);
     }
 

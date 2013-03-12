@@ -17,6 +17,7 @@
 
 namespace Ovh\Sms;
 
+use Ovh\Common\Exception\BadConstructorCallException;
 use Ovh\Sms\SmsClient;
 
 class Sms
@@ -26,12 +27,14 @@ class Sms
     private static $smsClient = null;
 
     /**
+     * @param $domain
      *
-     *
-     * @param string $domain
+     * @throws \Ovh\Common\Exception\BadConstructorCallException;
      */
     public function __construct($domain)
     {
+        if (!$domain)
+            throw new BadConstructorCallException('$domain parameter is missing.');
         $this->setDomain($domain);
     }
 
@@ -78,7 +81,7 @@ class Sms
      */
     public function getProperties()
     {
-        return json_decode(self::getClient()->getProperties($this->getDomain()));
+        return json_decode(self::getClient()->getProperties($this->domain));
     }
 
     /**
@@ -88,97 +91,106 @@ class Sms
      */
     public function getBlacklists()
     {
-        return json_decode(self::getClient()->getBlackLists($this->getDomain()));
+        return json_decode(self::getClient()->getBlackLists($this->domain));
     }
 
     /**
      * Get SMS sent associated to the SMS account
      *
-     * @return object
+     * @return array
      */
     public function getHistories()
     {
-        return json_decode(self::getClient()->getHistories($this->getDomain()));
+        return json_decode(self::getClient()->getHistories($this->domain));
     }
 
     /**
      * Get history object properties
      *
+     * @param int $id
      * @return object
      */
     public function getHistory($id)
     {
-        return json_decode(self::getClient()->getHistory($this->getDomain(), $id));
+        return json_decode(self::getClient()->getHistory($this->domain, $id));
     }
 
     /**
      * Get users associated to the SMS account
      *
-     * @return object
+     * @return array
      */
     public function getJobs()
     {
-        return json_decode(self::getClient()->getJobs($this->getDomain()));
+        return json_decode(self::getClient()->getJobs($this->domain));
     }
 
     /**
      * Get job object properties
      *
+     * @param int $id
      * @return object
      */
     public function getJob($id)
     {
-        return json_decode(self::getClient()->getJob($this->getDomain(), $id));
+        return json_decode(self::getClient()->getJob($this->domain, $id));
     }
 
     /**
      * Get SMS offers available
      *
+     * @param string $countryDestination country code ISO 3166-2
+     * @param string $countryCurrencyPrice country code ISO 3166-2
+     * @param integer $quantity
+     *
      * @return object
      */
+
     public function getSeeOffers($countryDestination, $countryCurrencyPrice, $quantity)
     {
-        return json_decode(self::getClient()->getSeeOffers($this->getDomain(), $countryDestination, $countryCurrencyPrice, $quantity));
+        return json_decode(self::getClient()->getSeeOffers($this->domain, $countryDestination, $countryCurrencyPrice, $quantity));
     }
 
     /**
      * Get senders allowed associated to the SMS account
      *
-     * @return object
+     * @return array
      */
     public function getSenders()
     {
-        return json_decode(self::getClient()->getSenders($this->getDomain()));
+        return json_decode(self::getClient()->getSenders($this->domain));
     }
 
     /**
      * Get sender object properties
      *
+     * @param string $sender
      * @return object
      */
     public function getSender($sender)
     {
-        return json_decode(self::getClient()->getSender($this->getDomain(), $sender));
+        return json_decode(self::getClient()->getSender($this->domain, $sender));
     }
 
     /**
      * Get users associated to the SMS account
      *
-     * @return object
+     * @return array
      */
     public function getUsers()
     {
-        return json_decode(self::getClient()->getUsers($this->getDomain()));
+        return json_decode(self::getClient()->getUsers($this->domain));
     }
 
     /**
      * Get user object properties
      *
+     * @param string $user
      * @return object
      */
     public function getUser($user)
     {
-        return json_decode(self::getClient()->getUser($this->getDomain(), $user));
+        return json_decode(self::getClient()->getUser($this->domain, $user));
     }
 
 }
