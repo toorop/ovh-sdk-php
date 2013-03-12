@@ -118,4 +118,15 @@ class Ovh
     }
 
 
+    /**
+     *
+     *      CDN
+     *
+     */
+    public function getCdnServices(){
+        return json_decode(self::getOvhClient()->getCdnServices());
+    }
+
+
+
 }

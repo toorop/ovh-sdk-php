@@ -40,6 +40,15 @@ class OvhClient extends AbstractClient {
         return $this->get('xdsl')->send()->getBody(true);
     }
 
+    /**
+     * Get CDN services
+     *
+     * @return json string
+     */
+    public function getCdnServices(){
+        return $this->get('cdn')->send()->getBody(true);
+    }
+
 }
 
 
