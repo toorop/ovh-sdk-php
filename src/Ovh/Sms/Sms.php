@@ -85,6 +85,14 @@ class Sms
     }
 
     /**
+     * @param array $props (avalaibles keys are callBack and templates)
+     * @return boolean
+     */
+    public function setProperties($props){
+        return self::getClient()->setProperties($this->domain,$props);
+    }
+
+    /**
      * Get numbers blacklisted associated to the SMS account
      *
      * @return object
@@ -92,6 +100,17 @@ class Sms
     public function getBlacklists()
     {
         return json_decode(self::getClient()->getBlackLists($this->domain));
+    }
+
+    /**
+     * Delete a number from blacklist
+     *
+     * @param string $number
+     * @return bool
+     */
+    public function deleteBlacklist($number){
+        self::getClient()->deleteBlacklist($this->domain,$number);
+        return true;
     }
 
     /**
@@ -113,6 +132,15 @@ class Sms
     public function getHistory($id)
     {
         return json_decode(self::getClient()->getHistory($this->domain, $id));
+    }
+
+    /**
+     * Delete the sms history given
+     *
+     * @param $id
+     */
+    public function deleteHistory($id){
+        self::getClient()->deleteHistory($this->domain, $id);
     }
 
     /**

@@ -44,6 +44,43 @@ class smsClient extends AbstractClient
         return $r->getBody(true);
     }
 
+
+    /**
+     * Set Properties of SMS account
+     *
+     * @param string $domain
+     * @param array $properties (available keys are callBack & templates)
+     * @return \Guzzle\Http\Message\Response
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function setProperties($domain, $properties)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$properties)
+            throw new BadMethodCallException('Parameter $properties is missing.');
+        if (!is_array($properties))
+            throw new BadMethodCallException('Parameter $properties must be a array.');
+        // clean : only callback and templates are allowed
+        $t = array();
+        if (array_key_exists('callBack', $properties))
+            $t['callBack'] = $properties['callBack'];
+        if (array_key_exists('templates', $properties))
+            $t['templates'] = $properties['templates'];
+        $properties = $t;
+        unset($t);
+        if (count($properties) == 0)
+            throw new BadMethodCallException('Parameter $properties does not contain valid key. valid keys are "templates" and "callBack"');
+        try {
+            $r = $this->put('sms/' . $domain, array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($properties))->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return true;
+    }
+
+
     /**
      * Get Numbers blacklisted associated to the sms account
      *
@@ -62,6 +99,29 @@ class smsClient extends AbstractClient
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
         return $r->getBody(true);
+    }
+
+    /**
+     * Delete a number from blacklist
+     *
+     * @param string $domain
+     * @param string $number
+     * @return \Guzzle\Http\Message\Response
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function deleteBlacklist($domain, $number)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$number)
+            throw new BadMethodCallException('Parameter $number is missing.');
+        try {
+            $r = $this->delete('sms/' . $domain . '/blacklists/' . $number)->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r;
     }
 
     /**
@@ -98,7 +158,7 @@ class smsClient extends AbstractClient
     {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
-        if ($id!==0 && !$id)
+        if ($id !== 0 && !$id)
             throw new BadMethodCallException('Parameter $id is missing.');
         $id = intval($id);
         try {
@@ -108,6 +168,29 @@ class smsClient extends AbstractClient
         }
 
         return $r->getBody(true);
+    }
+
+    /**
+     * Delete the sms history given
+     *
+     * @param string $domain
+     * @param int $id
+     * @return bool true‡
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function deleteHistory($domain, $id)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$id)
+            throw new BadMethodCallException('Parameter $id is missing.');
+        try {
+            $this->delete('sms/' . $domain . '/histories/' . $id)->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return true;
     }
 
     /**
@@ -144,7 +227,7 @@ class smsClient extends AbstractClient
     {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
-        if ($id!==0 && !$id)
+        if ($id !== 0 && !$id)
             throw new BadMethodCallException('Parameter $id is missing.');
         $id = intval($id);
         try {
@@ -237,7 +320,7 @@ class smsClient extends AbstractClient
             throw new BadMethodCallException('Parameter $domain is missing.');
         if (!$sender)
             throw new BadMethodCallException('Parameter $sender is missing.');
-        $sender=urlencode($sender);
+        $sender = urlencode($sender);
         try {
             $r = $this->get('sms/' . $domain . '/senders/' . $sender)->send();
         } catch (\Exception $e) {

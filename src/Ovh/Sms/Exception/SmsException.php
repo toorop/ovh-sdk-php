@@ -39,13 +39,18 @@ class SmsException extends \RuntimeException
                 if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist')) {
                     throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist.', 404);
                 } // bad sender
-                else {
-                    if ($response->getReasonPhrase() == "The requested object (Senders) does not exist") {
-                        throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Sender does not exists.', 404);
-                    }
+                elseif ($response->getReasonPhrase() == "The requested object (Senders) does not exist") {
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Sender does not exists.', 404);
+                } elseif ($response->getReasonPhrase() == "The requested object (Blacklists) does not exist") {
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Blacklist number does not exists.', 404);
+                } elseif ($response->getReasonPhrase() == "The requested object (Histories) does not exist") {
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. History number does not exists.', 404);
                 }
 
-            case 400 :
+
+
+            case
+                400 :
                 // Bad signature
                 if ($response->getReasonPhrase() == "Bad Request - Invalid signature") {
                     throw new InvalidSignatureException('The request signature is not valid.', 400);
@@ -64,13 +69,15 @@ class SmsException extends \RuntimeException
      * @param string $path
      * @return string domain
      */
-    private function getDomain($path)
+    private
+    function getDomain($path)
     {
         $d = explode("/", $path);
         return $d[3];
     }
 
-    public function debug()
+    public
+    function debug()
     {
         $r = new Response();
         var_dump($r->getReasonPhrase());
