@@ -18,6 +18,7 @@
 namespace Ovh\Sms;
 
 use Ovh\Common\Exception\BadConstructorCallException;
+use Ovh\Common\Exception\NotImplementedYetByOvhException;
 use Ovh\Sms\SmsClient;
 
 class Sms
@@ -88,8 +89,9 @@ class Sms
      * @param array $props (avalaibles keys are callBack and templates)
      * @return boolean
      */
-    public function setProperties($props){
-        return self::getClient()->setProperties($this->domain,$props);
+    public function setProperties($props)
+    {
+        return self::getClient()->setProperties($this->domain, $props);
     }
 
     /**
@@ -108,8 +110,9 @@ class Sms
      * @param string $number
      * @return bool
      */
-    public function deleteBlacklist($number){
-        self::getClient()->deleteBlacklist($this->domain,$number);
+    public function deleteBlacklist($number)
+    {
+        self::getClient()->deleteBlacklist($this->domain, $number);
         return true;
     }
 
@@ -139,7 +142,8 @@ class Sms
      *
      * @param $id
      */
-    public function deleteHistory($id){
+    public function deleteHistory($id)
+    {
         self::getClient()->deleteHistory($this->domain, $id);
     }
 
@@ -165,6 +169,48 @@ class Sms
     }
 
     /**
+     * Create a new job
+     *
+     * @param array $opt
+     * @return object
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function createJob($opt)
+    {
+        return json_decode(self::getClient()->createJob($this->domain, $opt));
+    }
+
+    /**
+     * @param int $id : job id
+     * @return void
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function deleteJob($id)
+    {
+        self::getClient()->deleteJob($this->domain, $id);
+    }
+
+    /**
+     * Helper to send SMS
+     *
+     * @param string $from => sender
+     * @param string $to => receiver
+     * @param string $msg => message
+     * @return object
+     */
+    public function send($from, $to, $msg)
+    {
+        $opt = array(
+            'sender' => $from,
+            'receivers' => array($to),
+            'message' => $msg
+        );
+        return $this->createJob($opt);
+    }
+
+    /**
      * Get SMS offers available
      *
      * @param string $countryDestination country code ISO 3166-2
@@ -177,6 +223,19 @@ class Sms
     public function getSeeOffers($countryDestination, $countryCurrencyPrice, $quantity)
     {
         return json_decode(self::getClient()->getSeeOffers($this->domain, $countryDestination, $countryCurrencyPrice, $quantity));
+    }
+
+    /**
+     * Purchase SMS credits
+     *
+     * @param int $quantity
+     * @return string (json encoded object)
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function purchase($quantity)
+    {
+        return json_decode(self::getClient()->purchase($this->domain, $quantity));
     }
 
     /**
@@ -201,6 +260,35 @@ class Sms
     }
 
     /**
+     *  Create a new sender
+     *
+     * @param array $sender (keys : sender (requiered) => string, relaunch => string, reason => string)
+     * @return void
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function createSender($sender)
+    {
+        self::getClient()->createSender($this->domain, $sender);
+    }
+
+    /**
+     * @param array $sender
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function updateSender($sender){
+        throw new NotImplementedYetByOvhException();
+    }
+
+    /**
+     * @param string $sender
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function deleteSender($sender){
+        throw new NotImplementedYetByOvhException();
+    }
+
+    /**
      * Get users associated to the SMS account
      *
      * @return array
@@ -219,6 +307,33 @@ class Sms
     public function getUser($user)
     {
         return json_decode(self::getClient()->getUser($this->domain, $user));
+    }
+
+    /**
+     *
+     * @param $user
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function addUser($user){
+        throw new NotImplementedYetByOvhException();
+    }
+
+    /**
+     *
+     * @param $user
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function updateUser($user){
+        throw new NotImplementedYetByOvhException();
+    }
+
+    /**
+     *
+     * @param $user
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function deleteUser($user){
+        throw new NotImplementedYetByOvhException();
     }
 
 }

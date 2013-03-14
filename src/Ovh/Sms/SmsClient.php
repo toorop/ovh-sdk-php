@@ -19,7 +19,9 @@ namespace Ovh\Sms;
 
 use Ovh\Common\AbstractClient;
 use Ovh\Common\Exception\BadMethodCallException;
+use Ovh\Common\Exception\NotImplementedYetByOvhException;
 use Ovh\Sms\Exception\SmsException;
+
 
 class smsClient extends AbstractClient
 {
@@ -240,6 +242,111 @@ class smsClient extends AbstractClient
     }
 
     /**
+     * Create a new job
+     *
+     * @param string $domain
+     * @param array $opt
+     * @return string (json encoded object)
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function createJob($domain, $opt)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$opt)
+            throw new BadMethodCallException('Parameter $opt is missing');
+        if (!is_array($opt))
+            throw new BadMethodCallException('Parameter $opt must be a array of option. ' . gettype($opt) . ' given.');
+        // required opt are :
+        //      receivers : array of recievers
+        //      message : sms message
+        //      sender : a valid sender
+        if (!array_key_exists('message', $opt) || !array_key_exists('sender', $opt) || !array_key_exists('receivers', $opt))
+            throw new BadMethodCallException('Parameter $opt must have at least  "message" (=> string), "sender" (=> string) and receivers (=> array) keys');
+
+        if (!is_array($opt['receivers']))
+            throw new BadMethodCallException('Parameter $opt[receivers] must be a array of option. ' . gettype($opt['receivers']) . ' given.');
+        if (count($opt['receivers']) == 0)
+            throw new BadMethodCallException('Parameter $opt[receivers] is empty.');
+
+        // clean opt
+        $job = array();
+
+        $job['sender'] = $opt['sender'];
+        $job['message'] = $opt['message'];
+        $job['receivers'] = $opt['receivers'];
+
+        // noStopClause : if true no STOP clause at the end of the SMS. Default to false
+        $job['noStopClause'] = (@$opt['noStopClause']) ? $opt['noStopClause'] : false;
+
+        // priority 0 to 3. Default : 3
+        if (@$opt['priority']) {
+            $opt['priority'] = intval($opt['priority']);
+            if ($opt['priority'] < 0 || $opt['priority'] > 3)
+                $job['priority'] = 3;
+        } else $job['priority'] = 3;
+
+        // validityPeriod : SMS validity in minutes. Default : 2880 (48 Hours)
+        $job['validityPeriod'] = (@$opt['validityPeriod']) ? intval($opt['validityPeriod']) : 2880;
+
+        // charset : Charset of sms message. Default : ?
+        $job['charset'] = (@$opt['charset']) ? $opt['charset'] : '';
+
+        // coding : the sms coding : 1 for 7 bit or 2 for unicode. Default is 1
+        if (@$opt['coding']) {
+            $opt['coding'] = intval($opt['coding']);
+            if ($opt['coding'] < 0 || $opt['coding'] > 1)
+                $job['coding'] = 1;
+        } else $job['coding'] = 1;
+
+        // differedPeriod :  Time in minutes to wait before sending the message. Default : 0
+        $job['differedPeriod'] = (@$opt['differedPeriod']) ? intval($opt['differedPeriod']) : 0;
+
+        // tag : optionnal tag (string)
+        $job['tag'] = (@$opt['tag']) ? $opt['tag'] : '';
+
+        // class :  the sms class: flash(0), phone display(1), SIM(2), toolkit(3). Default : 2
+        if (@$opt['class']) {
+            $opt['class'] = intval($opt['class']);
+            if ($opt['class'] < 0 || $opt['class'] > 3)
+                $job['class'] = 2;
+        } else $job['class'] = 2;
+
+        unset($opt); // not - really - usefull...
+
+        try {
+            $r = $this->post('sms/' . $domain . '/jobs', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($job))->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
+    /**
+     * @param string $domain
+     * @param int $id : job id
+     * @return \Guzzle\Http\Message\Response
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function deleteJob($domain, $id)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if ($id !== 0 && !$id)
+            throw new BadMethodCallException('Parameter $id is missing.');
+        $id = intval($id);
+        try {
+            $r = $this->delete('sms/' . $domain . '/job/' . $id)->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r;
+    }
+
+
+    /**
      * Describe SMS offers available.
      *
      * @param string $countryDestination country code ISO 3166-2
@@ -285,6 +392,32 @@ class smsClient extends AbstractClient
     }
 
     /**
+     * Purchase SMS credits
+     *
+     * @param string $domain
+     * @param int $quantity
+     * @return string (json encoded object)
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function purchase($domain,$quantity){
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$quantity)
+            throw new BadMethodCallException('Parameter $quantity is missing.');
+        $quantity=intval($quantity);
+        $allowedQ= array(100,200,250,500,1000,5000,2500,10000,50000,100000);
+        if(!in_array($quantity,$allowedQ))
+            throw new BadMethodCallException('Parameter $quantity must be in array (' . implode(', ', $allowedQ) . '), "' . $quantity . '" given.');
+        try {
+            $r = $this->post('sms/' . $domain . '/purchase', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($quantity))->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
+    /**
      * Get senders allowed associated to the sms account
      *
      * @param string $domain
@@ -326,8 +459,59 @@ class smsClient extends AbstractClient
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $r->getBody(true);
+    }
+
+    /**
+     *  Create a new sender
+     *
+     * @param string $domain
+     * @param array $sender (keys : sender (requiered) => string, relaunch => string, reason => string)
+     * @return void
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function createSender($domain, $sender){
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$sender)
+            throw new BadMethodCallException('Parameter $sender is missing.');
+        if(!is_array($sender))
+            throw new BadMethodCallException('Parameter $sender must be a array. '.gettype($sender).' given.');
+        // required fields (sender)
+        if(!array_key_exists('sender',$sender))
+            throw new BadMethodCallException('Parameter $sender have key sender (string).');
+        // sanitize
+        $t=array();
+        $t['sender']=$sender['sender'];
+        // relaunch
+        ($sender['relaunch']) ? $t['relaunch']=$sender['relaunch'] : $t['relaunch']='';
+        // reason
+        ($sender['reason']) ? $t['reason']=$sender['reason'] : $t['reason']='';
+        unset($sender);
+        try {
+            $r = $this->post('sms/' . $domain . '/senders', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($t))->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @param string $domain
+     * @param array $sender
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function updateSender($domain, $sender){
+        throw new NotImplementedYetByOvhException();
+    }
+
+    /**
+     * @param string $domain
+     * @param string $sender
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function deleteSender($domain, $sender){
+        throw new NotImplementedYetByOvhException();
     }
 
     /**
@@ -371,6 +555,35 @@ class smsClient extends AbstractClient
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
         return $r->getBody(true);
+    }
+
+    /**
+     *
+     * @param $domain
+     * @param $user
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function addUser($domain,$user){
+        throw new NotImplementedYetByOvhException();
+    }
+
+    /**
+     *
+     * @param $domain
+     * @param $user
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function updateUser($domain,$user){
+        throw new NotImplementedYetByOvhException();
+    }
+    /**
+     *
+     * @param $domain
+     * @param $user
+     * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
+     */
+    public function deleteUser($domain,$user){
+        throw new NotImplementedYetByOvhException();
     }
 
 }
