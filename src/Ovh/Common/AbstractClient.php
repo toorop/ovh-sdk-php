@@ -47,13 +47,8 @@ class AbstractClient extends Client
      */
     public function createRequest($method = RequestInterface::GET, $uri = null, $headers = null, $body = null)
     {
-        #$request=new Request();
-
 
         $request = parent::createRequest($method, $uri, $headers, $body);
-        #$r=$request->getPath();
-        #print($r);
-        #die();
         // Add OVH auth headers
         $hTimestamp = $this->getTimestamp();
         # SIG = "$1$" + sha1.hex(AS+"+"+CK+"+"+METHOD+"+"+QUERY+"+"+BODY +"+"+TSTAMP)
