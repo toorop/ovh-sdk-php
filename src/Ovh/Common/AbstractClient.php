@@ -49,6 +49,9 @@ class AbstractClient extends Client
     {
 
         $request = parent::createRequest($method, $uri, $headers, $body);
+        // see http://snippets.webaware.com.au/howto/stop-turning-off-curlopt_ssl_verifypeer-and-fix-your-php-config/
+        #$request->getCurlOptions()->set(CURLOPT_SSL_VERIFYPEER, false);
+
         // Add OVH auth headers
         $hTimestamp = $this->getTimestamp();
         # SIG = "$1$" + sha1.hex(AS+"+"+CK+"+"+METHOD+"+"+QUERY+"+"+BODY +"+"+TSTAMP)
