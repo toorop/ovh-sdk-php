@@ -311,6 +311,8 @@ class smsClient extends AbstractClient
             $opt['class'] = intval($opt['class']);
             if ($opt['class'] < 0 || $opt['class'] > 3)
                 $job['class'] = 2;
+						else
+								$job['class'] = $opt['class'];
         } else $job['class'] = 2;
 
         unset($opt); // not - really - usefull...
