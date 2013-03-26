@@ -311,8 +311,8 @@ class smsClient extends AbstractClient
             $opt['class'] = intval($opt['class']);
             if ($opt['class'] < 0 || $opt['class'] > 3)
                 $job['class'] = 2;
-						else
-								$job['class'] = $opt['class'];
+            else
+                $job['class'] = $opt['class'];
         } else $job['class'] = 2;
 
         unset($opt); // not - really - usefull...
@@ -402,14 +402,15 @@ class smsClient extends AbstractClient
      * @throws \Ovh\Common\Exception\BadMethodCallException
      * @throws Exception\SmsException
      */
-    public function purchase($domain,$quantity){
+    public function purchase($domain, $quantity)
+    {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         if (!$quantity)
             throw new BadMethodCallException('Parameter $quantity is missing.');
-        $quantity=intval($quantity);
-        $allowedQ= array(100,200,250,500,1000,5000,2500,10000,50000,100000);
-        if(!in_array($quantity,$allowedQ))
+        $quantity = intval($quantity);
+        $allowedQ = array(100, 200, 250, 500, 1000, 5000, 2500, 10000, 50000, 100000);
+        if (!in_array($quantity, $allowedQ))
             throw new BadMethodCallException('Parameter $quantity must be in array (' . implode(', ', $allowedQ) . '), "' . $quantity . '" given.');
         try {
             $r = $this->post('sms/' . $domain . '/purchase', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($quantity))->send();
@@ -473,23 +474,24 @@ class smsClient extends AbstractClient
      * @throws \Ovh\Common\Exception\BadMethodCallException
      * @throws Exception\SmsException
      */
-    public function createSender($domain, $sender){
+    public function createSender($domain, $sender)
+    {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         if (!$sender)
             throw new BadMethodCallException('Parameter $sender is missing.');
-        if(!is_array($sender))
-            throw new BadMethodCallException('Parameter $sender must be a array. '.gettype($sender).' given.');
+        if (!is_array($sender))
+            throw new BadMethodCallException('Parameter $sender must be a array. ' . gettype($sender) . ' given.');
         // required fields (sender)
-        if(!array_key_exists('sender',$sender))
+        if (!array_key_exists('sender', $sender))
             throw new BadMethodCallException('Parameter $sender have key sender (string).');
         // sanitize
-        $t=array();
-        $t['sender']=$sender['sender'];
+        $t = array();
+        $t['sender'] = $sender['sender'];
         // relaunch
-        ($sender['relaunch']) ? $t['relaunch']=$sender['relaunch'] : $t['relaunch']='';
+        ($sender['relaunch']) ? $t['relaunch'] = $sender['relaunch'] : $t['relaunch'] = '';
         // reason
-        ($sender['reason']) ? $t['reason']=$sender['reason'] : $t['reason']='';
+        ($sender['reason']) ? $t['reason'] = $sender['reason'] : $t['reason'] = '';
         unset($sender);
         try {
             $r = $this->post('sms/' . $domain . '/senders', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($t))->send();
@@ -503,7 +505,8 @@ class smsClient extends AbstractClient
      * @param array $sender
      * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
      */
-    public function updateSender($domain, $sender){
+    public function updateSender($domain, $sender)
+    {
         throw new NotImplementedYetByOvhException();
     }
 
@@ -512,7 +515,8 @@ class smsClient extends AbstractClient
      * @param string $sender
      * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
      */
-    public function deleteSender($domain, $sender){
+    public function deleteSender($domain, $sender)
+    {
         throw new NotImplementedYetByOvhException();
     }
 
@@ -565,7 +569,8 @@ class smsClient extends AbstractClient
      * @param $user
      * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
      */
-    public function addUser($domain,$user){
+    public function addUser($domain, $user)
+    {
         throw new NotImplementedYetByOvhException();
     }
 
@@ -575,16 +580,19 @@ class smsClient extends AbstractClient
      * @param $user
      * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
      */
-    public function updateUser($domain,$user){
+    public function updateUser($domain, $user)
+    {
         throw new NotImplementedYetByOvhException();
     }
+
     /**
      *
      * @param $domain
      * @param $user
      * @throws \Ovh\Common\Exception\NotImplementedYetByOvhException
      */
-    public function deleteUser($domain,$user){
+    public function deleteUser($domain, $user)
+    {
         throw new NotImplementedYetByOvhException();
     }
 
