@@ -14,11 +14,11 @@
  * permissions and limitations under the License.
  */
 
-namespace Ovh\Vps\Exception;
+namespace Ovh\Cdn\Exception;
 
-class VpsNotFoundException  extends \RuntimeException
+class CdnDomainAlreadyConfiguredException  extends \RuntimeException
 {
-    public function __construct($domain,$code=0,$prevException=null){
-        parent::__construct("VPS ".$domain.' not found',$code,$prevException);
+    public function __construct($code=0,$prevException=null){
+        parent::__construct('The domain you try to add to this CDN is already configured.',$code,$prevException);
     }
 }
