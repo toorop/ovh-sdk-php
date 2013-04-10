@@ -65,9 +65,10 @@ class Xdsl
      */
     private static function getClient()
     {
-        if (self::$client instanceof XdslClient)
-            return self::$client;
-        return new XdslClient();
+        if (!self::$client instanceof XdslClient) {
+            self::$client = new XdslClient();
+        }
+        return self::$client;
     }
 
     /**
@@ -378,9 +379,9 @@ class Xdsl
      * @param string $phone
      * @param bool $enable
      */
-    public function ipUpdateMonitoringNotification($ip,$notificationId, $frequency, $email, $phone, $enable)
+    public function ipUpdateMonitoringNotification($ip, $notificationId, $frequency, $email, $phone, $enable)
     {
-        self::getClient()->ipUpdateMonitoringNotification($this->id,$ip,$notificationId,$frequency,$email,$phone,$enable);
+        self::getClient()->ipUpdateMonitoringNotification($this->id, $ip, $notificationId, $frequency, $email, $phone, $enable);
     }
 
     /**
@@ -391,7 +392,7 @@ class Xdsl
      */
     public function ipDeleteMonitoringNotification($ip, $notificationId)
     {
-        self::getClient()->ipDeleteMonitoringNotification($this->id,$ip,$notificationId);
+        self::getClient()->ipDeleteMonitoringNotification($this->id, $ip, $notificationId);
     }
 
     /**
@@ -415,7 +416,7 @@ class Xdsl
      */
     public function getLineProperties($line)
     {
-        return json_decode(self::getClient()->getLineProperties($this->id,$line));
+        return json_decode(self::getClient()->getLineProperties($this->id, $line));
     }
 
     /**
@@ -428,7 +429,7 @@ class Xdsl
 
     public function lineResetDslamPort($line)
     {
-        return json_decode(self::getClient()->lineResetDslamPort($this->id,$line));
+        return json_decode(self::getClient()->lineResetDslamPort($this->id, $line));
     }
 
 
@@ -519,11 +520,8 @@ class Xdsl
      */
     public function changeLns($lnsName)
     {
-        return json_decode(self::getClient()->changeLns($this->id,$lnsName));
+        return json_decode(self::getClient()->changeLns($this->id, $lnsName));
     }
-
-
-
 
 
 }

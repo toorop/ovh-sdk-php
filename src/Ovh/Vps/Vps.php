@@ -45,9 +45,10 @@ class Vps
      */
     private static function getClient()
     {
-        if (self::$vpsClient instanceof VpsClient)
-            return self::$vpsClient;
-        return new VpsClient();
+        if (!self::$vpsClient instanceof VpsClient){
+            self::$vpsClient=new VpsClient();
+        };
+        return self::$vpsClient;
     }
 
     /**

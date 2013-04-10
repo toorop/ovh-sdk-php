@@ -46,9 +46,10 @@ class Sms
      */
     private static function getClient()
     {
-        if (self::$smsClient instanceof SmsClient)
-            return self::$smsClient;
-        return new SmsClient();
+        if (!self::$smsClient instanceof SmsClient){
+            self::$smsClient=new SmsClient();
+        };
+        return self::$smsClient;
     }
 
     /**
