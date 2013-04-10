@@ -17,6 +17,7 @@
 namespace Ovh\Common;
 
 use Ovh\Common\AbstractClient;
+use Ovh\Common\Exception\BadMethodCallException;
 
 class OvhClient extends AbstractClient {
 
@@ -49,13 +50,35 @@ class OvhClient extends AbstractClient {
         return $this->get('sms')->send()->getBody(true);
     }
 
+
     /**
      * Get CDN services
      *
-     * @return json string
+     * @return string (json encoded)
      */
     public function getCdnServices(){
         return $this->get('cdn')->send()->getBody(true);
+    }
+
+    /**
+     * Get available POP
+     * @return string (json econded)
+     */
+    public function getCdnPops(){
+        return $this->get('cdn/pops')->send()->getBody(true);
+    }
+
+    /**
+     * Get POP details/info
+     *
+     * @param string $pop : pop name
+     * @return string (json encoded)
+     * @throws Exception\BadMethodCallException
+     */
+    public function getCdnPopDetails($pop){
+        if (!$pop)
+            throw new BadMethodCallException('Parameter $pop is missing.');
+        return $this->get('cdn/pops/'.$pop)->send()->getBody(true);
     }
 
 }

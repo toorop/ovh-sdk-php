@@ -18,6 +18,7 @@ namespace Ovh\Common;
 
 use Guzzle\Http\Client;
 
+use Ovh\Cdn\Cdn;
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
 use Ovh\Sms\Sms;
@@ -60,9 +61,10 @@ class Ovh
      * @return null|OvhClient
      */
     private static function getOvhClient(){
-        if(self::$ovhClient instanceof OvhClient)
-            return self::$ovhClient;
-        else return new OvhClient();
+        if (!self::$ovhClient instanceof OvhClient){
+            self::$ovhClient=new OvhClient();
+        };
+        return self::$ovhClient;
     }
 
 
@@ -147,9 +149,44 @@ class Ovh
      *      CDN
      *
      */
+
+    /**
+     * Get CDN services
+     *
+     * @return array
+     */
     public function getCdnServices(){
         return json_decode(self::getOvhClient()->getCdnServices());
     }
+
+    /**
+     * Get available POPs
+     *
+     * @return array
+     */
+    public function getCdnPops(){
+        return json_decode(self::getOvhClient()->getCdnPops());
+    }
+
+    /**
+     * get CDN pop details
+     *
+     * @param string $pop (as returned by getCdnPops)
+     * @return object
+     */
+    public function getCdnPopDetails($pop){
+        return json_decode(self::getOvhClient()->getCdnPopDetails($pop));
+    }
+
+    /**
+     * Retunrn a CDN object
+     * @param $serviceName
+     * @return object Cdn
+     */
+    public function getCdn($serviceName){
+        return new Cdn($serviceName);
+    }
+
 
 
 
