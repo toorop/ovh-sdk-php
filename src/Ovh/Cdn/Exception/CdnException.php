@@ -16,14 +16,16 @@
  */
 // @todo create a common exception client and extends from it
 
-namespace Ovh\Sms\Exception;
+namespace Ovh\Cdn\Exception;
 
+use Guzzle\Common\Exception\RuntimeException;
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
+use Ovh\Cdn\Exception\CdnDomainAlreadyConfiguredException;
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
-class SmsException extends \RuntimeException
+class CdnException extends \RuntimeException
 {
 
     public function __construct($message = '', $code = 0, $prev)
@@ -32,56 +34,56 @@ class SmsException extends \RuntimeException
         $request = $prev->getRequest();
         $response = $prev->getResponse();
 
+        /*var_dump($response->getStatusCode());
+        var_dump($response->getReasonPhrase());
+        var_dump($request->getPath());
+        die();*/
+
+
         $statusCode = $response->getStatusCode();
         switch ($statusCode) {
             case 404 :
-                // Bad Method or Ressource not available
-                if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist')) {
-                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist.', 404);
-                } // bad sender
-                elseif ($response->getReasonPhrase() == "The requested object (Senders) does not exist") {
-                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Sender does not exists.', 404);
-                } elseif ($response->getReasonPhrase() == "The requested object (Blacklists) does not exist") {
-                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Blacklist number does not exists.', 404);
-                } elseif ($response->getReasonPhrase() == "The requested object (Histories) does not exist") {
-                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. History number does not exists.', 404);
-                }
+                if ($response->getReasonPhrase() == "This service does not exist") {
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist. Service name does not exists.', 404);
+                } elseif (stristr((string)$response->getBody(), 'The requested object') && stristr((string)$response->getBody(), 'does not exist')) {
+                    throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist.' . $response->getReasonPhrase(), 404);
+                } else throw new RuntimeException($response->getReasonPhrase(), 404);
+                break; // not really usefull but...
 
 
-
-            case
-                400 :
+            case 400 :
                 // Bad signature
                 if ($response->getReasonPhrase() == "Bad Request - Invalid signature") {
                     throw new InvalidSignatureException('The request signature is not valid.', 400);
+                } elseif ($response->getReasonPhrase() == "This rule is being update on CDN, please wait few minutes") {
+                    throw new CdnUpdateInProgressException();
                 } else {
                     throw $prev;
                 }
+                break;
+
+
+            case 500:
+                if ($response->getReasonPhrase() == "CDN already configured for this domain") {
+                    throw new CdnDomainAlreadyConfiguredException();
+                } elseif ($response->getReasonPhrase() == "Active Task detected") {
+                    throw new CdnUpdateInProgressException();
+                } else {
+                    throw $prev;
+                }
+                break;
 
             default :
                 throw $prev;
         }
     }
 
-    /**
-     * Return domain from path
-     *
-     * @param string $path
-     * @return string domain
-     */
-    private
-    function getDomain($path)
-    {
-        $d = explode("/", $path);
-        return $d[3];
-    }
-
-    public
-    function debug()
+    public function debug()
     {
         $r = new Response();
         var_dump($r->getReasonPhrase());
         $req = new Request();
+        $req->getParams();
         $req->getPath();
     }
 
