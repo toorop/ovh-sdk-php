@@ -1,5 +1,6 @@
 {
     "name": "toorop/ovh-sdk-php",
+    "version": "0.1.0",
     "homepage": "https://github.com/Toorop/ovh-sdk-php",
     "description":"OVH SDK for PHP",
     "keywords":["ovh","sdk"],
