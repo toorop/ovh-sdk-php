@@ -81,6 +81,17 @@ class OvhClient extends AbstractClient {
         return $this->get('cdn/pops/'.$pop)->send()->getBody(true);
     }
 
+    /**
+     * Get Cloud passports
+     *
+     * @return string passports (json encoded)
+     */
+    public function getCloudPassports()
+    {
+       return $this->get('cloud')->send()->getBody(true);
+    }
+
+
 }
 
 

@@ -24,6 +24,7 @@ use Ovh\Common\OvhClient;
 use Ovh\Sms\Sms;
 use Ovh\Vps\Vps;
 use Ovh\Xdsl\Xdsl;
+use Ovh\Cloud\Cloud;
 
 
 class Ovh
@@ -179,7 +180,8 @@ class Ovh
     }
 
     /**
-     * Retunrn a CDN object
+     * Return a CDN object
+     *
      * @param $serviceName
      * @return object Cdn
      */
@@ -188,6 +190,34 @@ class Ovh
     }
 
 
+
+    /**
+     *
+     *      CLOUD
+     * PCA : public cloud archive : http://www.ovh.com/fr/cloud/archives/
+     * PCS : Public cloud storage : http://www.ovh.com/fr/cloud/stockage/
+     *
+     */
+
+    /**
+     * Return Cloud Services (cloud passport)
+     *
+     * @return array of services (passport)
+     */
+    public function getCloudPassports()
+    {
+        return json_decode(self::getOvhClient()->getCloudPassports());
+    }
+
+    /**
+     * Return a cloud instance
+     *
+     * @param string $passport (OVH cloud passport)
+     * @return Cloud instance
+     */
+    public function getCloud($passport){
+        return new Cloud($passport);
+    }
 
 
 }

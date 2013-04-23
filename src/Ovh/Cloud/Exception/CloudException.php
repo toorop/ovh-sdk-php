@@ -16,16 +16,15 @@
  */
 // @todo create a common exception client and extends from it
 
-namespace Ovh\Cdn\Exception;
+namespace Ovh\Cloud\Exception;
 
 use Guzzle\Common\Exception\RuntimeException;
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
-use Ovh\Cdn\Exception\CdnDomainAlreadyConfiguredException;
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
-class CdnException extends \RuntimeException
+class CloudException extends \RuntimeException
 {
 
     public function __construct($message = '', $code = 0, $prev)
@@ -55,8 +54,6 @@ class CdnException extends \RuntimeException
                 // Bad signature
                 if ($response->getReasonPhrase() == "Bad Request - Invalid signature") {
                     throw new InvalidSignatureException('The request signature is not valid.', 400);
-                } elseif ($response->getReasonPhrase() == "This rule is being update on CDN, please wait few minutes") {
-                    throw new CdnUpdateInProgressException();
                 } else {
                     throw $prev;
                 }
@@ -64,13 +61,7 @@ class CdnException extends \RuntimeException
 
 
             case 500:
-                if ($response->getReasonPhrase() == "CDN already configured for this domain") {
-                    throw new CdnDomainAlreadyConfiguredException();
-                } elseif ($response->getReasonPhrase() == "Active Task detected") {
-                    throw new CdnUpdateInProgressException();
-                } else {
-                    throw $prev;
-                }
+                throw $prev;
                 break;
 
             default :
