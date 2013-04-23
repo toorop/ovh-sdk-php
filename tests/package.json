@@ -1,0 +1,12 @@
+{
+  "name": "OVH_SDK_PHP_tests_runner",
+  "version": "0.0.1",
+  "description": "PHPunit test runner",
+  "author": "Stéphane Depierrepont aka Toorop",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-phpunit": "~0.2.1",
+    "grunt-contrib-watch": "~0.3.1"
+  }
+}
