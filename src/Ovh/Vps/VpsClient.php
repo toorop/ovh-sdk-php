@@ -473,7 +473,7 @@ class vpsClient extends AbstractClient
         try {
             $r = $this->get('vps/' . $domain . '/tasks')->send();
         } catch (\Exception $e) {
-            throw new VpsException($e->getMessage(), $e->getCode());
+            throw new VpsException($e->getMessage(), $e->getCode(), $e);
         }
         return $r->getBody(true);
     }
