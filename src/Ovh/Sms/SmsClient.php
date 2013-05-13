@@ -280,25 +280,22 @@ class smsClient extends AbstractClient
         // noStopClause : if true no STOP clause at the end of the SMS. Default to false
         $job['noStopClause'] = (@$opt['noStopClause']) ? $opt['noStopClause'] : false;
 
-        // priority 0 to 3. Default : 3
-        if (@$opt['priority']) {
-            $opt['priority'] = intval($opt['priority']);
-            if ($opt['priority'] < 0 || $opt['priority'] > 3)
-                $job['priority'] = 3;
-        } else $job['priority'] = 3;
+        // priority Default: veryLow
+        if (@$opt['priority'] &&
+            in_array($opt['priority'], ['high', 'medium', 'low', 'veryLow']))
+            $job['priority'] = $opt['priority'];
+        else $job['priority'] = 'veryLow';
 
         // validityPeriod : SMS validity in minutes. Default : 2880 (48 Hours)
         $job['validityPeriod'] = (@$opt['validityPeriod']) ? intval($opt['validityPeriod']) : 2880;
 
         // charset : Charset of sms message. Default : ?
-        $job['charset'] = (@$opt['charset']) ? $opt['charset'] : '';
+        $job['charset'] = (@$opt['charset']) ? $opt['charset'] : 'UTF-8';
 
-        // coding : the sms coding : 1 for 7 bit or 2 for unicode. Default is 1
-        if (@$opt['coding']) {
-            $opt['coding'] = intval($opt['coding']);
-            if ($opt['coding'] < 0 || $opt['coding'] > 1)
-                $job['coding'] = 1;
-        } else $job['coding'] = 1;
+        // coding : the sms coding : '7bit' or '8bit' for unicode. Default is '7bit'
+        if (@$opt['coding'] && in_array($opt['coding'], ['7bit', '8bit']))
+            $job['coding'] = $opt['coding'];
+        else $job['coding'] = '7bit';
 
         // differedPeriod :  Time in minutes to wait before sending the message. Default : 0
         $job['differedPeriod'] = (@$opt['differedPeriod']) ? intval($opt['differedPeriod']) : 0;
@@ -306,14 +303,11 @@ class smsClient extends AbstractClient
         // tag : optionnal tag (string)
         $job['tag'] = (@$opt['tag']) ? $opt['tag'] : '';
 
-        // class :  the sms class: flash(0), phone display(1), SIM(2), toolkit(3). Default : 2
-        if (@$opt['class']) {
-            $opt['class'] = intval($opt['class']);
-            if ($opt['class'] < 0 || $opt['class'] > 3)
-                $job['class'] = 2;
-            else
-                $job['class'] = $opt['class'];
-        } else $job['class'] = 2;
+        // class :  the sms class: 'flash', 'phoneDisplay', 'sim', 'toolkit'. Default : 'phoneDisplay'
+        if (@$opt['class'] &&
+            in_array($opt['class'], ['flash', 'phoneDisplay', 'sim', 'toolkit']))
+            $job['class'] = $opt['class'];
+        else $job['class'] = 'phoneDisplay';
 
         unset($opt); // not - really - usefull...
 
