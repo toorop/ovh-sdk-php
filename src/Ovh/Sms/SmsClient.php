@@ -282,7 +282,7 @@ class smsClient extends AbstractClient
 
         // priority Default: veryLow
         if (@$opt['priority'] &&
-            in_array($opt['priority'], ['high', 'medium', 'low', 'veryLow']))
+            in_array($opt['priority'], array('high', 'medium', 'low', 'veryLow')))
             $job['priority'] = $opt['priority'];
         else $job['priority'] = 'veryLow';
 
@@ -293,7 +293,7 @@ class smsClient extends AbstractClient
         $job['charset'] = (@$opt['charset']) ? $opt['charset'] : 'UTF-8';
 
         // coding : the sms coding : '7bit' or '8bit' for unicode. Default is '7bit'
-        if (@$opt['coding'] && in_array($opt['coding'], ['7bit', '8bit']))
+        if (@$opt['coding'] && in_array($opt['coding'], array('7bit', '8bit')))
             $job['coding'] = $opt['coding'];
         else $job['coding'] = '7bit';
 
@@ -305,7 +305,7 @@ class smsClient extends AbstractClient
 
         // class :  the sms class: 'flash', 'phoneDisplay', 'sim', 'toolkit'. Default : 'phoneDisplay'
         if (@$opt['class'] &&
-            in_array($opt['class'], ['flash', 'phoneDisplay', 'sim', 'toolkit']))
+            in_array($opt['class'], array('flash', 'phoneDisplay', 'sim', 'toolkit')))
             $job['class'] = $opt['class'];
         else $job['class'] = 'phoneDisplay';
 
