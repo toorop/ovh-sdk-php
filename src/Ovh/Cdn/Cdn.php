@@ -17,7 +17,7 @@
 namespace Ovh\Cdn;
 
 use Ovh\Common\Exception\BadConstructorCallException;
-use CdnClient;
+use Ovh\Cdn\CdnClient;
 
 
 class Cdn
