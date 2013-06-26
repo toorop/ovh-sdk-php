@@ -429,7 +429,7 @@ class Cdn
      * @param integer $taskId
      * @return object property
      */
-    public function hetDomainTaskProperties($domain, $taskId)
+    public function getDomainTaskProperties($domain, $taskId)
     {
         return json_decode(self::getClient()->getDomainTaskProperties($this->sn, $domain, $taskId));
     }
