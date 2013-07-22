@@ -17,9 +17,10 @@
 namespace Ovh\Vps;
 
 
-use \Ovh\Common\Exception\NotImplementedYetException;
-use \Ovh\Common\Exception\NotImplementedYetByOvhException;
+use Ovh\Common\Exception\NotImplementedYetException;
+use Ovh\Common\Exception\NotImplementedYetByOvhException;
 
+use Ovh\Common\Ovh;
 use Ovh\Vps\VpsClient;
 use Ovh\Common\Task;
 
@@ -125,18 +126,18 @@ class Vps
     /**
      * Start VPS
      *
-     * @return \Ovh\Common\Task
+     * @return Task
      */
     public function start()
     {
-        return $task=new Task(self::getClient()->start($this->getDomain()));
+        return new Task(self::getClient()->start($this->getDomain()));
     }
 
 
     /**
      * Stop VPS
      *
-     * @return \Ovh\Common\Task
+     * @return Task
      */
     public function stop()
     {
@@ -147,7 +148,7 @@ class Vps
     /**
      * Reboot VPS
      *
-     * @return \Ovh\Common\Task
+     * @return Task
      */
     public function reboot()
     {
@@ -292,7 +293,7 @@ class Vps
 
     /**
      * @param $taskId
-     * @return \Ovh\Common\Task
+     * @return Task
      */
     public function getTaskProperties($taskId)
     {
