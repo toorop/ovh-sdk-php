@@ -26,7 +26,7 @@ use Ovh\Common\AbstractClient;
 use Ovh\Common\Exception\BadMethodCallException;
 use Ovh\Common\Exception\NotImplementedYetException;
 //use Ovh\Vps\Exception\VpsNotFoundException;
-use Ovh\Vps\Exception\ServerException;
+use Ovh\Dedicated\Server\Exception\ServerException;
 
 
 class serverClient extends AbstractClient
