@@ -68,6 +68,26 @@ $ovh = new Ovh($config);
 
 /**
  *
+ *  Dedicated Server Part
+ *
+ */
+
+// Get your Dedicated Servers
+$dedicatedServerList=$ovh->getDedicatedServerList();
+foreach($dedicatedServerList as $dedicatedServerDomain)
+    print "$dedicatedServerDomain\n";
+
+// Init a Dedicated Server instance
+$dedicatedServer=$ovh->getDedicatedServer($dedicatedServerDomain);
+
+// Get Dedicated Server properties
+$r=$dedicatedServer->getProperties();
+
+
+
+
+/**
+ *
  *  VPS Part
  *
  */
