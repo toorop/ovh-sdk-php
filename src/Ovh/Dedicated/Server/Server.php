@@ -49,7 +49,7 @@ class Server
 		if (!self::$serverClient instanceof ServerClient){
 			self::$serverClient=new ServerClient();
 		};
-		return self::$ServerClient;
+		return self::$serverClient;
 	}
 
 	/**
