@@ -18,6 +18,7 @@ namespace Ovh\Common;
 
 use Guzzle\Http\Client;
 
+use Ovh\Dedicated\Server\Server;
 use Ovh\Cdn\Cdn;
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
