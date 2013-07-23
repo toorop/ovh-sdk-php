@@ -102,4 +102,26 @@ class Server
 		return json_decode(self::getClient()->getServiceInfos($this->getDomain()));
 	}
 
+
+
+	#Task
+	/**
+	 * Return tasks associated with this Dedicated Server (current and past)
+	 *
+	 * @return array of int
+	 */
+	public function getTasks()
+	{
+		return json_decode(self::getClient()->getTasks($this->getDomain()));
+	}
+
+	/**
+	 * @param $taskId
+	 * @return Task
+	 */
+	public function getTaskProperties($taskId)
+	{
+		return new Task(self::getClient()->getTaskProperties($this->getDomain(), $taskId));
+	}
+
 }

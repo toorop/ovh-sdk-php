@@ -83,6 +83,14 @@ $dedicatedServer=$ovh->getDedicatedServer($dedicatedServerDomain);
 // Get Dedicated Server properties
 $r=$dedicatedServer->getProperties();
 
+// Get Dedicated Server Service Infos
+$r=$dedicatedServer->getServiceInfos();
+
+// Get current task
+$task=$dedicatedServer->getTasks();
+
+// Get properties of a task
+$properties = $dedicatedServer->getTaskProperties($taskId);
 
 
 

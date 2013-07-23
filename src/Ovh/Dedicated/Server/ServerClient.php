@@ -52,7 +52,7 @@ class serverClient extends AbstractClient
 	}
 
 	/**
-	 * Get properties
+	 * Get Service Infos
 	 *
 	 * @param string $domain
 	 * @return string Json
@@ -65,6 +65,53 @@ class serverClient extends AbstractClient
 			$r = $this->get('dedicated/server/' . $domain . '/serviceInfos')->send();
 		} catch (\Exception $e) {
 			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
+
+	/**
+	 * Tasks associated to this virtual server
+	 *
+	 * @param string $domain
+	 * @return mixed
+	 * @throws \Ovh\Common\Exception\BadMethodCallException
+	 * @throws Exception\ServerException
+	 */
+	public function getTasks($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/task')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
+	/**
+	 * Get task properties
+	 *
+	 * @param $domain
+	 * @param $taskId
+	 * @return mixed
+	 * @throws \Ovh\Common\Exception\BadMethodCallException
+	 * @throws Exception\ServerException
+	 */
+	public function getTaskProperties($domain, $taskId)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$taskId = (string)$taskId;
+		if (!$taskId)
+			throw new BadMethodCallException('Parameter $taskId is missing.');
+		try {
+			$r = $this->get('server/dedicated/' . $domain . '/task/' . $taskId)->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(),$e);
 		}
 		return $r->getBody(true);
 	}
