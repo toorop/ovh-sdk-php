@@ -21,7 +21,7 @@ use Ovh\Common\Exception\NotImplementedYetException;
 use Ovh\Common\Exception\NotImplementedYetByOvhException;
 
 use Ovh\Common\Ovh;
-use Ovh\Vps\ServerClient;
+use Ovh\Dedicated\Server\ServerClient;
 use Ovh\Common\Task;
 
 

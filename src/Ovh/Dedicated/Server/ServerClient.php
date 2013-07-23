@@ -37,8 +37,8 @@ class serverClient extends AbstractClient
 	 *
 	 * @param string $domain
 	 * @return string Json
-	 * @throws Exception\VpsException
-	 * @throws Exception\VpsNotFoundException
+	 * @throws Exception\ServerException
+	 * @throws Exception\ServerNotFoundException
 	 */
 	public function getProperties($domain)
 	{
