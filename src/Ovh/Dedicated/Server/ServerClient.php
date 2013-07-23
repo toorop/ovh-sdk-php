@@ -15,7 +15,7 @@
  */
 
 
-namespace Ovh\Vps;
+namespace Ovh\Dedicated\Server;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 #use Guzzle\Http\Exception\BadResponseException;
