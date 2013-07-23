@@ -43,7 +43,7 @@ class serverClient extends AbstractClient
 	public function getProperties($domain)
 	{
 		try {
-			$r = $this->get('dedicated/Server/' . $domain)->send();
+			$r = $this->get('dedicated/server/' . $domain)->send();
 		} catch (\Exception $e) {
 			throw new ServerException($e->getMessage(), $e->getCode(), $e);
 		}
