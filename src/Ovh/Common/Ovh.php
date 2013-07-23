@@ -95,7 +95,7 @@ class Ovh
 	 * @return \Ovh\Dedicated\Server\Server
 	 */
 	public function getDedicatedServer($domain){
-		return new Dedicated/Server($domain);
+		return new Server($domain);
 	}
 
 
