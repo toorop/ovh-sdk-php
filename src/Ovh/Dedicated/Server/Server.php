@@ -28,7 +28,7 @@ use Ovh\Common\Task;
 class Server
 {
 	private $domain = null;
-	private static $ServerClient = null;
+	private static $serverClient = null;
 
 	/**
 	 * @param string $domain
@@ -42,7 +42,7 @@ class Server
 	/**
 	 * Return VPS client
 	 *
-	 * @return null|ServerClient
+	 * @return null|serverClient
 	 */
 	private static function getClient()
 	{
