@@ -70,6 +70,25 @@ class Ovh
 
 
 
+	/**
+	 *
+	 *          Dedicated Server
+	 *
+	 */
+
+
+	/**
+	 * Return list of Dedicated Servers owned by user
+	 *
+	 * @return mixed
+	 */
+	public function getDedicatedServerList()
+	{
+		return json_decode(self::getOvhClient()->getDedicatedServerList());
+	}
+
+
+
     /**
      *
      *          VPS
