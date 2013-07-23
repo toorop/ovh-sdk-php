@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright 2013 Stéphane Depierrepont (aka Toorop)
+ * Copyright 2013 Florian Jensen (aka flosoft)
+ * based on work by Stéphane Depierrepont (aka Toorop)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
