@@ -62,7 +62,7 @@ class serverClient extends AbstractClient
 	public function getServiceInfos($domain)
 	{
 		try {
-			$r = $this->get('dedicated/server/' . $domain . 'serviceInfos')->send();
+			$r = $this->get('dedicated/server/' . $domain . '/serviceInfos')->send();
 		} catch (\Exception $e) {
 			throw new ServerException($e->getMessage(), $e->getCode(), $e);
 		}
