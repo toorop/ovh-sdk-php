@@ -41,7 +41,7 @@ class Server
 
 
 	/**
-	 * Return VPS client
+	 * Return Dedicated Server client
 	 *
 	 * @return null|serverClient
 	 */
@@ -80,7 +80,7 @@ class Server
 	##
 
 	/**
-	 *  Get VPS properties
+	 *  Get Dedicated Server properties
 	 *
 	 *  @return object
 	 *
