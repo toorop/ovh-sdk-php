@@ -51,4 +51,22 @@ class serverClient extends AbstractClient
 		return $r->getBody(true);
 	}
 
+	/**
+	 * Get properties
+	 *
+	 * @param string $domain
+	 * @return string Json
+	 * @throws Exception\ServerException
+	 * @throws Exception\ServerNotFoundException
+	 */
+	public function getServiceInfos($domain)
+	{
+		try {
+			$r = $this->get('dedicated/server/' . $domain . 'serviceInfos')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
 }

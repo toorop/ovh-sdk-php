@@ -90,4 +90,16 @@ class Server
 		return json_decode(self::getClient()->getProperties($this->getDomain()));
 	}
 
+	/**
+	 *  Get Dedicated Server Service Infos
+	 *
+	 *  @return object
+	 *
+	 */
+
+	public function  getServiceInfos()
+	{
+		return json_decode(self::getClient()->getServiceInfos($this->getDomain()));
+	}
+
 }
