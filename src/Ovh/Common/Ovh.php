@@ -87,6 +87,16 @@ class Ovh
 		return json_decode(self::getOvhClient()->getDedicatedServerList());
 	}
 
+	/**
+	 * Return a Dedicated Server object
+	 *
+	 * @param $domain
+	 * @return \Ovh\Dedicated\Server\Server
+	 */
+	public function getDedicatedServer($domain){
+		return new DedicatedServer($domain);
+	}
+
 
 
     /**
