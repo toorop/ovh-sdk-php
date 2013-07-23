@@ -21,6 +21,17 @@ use Ovh\Common\Exception\BadMethodCallException;
 
 class OvhClient extends AbstractClient {
 
+	/**
+	 * Return Dedicated Server list
+	 *
+	 * @return mixed
+	 */
+	public function getDedicatedServerList(){
+		$request = $this->get('dedicated/server');
+		$response=$request->send();
+		return $response->getBody(true);
+	}
+
     /**
      * Return VPS list
      *
