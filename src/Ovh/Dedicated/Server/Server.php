@@ -3,6 +3,7 @@
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
  * Authors :
+ *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -91,6 +92,130 @@ class Server
 	{
 		return json_decode(self::getClient()->getProperties($this->getDomain()));
 	}
+
+    /**
+     * @param $bootDevice
+     * @return bool true
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function setBootdevice($bootDevice){
+        self::getClient()->setBootDevice($this->getDomain(),$bootDevice);
+        return true;
+    }
+
+    /**
+     * @param $enable
+     * @return bool true
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function setMonitorin($enable){
+        self::getClient()->setMonitoring($this->getDomain(),$enable);
+        return true;
+    }
+
+    /**
+     * Set netboot
+     *
+     * @param $netbootId
+     * @return bool true
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function setNetBoot($netbootId){
+        self::getClient()->setBootDevice($this->getDomain(),$netbootId);
+        return true;
+    }
+
+    /**
+     * Get IPS
+     *
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @return array of strings
+     */
+    public function getIps()
+    {
+        return json_decode(self::getClient()->getIps($this->getDomain()));
+    }
+
+    /**
+     * Reboot server
+     *
+     * @return bool true
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function reboot()
+    {
+        self::getClient()->reboot($this->getDomain());
+        return true;
+    }
+
+    /**
+     *  Get secondary DNS
+     *
+     * @return array
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getSecondaryDnsDomains()
+    {
+        return json_decode(self::getClient()->getSecondaryDnsDomains($this->getDomain()));
+    }
+
+    /**
+     * Add domain to secondary DNS
+     *
+     * @param string $domain2add
+     * @param string ipv4 $ip
+     * @return bool true
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function addSecondaryDnsDomains($domain2add, $ip){
+        self::getClient()->addSecondaryDnsDomains($this->getDomain(),$domain2add,$ip);
+        return true;
+    }
+
+    /**
+     * Get info about $domain2getInfo
+     *
+     * @param $domain2getInfo
+     * @return array
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getSecondaryDnsDomainsInfo($domain2getInfo){
+        return json_decode(self::getClient()->getSecondaryDnsDomainsInfo($this->getDomain(), $domain2getInfo));
+    }
+
+    /**
+     * Delete a domain on secondayr DNS server
+     *
+     * @param $domain2delete
+     * @return bool true
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function deleteSecondaryDnsDomains($domain2delete){
+        json_decode(self::getClient()->deleteSecondaryDnsDomains($this->getDomain(), $domain2delete));
+        return true;
+    }
+
+    /**
+     * Get info about secondary DNS server of $domain2getInfo
+     *
+     * @param $domain2getInfo
+     * @return array
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getSecondaryDnsServerInfo($domain2getInfo){
+        return json_decode(self::getClient()->getSecondaryDnsServerInfo($this->getDomain(), $domain2getInfo));
+    }
+
 
 	/**
 	 *  Get Dedicated Server Service Infos

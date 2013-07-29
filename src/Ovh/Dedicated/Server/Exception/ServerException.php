@@ -3,6 +3,7 @@
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
  * Authors :
+ *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
