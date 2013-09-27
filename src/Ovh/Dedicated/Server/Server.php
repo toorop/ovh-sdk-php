@@ -115,7 +115,7 @@ class Server
 	 */
 	public function getBootOptions($bootId)
 	{
-		return json_decode(self::getClient()->getBootProperties($this->getDomain(), $bootId));
+		return json_decode(self::getClient()->getBootOptions($this->getDomain(), $bootId));
 	}
 
 
