@@ -93,7 +93,42 @@ class Server
 		return json_decode(self::getClient()->getProperties($this->getDomain()));
 	}
 
-    /**
+	/**
+	 * @return mixed
+	 */
+	public function getBoot()
+	{
+		return json_decode(self::getClient()->getBoot($this->getDomain()));
+	}
+
+
+	/**
+	 * @param $bootId
+	 */
+	public function getBootProperties($bootId)
+	{
+		return json_decode(self::getClient()->getBootProperties($this->getDomain(), $bootId));
+	}
+
+	/**
+	 * @param $bootId
+	 */
+	public function getBootOptions($bootId)
+	{
+		return json_decode(self::getClient()->getBootOptions($this->getDomain(), $bootId));
+	}
+
+	/**
+	 * @param $bootId
+	 */
+	public function getBootOptionsProperties($bootId, $option)
+	{
+		return json_decode(self::getClient()->getBootOptionsProperties($this->getDomain(), $bootId, $option));
+	}
+
+
+
+	/**
      * @param $bootDevice
      * @return bool true
      * @throws Exception\ServerException
@@ -110,7 +145,7 @@ class Server
      * @throws Exception\ServerException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
-    public function setMonitorin($enable){
+    public function setMonitoring($enable){
         self::getClient()->setMonitoring($this->getDomain(),$enable);
         return true;
     }
