@@ -57,7 +57,97 @@ class serverClient extends AbstractClient
         return $r->getBody(true);
     }
 
-    /**
+	/**
+	 * Get boot options
+	 */
+
+	public function getBoot($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+
+	}
+
+	/**
+	 * Get boot properties
+	 *
+	 * @param $domain
+	 * @param $bootId
+	 * @return mixed
+	 * @throws \Ovh\Common\Exception\BadMethodCallException
+	 * @throws Exception\ServerException
+	 */
+	public function getBootProperties($domain, $bootId)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$bootId = (string)$bootId;
+		if (!$bootId)
+			throw new BadMethodCallException('Parameter $bootId is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot/' . $bootId)->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
+	/**
+	 * Get boot options
+	 *
+	 * @param $domain
+	 * @param $bootId
+	 * @return mixed
+	 * @throws \Ovh\Common\Exception\BadMethodCallException
+	 * @throws Exception\ServerException
+	 */
+	public function getBootOptions($domain, $bootId)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$bootId = (string)$bootId;
+		if (!$bootId)
+			throw new BadMethodCallException('Parameter $bootId is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot/' . $bootId . '/option')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
+	public function getBootOptionsProperties($domain, $bootId, $option)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$bootId = (string)$bootId;
+		if (!$bootId)
+			throw new BadMethodCallException('Parameter $bootId is missing.');
+		$option = (string)$option;
+		if (!$option)
+			throw new BadMethodCallException('Parameter $option is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot/' . $bootId . '/option/' . $option)->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
+
+
+
+	/**
      * Set boot device
      *
      * @param $domain
@@ -84,7 +174,7 @@ class serverClient extends AbstractClient
     }
 
     /**
-     * (des)activate monitoring
+     * (de)activate monitoring
      *
      * @param string $domain
      * @param boolean $enable
@@ -355,7 +445,7 @@ class serverClient extends AbstractClient
         if (!$taskId)
             throw new BadMethodCallException('Parameter $taskId is missing.');
         try {
-            $r = $this->get('server/dedicated/' . $domain . '/task/' . $taskId)->send();
+            $r = $this->get('dedicated/server/' . $domain . '/task/' . $taskId)->send();
         } catch (\Exception $e) {
             throw new ServerException($e->getMessage(), $e->getCode(), $e);
         }
