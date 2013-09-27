@@ -93,6 +93,15 @@ class Server
 		return json_decode(self::getClient()->getProperties($this->getDomain()));
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getBoot()
+	{
+		return json_decode(self::getClient()->getBoot($this->getDomain()));
+	}
+
+
     /**
      * @param $bootDevice
      * @return bool true

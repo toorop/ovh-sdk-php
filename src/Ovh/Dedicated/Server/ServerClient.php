@@ -57,7 +57,28 @@ class serverClient extends AbstractClient
         return $r->getBody(true);
     }
 
-    /**
+	/**
+	 * Get boot options
+	 */
+
+	public function getBoot($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+
+	}
+
+
+
+
+	/**
      * Set boot device
      *
      * @param $domain
