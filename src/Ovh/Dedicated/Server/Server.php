@@ -110,7 +110,7 @@ class Server
      * @throws Exception\ServerException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
-    public function setMonitorin($enable){
+    public function setMonitoring($enable){
         self::getClient()->setMonitoring($this->getDomain(),$enable);
         return true;
     }

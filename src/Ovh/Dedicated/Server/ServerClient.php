@@ -84,7 +84,7 @@ class serverClient extends AbstractClient
     }
 
     /**
-     * (des)activate monitoring
+     * (de)activate monitoring
      *
      * @param string $domain
      * @param boolean $enable
