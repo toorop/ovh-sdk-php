@@ -125,6 +125,25 @@ class serverClient extends AbstractClient
 		return $r->getBody(true);
 	}
 
+	public function getBootOptionsProperties($domain, $bootId, $option)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$bootId = (string)$bootId;
+		if (!$bootId)
+			throw new BadMethodCallException('Parameter $bootId is missing.');
+		$option = (string)$option;
+		if (!$option)
+			throw new BadMethodCallException('Parameter $option is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot/' . $bootId . '/option/' . $option)->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
 
 
 
