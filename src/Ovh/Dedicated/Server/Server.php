@@ -102,6 +102,15 @@ class Server
 	}
 
 
+	/**
+	 * @param $bootId
+	 */
+	public function getBootProperties($bootId)
+	{
+		return json_decode(self::getClient()->getBootProperties($this->getDomain(), $bootId));
+	}
+
+
     /**
      * @param $bootDevice
      * @return bool true

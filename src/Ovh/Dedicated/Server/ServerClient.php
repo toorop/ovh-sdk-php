@@ -75,6 +75,31 @@ class serverClient extends AbstractClient
 
 	}
 
+	/**
+	 * Get boot properties
+	 *
+	 * @param $domain
+	 * @param $bootId
+	 * @return mixed
+	 * @throws \Ovh\Common\Exception\BadMethodCallException
+	 * @throws Exception\ServerException
+	 */
+	public function getBootProperties($domain, $bootId)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$bootId = (string)$bootId;
+		if (!$bootId)
+			throw new BadMethodCallException('Parameter $bootId is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot/' . $bootId)->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
 
 
 
@@ -376,7 +401,7 @@ class serverClient extends AbstractClient
         if (!$taskId)
             throw new BadMethodCallException('Parameter $taskId is missing.');
         try {
-            $r = $this->get('server/dedicated/' . $domain . '/task/' . $taskId)->send();
+            $r = $this->get('dedicated/server/' . $domain . '/task/' . $taskId)->send();
         } catch (\Exception $e) {
             throw new ServerException($e->getMessage(), $e->getCode(), $e);
         }
