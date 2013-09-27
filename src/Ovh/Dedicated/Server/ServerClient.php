@@ -100,6 +100,31 @@ class serverClient extends AbstractClient
 		return $r->getBody(true);
 	}
 
+	/**
+	 * Get boot options
+	 *
+	 * @param $domain
+	 * @param $bootId
+	 * @return mixed
+	 * @throws \Ovh\Common\Exception\BadMethodCallException
+	 * @throws Exception\ServerException
+	 */
+	public function getBootOptions($domain, $bootId)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		$bootId = (string)$bootId;
+		if (!$bootId)
+			throw new BadMethodCallException('Parameter $bootId is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/boot/' . $bootId . '/option')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+
 
 
 

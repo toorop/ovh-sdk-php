@@ -110,8 +110,17 @@ class Server
 		return json_decode(self::getClient()->getBootProperties($this->getDomain(), $bootId));
 	}
 
+	/**
+	 * @param $bootId
+	 */
+	public function getBootOptions($bootId)
+	{
+		return json_decode(self::getClient()->getBootProperties($this->getDomain(), $bootId));
+	}
 
-    /**
+
+
+	/**
      * @param $bootDevice
      * @return bool true
      * @throws Exception\ServerException
