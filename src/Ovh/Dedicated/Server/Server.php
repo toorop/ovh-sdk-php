@@ -159,7 +159,7 @@ class Server
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
     public function setNetBoot($netbootId){
-        self::getClient()->setBootDevice($this->getDomain(),$netbootId);
+        self::getClient()->setNetboot($this->getDomain(),$netbootId);
         return true;
     }
 
