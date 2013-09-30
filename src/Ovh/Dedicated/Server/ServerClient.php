@@ -207,20 +207,20 @@ class serverClient extends AbstractClient
      * Set netboot
      *
      * @param string $domain
-     * @param int $netbootId
+     * @param int $bootId
      * @return \Guzzle\Http\EntityBodyInterface|string
      * @throws Exception\ServerException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
-    public function setNetboot($domain, $netbootId)
+    public function setNetboot($domain, $bootId)
     {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         $domain = (string)$domain;
-        if (!$netbootId)
-            throw new BadMethodCallException('Parameter $netbootId is missing.');
-        $netbootId = intval($netbootId);
-        $payload = array('netbootId' => $netbootId);
+        if (!$bootId)
+            throw new BadMethodCallException('Parameter $bootId is missing.');
+        $bootId = intval($bootId);
+        $payload = array('bootId' => $bootId);
         try {
             $r = $this->put('dedicated/server/' . $domain, array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
         } catch (\Exception $e) {
