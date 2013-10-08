@@ -283,7 +283,7 @@ class Server
 	 */
 	public function getTaskProperties($taskId)
 	{
-		return new Task(self::getClient()->getTaskProperties($this->getDomain(), $taskId));
+		return json_decode(self::getClient()->getTaskProperties($this->getDomain(), $taskId));
 	}
 
 }
