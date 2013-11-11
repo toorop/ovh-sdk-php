@@ -174,6 +174,20 @@ class Server
     {
         return json_decode(self::getClient()->getIps($this->getDomain()));
     }
+    
+    
+    /**
+     * Get MRTG
+     * Ajout by @Thibautg16 le 11/11/2013
+     *
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @return array of strings
+     */
+    public function getMrtg($period,$type)
+    {
+        return json_decode(self::getClient()->getMrtg($this->getDomain(),$period,$type));
+    }
 
     /**
      * Reboot server
