@@ -249,6 +249,37 @@ class serverClient extends AbstractClient
         }
         return $r->getBody(true);
     }
+    
+    
+    /**
+     * Get MRTG
+     * Ajout by @Thibautg16 le 11/11/2013
+     * 
+     * @param string $domain
+     * @param string $period
+     * @param string $type
+     * 
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getMrtg($domain, $period='daily', $type='traffic:download'){
+        $domain = (string)$domain;
+        $period = (string)$period;
+        $type   = (string)$type;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/mrtg?period='.$period.'&type='.$type)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    
 
     /**
      * Reboot
