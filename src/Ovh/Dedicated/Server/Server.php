@@ -299,5 +299,32 @@ class Server
 	{
 		return json_decode(self::getClient()->getTaskProperties($this->getDomain(), $taskId));
 	}
+	
+	/*********** Intervention ***********/
+        /**
+        * Get Interventions
+        * Retourne les interventions associés au serveur dédié (en cours et passé)
+        * Ajout par @Thibautg16 le 22/11/2013
+        *
+        * @throws Exception\ServerException
+        * @throws \Ovh\Common\Exception\BadMethodCallException
+        * @return array of int
+        */
+        public function getInterventions(){
+                return json_decode(self::getClient()->getInterventions($this->getDomain()));
+        }
+        
+        /**
+        * Get InterventionsProperties
+        * Retourne les informations d'une intervention suivant son identifiant
+        * Ajout by @Thibautg16 le 22/11/2013
+        *
+        * @throws Exception\ServerException
+        * @throws \Ovh\Common\Exception\BadMethodCallException
+        * @return array(date,type,id)
+        */
+        public function getInterventionProperties($interventionId){
+                return json_decode(self::getClient()->getInterventionProperties($this->getDomain(), $interventionId));
+        }
 
 }
