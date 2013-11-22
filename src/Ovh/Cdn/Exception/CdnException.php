@@ -63,7 +63,7 @@ class CdnException extends \RuntimeException
                 break;
 
 
-            case 500:
+            case 409:
                 if ($response->getReasonPhrase() == "CDN already configured for this domain") {
                     throw new CdnDomainAlreadyConfiguredException();
                 } elseif ($response->getReasonPhrase() == "Active Task detected") {
