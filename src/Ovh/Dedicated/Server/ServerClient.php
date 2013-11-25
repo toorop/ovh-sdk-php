@@ -482,5 +482,53 @@ class serverClient extends AbstractClient
         }
         return $r->getBody(true);
     }
+    
+    /**
+    * Retourne les interventions associés au serveur dédié (en cours et passé)
+    * Ajout par @Thibautg16 le 22/11/2013
+    *
+    * @param string $domain
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    * @throws Exception\ServerException
+    * @return int
+    */
+    public function getInterventions($domain)
+    {
+        $domain = (string)$domain;
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/intervention')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+	
+    /**
+    * Retourne les informations d'une intervention suivant son identifiant
+    * Ajout par @Thibautg16 le 22/11/2013
+    *
+    * @param $domain
+    * @param $interventionId
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    * @throws Exception\ServerException
+    * @return array(date,type,id)
+    */
+    public function getInterventionProperties($domain, $interventionId)
+    {
+        $domain = (string)$domain;
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        $interventionId = (string)$interventionId;
+        if (!$interventionId)
+            throw new BadMethodCallException('Parameter $interventionId is missing.');
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/intervention/' . $interventionId)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
 
 }
