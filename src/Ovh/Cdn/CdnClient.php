@@ -22,6 +22,7 @@ use Ovh\Common\Exception\BadMethodCallException;
 
 class CdnClient extends AbstractClient
 {
+    const CDN_API_ENDPOINT = "cdn/dedicated/";
 
     /**
      *
@@ -35,7 +36,7 @@ class CdnClient extends AbstractClient
         if ( !$sn )
             throw new BadMethodCallException( 'Missing parameter $sn.' );
         try {
-            $r = $this->get( 'cdn/' . $sn )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -54,7 +55,7 @@ class CdnClient extends AbstractClient
         if ( !$sn )
             throw new BadMethodCallException( 'Missing parameter $sn.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains' )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -76,7 +77,7 @@ class CdnClient extends AbstractClient
         if ( !$domain )
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -99,7 +100,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         $payload = array( 'domain' => $domain );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/domains', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $payload ) )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/domains', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $payload ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -141,7 +142,7 @@ class CdnClient extends AbstractClient
                 throw new BadMethodCallException( "Properties status must be : 'on' or 'off' or 'error'. '" . $properties['status'] . "' given." );
         }
         try {
-            $this->put( 'cdn/' . $sn . '/domains/' . $domain, array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $properties ) )->send();
+            $this->put( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain, array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $properties ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -162,7 +163,7 @@ class CdnClient extends AbstractClient
         if ( !$domain )
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         try {
-            $r = $this->delete( 'cdn/' . $sn . '/domains/' . $domain )->send();
+            $r = $this->delete( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -184,7 +185,7 @@ class CdnClient extends AbstractClient
         if ( !$domain )
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/backends' )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/backends' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -210,7 +211,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $backend is missing.' );
         $payload = array( 'ip' => $backend );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/domains/' . $domain . '/backends', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $payload ) )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/backends', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $payload ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -235,7 +236,7 @@ class CdnClient extends AbstractClient
         if ( !$backend )
             throw new BadMethodCallException( 'Parameter $backend is missing.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/backends/' . $backend )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/backends/' . $backend )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -260,7 +261,7 @@ class CdnClient extends AbstractClient
         if ( !$backend )
             throw new BadMethodCallException( 'Parameter $backend is missing.' );
         try {
-            $r = $this->delete( 'cdn/' . $sn . '/domains/' . $domain . '/backends/' . $backend )->send();
+            $r = $this->delete( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/backends/' . $backend )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -282,7 +283,7 @@ class CdnClient extends AbstractClient
         if ( !$domain )
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules' )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -334,7 +335,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $rule[\'fileType\'] must be "folder" or "file" or "extension" ' . $rule['filtype'] . ' given' );
 
         try {
-            $r = $this->post( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $rule ) )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $rule ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -359,7 +360,7 @@ class CdnClient extends AbstractClient
         if ( !$ruleId )
             throw new BadMethodCallException( 'Parameter $ruleId is missing.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -405,7 +406,7 @@ class CdnClient extends AbstractClient
         }
 
         try {
-            $this->put( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId, array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $rule ) )->send();
+            $this->put( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId, array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( $rule ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -430,7 +431,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $ruleId is missing.' );
         $ruleId = intval( $ruleId );
         try {
-            $r = $this->delete( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId )->send();
+            $r = $this->delete( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -456,7 +457,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $ruleId is missing.' );
         $ruleId = intval( $ruleId );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId . '/flush' )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId . '/flush' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -478,7 +479,7 @@ class CdnClient extends AbstractClient
         if ( !$domain )
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/domains/' . $domain . '/flush' )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/flush' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -505,7 +506,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $ruleId is missing.' );
         $ruleId = intval( $ruleId );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId . '/tasks' )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId . '/tasks' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -535,7 +536,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $taskId is missing.' );
         $taskId = intval( $taskId );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId . '/tasks/' . $taskId )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/cacheRules/' . $ruleId . '/tasks/' . $taskId )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -572,7 +573,7 @@ class CdnClient extends AbstractClient
         if ( !in_array( $type, array( 'backend', 'cdn' ) ) )
             throw new BadMethodCallException( 'Parameter $type must be "backend" or "cdn".' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/statistics?period=' . $period . '&value=' . $value . '&type=' . $type )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/statistics?period=' . $period . '&value=' . $value . '&type=' . $type )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -594,7 +595,7 @@ class CdnClient extends AbstractClient
         if ( !$domain )
             throw new BadMethodCallException( 'Parameter $domain is missing.' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/tasks' )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/tasks' )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -620,7 +621,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $taskId is missing.' );
         $taskId = intval( $taskId );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/domains/' . $domain . '/tasks/' . $taskId )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/domains/' . $domain . '/tasks/' . $taskId )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -647,7 +648,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $duration is missing' );
         $duration = intval( $duration );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/orderBackend', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( array( "backend" => $nbBackend, 'duration' => $duration ) ) )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/orderBackend', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( array( "backend" => $nbBackend, 'duration' => $duration ) ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -678,7 +679,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $duration is missing' );
         $duration = intval( $duration );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/orderCacheRule', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( array( "cacheRule" => $nbCacheRule, 'duration' => $duration ) ) )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/orderCacheRule', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( array( "cacheRule" => $nbCacheRule, 'duration' => $duration ) ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -702,7 +703,7 @@ class CdnClient extends AbstractClient
             throw new BadMethodCallException( 'Parameter $quota is missing' );
         $quota = intval( $quota );
         try {
-            $r = $this->post( 'cdn/' . $sn . '/orderQuota', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( array( "quota" => $quota ) ) )->send();
+            $r = $this->post( self::CDN_API_ENDPOINT . $sn . '/orderQuota', array( 'Content-Type' => 'application/json;charset=UTF-8' ), json_encode( array( "quota" => $quota ) ) )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
@@ -726,7 +727,7 @@ class CdnClient extends AbstractClient
         if ( !in_array( $period, array( 'day', 'week', 'month' ) ) )
             throw new BadMethodCallException( 'Parameter $period must be "day" oy "week" or "month' );
         try {
-            $r = $this->get( 'cdn/' . $sn . '/quota?period='.$period )->send();
+            $r = $this->get( self::CDN_API_ENDPOINT . $sn . '/quota?period='.$period )->send();
         } catch ( \Exception $e ) {
             throw new CdnException( $e->getMessage(), $e->getCode(), $e );
         }
