@@ -256,42 +256,48 @@ class CloudClient extends AbstractClient
         return $r->getBody(true);
     }
 
-
     /**
      * @param string $pp OVH cloud passport
      * @param string $pca PCA service name
-     * @param string $task task to add
-     * @return string json encoded array)
+     * @param string $sessionId session id to delete
+     * @return string json encoded array
      * @throws \Ovh\Cloud\Exception\CloudException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
-    public function addPcaTaskProperties($pp, $pca, $task)
+    public function createPcaDeleteTask($pp, $pca, $sessionId)
     {
         if (!$pp)
             throw new BadMethodCallException('Missing parameter $pp (OVH cloud passport).');
         if (!$pca)
             throw new BadMethodCallException('Missing parameter $pca (PCA ServiceName).');
-        if (!$task)
-            throw new BadMethodCallException('Missing parameter $task (array task to add).');
-        if (!is_array($task))
-            throw new BadMethodCallException('Parameter $task must be an array.');
-        // clean array
-        $requiredKeys = array('sessionId', 'taskFunction', 'fileIds');
-        foreach ($task as $k => $v) {
-            if (!in_array($k, $requiredKeys)) {
-                unset($task[$k]);
-            }
-        }
-        if (count($task) != 3)
-            throw new BadMethodCallException("Parameter $task must be a array 'sessionId', 'taskFunction', 'fileIds'");
-        // taskFunction ?
-        if (!in_array($task['taskFunction'], array('restore', 'delete')))
-            throw new BadMethodCallException('Parameter $task[\'taskFunction\'] must be "restore" or "delete". ' . $task['taskFunction'] . ' given.');
-        // fileIds
-        if (!is_array($task['fileIds']))
-            throw new BadMethodCallException('Parameter $task[\'fileIds\'] must a array of fileId. ' . gettype($task['taskFunction']) . ' given.');
+        if (!$sessionId)
+             throw new BadMethodCallException('Missing parameter $sessionId (string).');
         try {
-            $r = $this->post('cloud/' . $pp . '/pca/' . $pca . '/tasks', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($task))->send();
+            $r = $this->delete('cloud/' . $pp . '/pca/' . $pca . '/sessions/' . $sessionId)->send();
+        } catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
+    /**
+     * @param string $pp OVH cloud passport
+     * @param string $pca PCA service name
+     * @param string $sessionId session id to restore
+     * @return string json encoded array
+     * @throws \Ovh\Cloud\Exception\CloudException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function createPcaRestoreTask($pp, $pca, $sessionId)
+    {
+        if (!$pp)
+            throw new BadMethodCallException('Missing parameter $pp (OVH cloud passport).');
+        if (!$pca)
+            throw new BadMethodCallException('Missing parameter $pca (PCA ServiceName).');
+        if (!$sessionId)
+             throw new BadMethodCallException('Missing parameter $sessionId (string).');
+        try {
+            $r = $this->post('cloud/' . $pp . '/pca/' . $pca . '/sessions/' . $sessionId . '/restore')->send();
         } catch (\Exception $e) {
             throw new CloudException($e->getMessage(), $e->getCode(), $e);
         }
