@@ -10,8 +10,10 @@ use Ovh\Cloud\Pca;
 /**
  * Cloud class
  */
-class Cloud {
+class Cloud 
+{
 	private $passport=null;
+
 	private static $CloudClient=null;
 
     /**
@@ -20,7 +22,8 @@ class Cloud {
      * @param $passport
      * @throws \Ovh\Common\Exception\BadConstructorCallException;
      */
-    function __construct($passport) {
+    public function __construct($passport) 
+    {
 		if (!$passport ) {
 			throw new BadConstructorCallException( '$passport parameter is missing', 1 );
 		}
@@ -38,7 +41,6 @@ class Cloud {
         if (!self::$CloudClient instanceof CloudClient) {
             self::$CloudClient = new CloudClient();
         }
-        ;
         return self::$CloudClient;
     }
 
@@ -50,7 +52,7 @@ class Cloud {
      */
     public function getPcaServices()
     {
-        return self::getClient()->getPcaServices($this->passport);
+        return json_decode(self::getClient()->getPcaServices($this->passport));
     }
 
     /**
@@ -59,13 +61,8 @@ class Cloud {
      * @param string $pcaName
      * @return object Pca
      */
-
-    public function getPca($pcaName){
+    public function getPca($pcaName)
+    {
         return new Pca($this->passport,$pcaName);
     }
-
-
-
-
-
 }
