@@ -61,6 +61,15 @@ class OvhClient extends AbstractClient {
         return $this->get('sms')->send()->getBody(true);
     }
 
+    /**
+     * Get Telephony Services
+     *
+     * @return string (json encoded)
+     */
+    public function getTelephonyServices(){
+        return $this->get('telephony')->send()->getBody(true);
+    }
+
 
     /**
      * Get CDN services
