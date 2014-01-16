@@ -27,6 +27,7 @@ use Ovh\Cdn\Cdn;
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
 use Ovh\Sms\Sms;
+use Ovh\Telephony\Telephony;
 use Ovh\Vps\Vps;
 use Ovh\Xdsl\Xdsl;
 use Ovh\Cloud\Cloud;
@@ -176,6 +177,29 @@ class Ovh
      */
     public function getSms($domain){
         return new Sms($domain);
+    }
+
+    /**
+     *
+     *      Telephony
+     * 
+     */
+    /**
+     * Return Tekphony subscriptions/Service (list of 'domains')
+     * @return array
+     */
+    public function getTelephonyServices(){
+        return json_decode(self::getOvhClient()->getTelephonyServices());
+    }
+
+    /**
+     * Get new Telephony object
+     * @param  $domain
+     * @return Telephony
+     */
+    public function getTelephony($domain)
+    {
+        return new Telephony($domain);
     }
 
 
