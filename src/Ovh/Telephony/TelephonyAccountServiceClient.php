@@ -89,31 +89,31 @@ class TelephonyAccountServiceClient extends AbstractClient
         		$string = $params['creationDatetime.from'];
         		if ($params['creationDatetime.from'] instanceof \Datetime)
         			$string = $params['creationDatetime.from']->format("Y-m-d\TH:i:sP");
-            	$paramsString .= "creationDatetime.from=".$string;
+            	$paramsString .= "creationDatetime.from=".urlencode($string);
         	}
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&"; 
         	if (array_key_exists('creationDatetime.to', $params))
         	{
+                $paramsString .= "&"; 
         		$string = $params['creationDatetime.to'];
         		if ($params['creationDatetime.to'] instanceof \Datetime)
         			$string = $params['creationDatetime.to']->format("Y-m-d\TH:i:sP");
-            	$paramsString .= "creationDatetime.to=".$string;
+            	$paramsString .= "creationDatetime.to=".urlencode($string);
         	}
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&";
         	if (array_key_exists('destinationType', $params) && in_array($params['destinationType'], array('landline', 'mobile', 'special')))
+            {
+                $paramsString .= "&";
             	$paramsString .= "destinationType=".$params['destinationType'];
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&";
+            }
         	if (array_key_exists('planType', $params) && in_array($params['planType'], array('outplan', 'priceplan')))
+            {
+                $paramsString .= "&";
             	$paramsString .= "planType=".$params['planType'];
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&";
-        	if (array_key_exists('wayType', $params) && in_array($params['wayType'], array('incoming', 'outcoming', 'transfer')))
+            }
+        	if (array_key_exists('wayType', $params) && in_array($params['wayType'], array('incoming', 'outgoing', 'transfer')))
+            {
+                $paramsString .= "&";
             	$paramsString .= "wayType=".$params['wayType'];
-            if (strrev( $string )[0] == '&')
-            	$paramsString = substr_replace($paramsString, "", -1);
+            }
         }
         try {
             $r = $this->get('telephony/' . $billingAccount->getBillingAccount() . '/service/' . $service . '/voiceConsumption' . $paramsString)->send();
@@ -142,36 +142,36 @@ class TelephonyAccountServiceClient extends AbstractClient
         if ($params != null && is_array($params) && count($params) > 0)
         {
         	$paramsString = "?";
-        	if (array_key_exists('creationDatetime.from', $params))
-        	{
-        		$string = $params['creationDatetime.from'];
-        		if ($params['creationDatetime.from'] instanceof \Datetime)
-        			$string = $params['creationDatetime.from']->format("Y-m-d\TH:i:sP");
-            	$paramsString .= "creationDatetime.from=".$string;
-        	}
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&"; 
-        	if (array_key_exists('creationDatetime.to', $params))
-        	{
-        		$string = $params['creationDatetime.to'];
-        		if ($params['creationDatetime.to'] instanceof \Datetime)
-        			$string = $params['creationDatetime.to']->format("Y-m-d\TH:i:sP");
-            	$paramsString .= "creationDatetime.to=".$string;
-        	}
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&";
-        	if (array_key_exists('destinationType', $params) && in_array($params['destinationType'], array('landline', 'mobile', 'special')))
-            	$paramsString .= "destinationType=".$params['destinationType'];
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&";
-        	if (array_key_exists('planType', $params) && in_array($params['planType'], array('outplan', 'priceplan')))
-            	$paramsString .= "planType=".$params['planType'];
-            if (strlen($paramsString) > 1)
-            	$paramsString .= "&";
-        	if (array_key_exists('wayType', $params) && in_array($params['wayType'], array('incoming', 'outcoming', 'transfer')))
-            	$paramsString .= "wayType=".$params['wayType'];
-            if (strrev( $string )[0] == '&')
-            	$paramsString = substr_replace($paramsString, "", -1);
+            if (array_key_exists('creationDatetime.from', $params))
+            {
+                $string = $params['creationDatetime.from'];
+                if ($params['creationDatetime.from'] instanceof \Datetime)
+                    $string = $params['creationDatetime.from']->format("Y-m-d\TH:i:sP");
+                $paramsString .= "creationDatetime.from=".urlencode($string);
+            }
+            if (array_key_exists('creationDatetime.to', $params))
+            {
+                $paramsString .= "&"; 
+                $string = $params['creationDatetime.to'];
+                if ($params['creationDatetime.to'] instanceof \Datetime)
+                    $string = $params['creationDatetime.to']->format("Y-m-d\TH:i:sP");
+                $paramsString .= "creationDatetime.to=".urlencode($string);
+            }
+            if (array_key_exists('destinationType', $params) && in_array($params['destinationType'], array('landline', 'mobile', 'special')))
+            {
+                $paramsString .= "&";
+                $paramsString .= "destinationType=".$params['destinationType'];
+            }
+            if (array_key_exists('planType', $params) && in_array($params['planType'], array('outplan', 'priceplan')))
+            {
+                $paramsString .= "&";
+                $paramsString .= "planType=".$params['planType'];
+            }
+            if (array_key_exists('wayType', $params) && in_array($params['wayType'], array('incoming', 'outgoing', 'transfer')))
+            {
+                $paramsString .= "&";
+                $paramsString .= "wayType=".$params['wayType'];
+            }
         }
         try {
             $r = $this->get('telephony/' . $billingAccount->getBillingAccount() . '/service/' . $service . '/faxConsumption' . $paramsString)->send();
