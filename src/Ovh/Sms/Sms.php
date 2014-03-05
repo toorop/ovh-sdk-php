@@ -119,12 +119,38 @@ class Sms
 
     /**
      * Get SMS sent associated to the SMS account
+     * Wrapper on $this->getOutgoings() for backward compatibility
      *
      * @return array
+     * @deprecated
      */
     public function getHistories()
     {
-        return json_decode(self::getClient()->getHistories($this->domain));
+        trigger_error('Deprecated method. Use $this->getOutgoings instead.', E_USER_DEPRECATED);
+        return $this->getOutgoings();
+    }
+
+    /**
+     * Get SMS sent associated to the SMS account
+     *
+     * @return array
+     */
+    public function getOutgoings()
+    {
+        return json_decode(self::getClient()->getOutgoings($this->domain));
+    }
+
+    /**
+     * Get history object properties
+     * Wrapper on $this->getOutgoing() for backward compatibility
+     *
+     * @return array
+     * @deprecated
+     */
+    public function getHistory($id)
+    {
+        trigger_error('Deprecated method. Use $this->getOutgoing instead.', E_USER_DEPRECATED);
+        return $this->getOutgoing($id);
     }
 
     /**
@@ -133,9 +159,22 @@ class Sms
      * @param int $id
      * @return object
      */
-    public function getHistory($id)
+    public function getOutgoing($id)
     {
-        return json_decode(self::getClient()->getHistory($this->domain, $id));
+        return json_decode(self::getClient()->getOutgoing($this->domain, $id));
+    }
+
+    /**
+     * Delete the sms history given
+     * Wrapper on $this->deleteOutgoing() for backward compatibility
+     *
+     * @return array
+     * @deprecated
+     */
+    public function deleteHistory($id)
+    {
+        trigger_error('Deprecated method. Use $this->deleteOutgoing instead.', E_USER_DEPRECATED);
+        return $this->deleteOutgoing($id);
     }
 
     /**
@@ -143,9 +182,9 @@ class Sms
      *
      * @param $id
      */
-    public function deleteHistory($id)
+    public function deleteOutgoing($id)
     {
-        self::getClient()->deleteHistory($this->domain, $id);
+        self::getClient()->deleteOutgoing($this->domain, $id);
     }
 
     /**

@@ -128,23 +128,56 @@ class smsClient extends AbstractClient
 
     /**
      * Get Sms sent associated to the sms account
+     * Wrapper on $this->getOutgoings() for backward compatibility
+     *
+     * @param string $domain
+     * @return string Json
+     * @throws BadMethodCallException
+     * @throws Exception\SmsException
+     * @deprecated
+     */
+    public function getHistories($domain)
+    {
+        trigger_error('Deprecated method. Use $this->getHistories() instead.', E_USER_DEPRECATED);
+        return $this->getOutgoings($domain);
+    }
+
+    /**
+     * Get Sms sent associated to the sms account
      *
      * @param string $domain
      * @return string Json
      * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
-    public function getHistories($domain)
+    public function getOutgoings($domain)
     {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         try {
-            $r = $this->get('sms/' . $domain . '/histories')->send();
+            $r = $this->get('sms/' . $domain . '/outgoing')->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
 
         return $r->getBody(true);
+    }
+
+    /**
+     * Get history object properties
+     * Wrapper on $this->getOutgoing() for backward compatibility
+     *
+     * @param string $domain
+     * @param int $id
+     * @return string Json
+     * @throws BadMethodCallException
+     * @throws Exception\SmsException
+     * @deprecated
+     */
+    public function getHistory($domain, $id)
+    {
+        trigger_error('Deprecated method. Use $this->getHistory() instead.', E_USER_DEPRECATED);
+        return $this->getOutgoing($domain, $id);
     }
 
     /**
@@ -156,7 +189,7 @@ class smsClient extends AbstractClient
      * @throws BadMethodCallException
      * @throws Exception\SmsException
      */
-    public function getHistory($domain, $id)
+    public function getOutgoing($domain, $id)
     {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
@@ -164,12 +197,29 @@ class smsClient extends AbstractClient
             throw new BadMethodCallException('Parameter $id is missing.');
         $id = intval($id);
         try {
-            $r = $this->get('sms/' . $domain . '/histories/' . $id)->send();
+            $r = $this->get('sms/' . $domain . '/outgoing/' . $id)->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
 
         return $r->getBody(true);
+    }
+
+    /**
+     * Delete the sms history given
+     * Wrapper on $this->getOutgoing() for backward compatibility
+     *
+     * @param string $domain
+     * @param int $id
+     * @return bool true‡
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     * @deprecated
+     */
+    public function deleteHistory($domain, $id)
+    {
+        trigger_error('Deprecated method. Use $this->deleteOutgoing() instead.', E_USER_DEPRECATED);
+        return $this->deleteOutgoing($domain, $id);
     }
 
     /**
@@ -181,14 +231,14 @@ class smsClient extends AbstractClient
      * @throws \Ovh\Common\Exception\BadMethodCallException
      * @throws Exception\SmsException
      */
-    public function deleteHistory($domain, $id)
+    public function deleteOutgoing($domain, $id)
     {
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         if (!$id)
             throw new BadMethodCallException('Parameter $id is missing.');
         try {
-            $this->delete('sms/' . $domain . '/histories/' . $id)->send();
+            $this->delete('sms/' . $domain . '/outgoing/' . $id)->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }
