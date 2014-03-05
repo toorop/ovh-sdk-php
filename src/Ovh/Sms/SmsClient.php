@@ -181,7 +181,7 @@ class smsClient extends AbstractClient
     }
 
     /**
-     * Get history object properties
+     * Get outgoing object properties
      *
      * @param string $domain
      * @param integer $id
@@ -239,6 +239,75 @@ class smsClient extends AbstractClient
             throw new BadMethodCallException('Parameter $id is missing.');
         try {
             $this->delete('sms/' . $domain . '/outgoing/' . $id)->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+        return true;
+    }
+
+    /**
+     * Get Sms sent associated to the sms account
+     *
+     * @param string $domain
+     * @return string Json
+     * @throws BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function getIncomings($domain)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->get('sms/' . $domain . '/incoming')->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $r->getBody(true);
+    }
+
+    /**
+     * Get history object properties
+     *
+     * @param string $domain
+     * @param integer $id
+     * @return string Json
+     * @throws BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function getIncoming($domain, $id)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if ($id !== 0 && !$id)
+            throw new BadMethodCallException('Parameter $id is missing.');
+        $id = intval($id);
+        try {
+            $r = $this->get('sms/' . $domain . '/incoming/' . $id)->send();
+        } catch (\Exception $e) {
+            throw new SmsException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $r->getBody(true);
+    }
+
+    /**
+     * Delete the sms history given
+     *
+     * @param string $domain
+     * @param int $id
+     * @return bool true‡
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @throws Exception\SmsException
+     */
+    public function deleteIncoming($domain, $id)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$id)
+            throw new BadMethodCallException('Parameter $id is missing.');
+        try {
+            $this->delete('sms/' . $domain . '/incoming/' . $id)->send();
         } catch (\Exception $e) {
             throw new SmsException($e->getMessage(), $e->getCode(), $e);
         }

@@ -154,7 +154,7 @@ class Sms
     }
 
     /**
-     * Get history object properties
+     * Get outgoing object properties
      *
      * @param int $id
      * @return object
@@ -185,6 +185,37 @@ class Sms
     public function deleteOutgoing($id)
     {
         self::getClient()->deleteOutgoing($this->domain, $id);
+    }
+
+    /**
+     * Get SMS received associated to the SMS account
+     *
+     * @return array
+     */
+    public function getIncomings()
+    {
+        return json_decode(self::getClient()->getIncomings($this->domain));
+    }
+
+    /**
+     * Get incoming object properties
+     *
+     * @param int $id
+     * @return object
+     */
+    public function getIncoming($id)
+    {
+        return json_decode(self::getClient()->getIncoming($this->domain, $id));
+    }
+
+    /**
+     * Delete the incoming sms given
+     *
+     * @param $id
+     */
+    public function deleteIncoming($id)
+    {
+        self::getClient()->deleteIncoming($this->domain, $id);
     }
 
     /**
