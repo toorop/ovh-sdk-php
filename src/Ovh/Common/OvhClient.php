@@ -31,6 +31,18 @@ class OvhClient extends AbstractClient {
 		$response=$request->send();
 		return $response->getBody(true);
 	}
+	
+	/**
+	 * Return Vrack list
+	 *
+	 * @return mixed
+	 */
+	public function getVrackList(){
+		$request = $this->get('vrack');
+		$response=$request->send();
+		return $response->getBody(true);
+	}
+	
 
     /**
      * Return VPS list
