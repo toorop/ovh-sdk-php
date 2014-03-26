@@ -186,9 +186,44 @@ class Pca
      *
      * @param  array $task. Keys : string sessionId, string taskFunction (restore|delete), array of string fileIds.
      * @return object task
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @deprecated Use addDeleteTask or addRestoreTask
      */
-    public function addTask($task){
-        return json_decode(self::getClient()->addPcaTaskProperties($this->pp, $this->sn,$task));
+    public function addTask(array $task)
+    {
+        if (!array_key_exists('sessionId', $task))
+            throw new BadMethodCallException("Parameter $task must have the key 'sessionId'");
+        if (!array_key_exists('taskFunction', $task))
+            throw new BadMethodCallException("Parameter $task must have the key 'taskFunction'");
+
+        if ($task['taskFunction'] == 'restore') {
+            return json_decode(self::getClient()->createPcaRestoreTask($this->pp, $this->sn,$task['sessionId']));
+        } elseif ($task['taskFunction'] == 'delete') {
+            return json_decode(self::getClient()->createPcaDeleteTask($this->pp, $this->sn,$task['sessionId']));
+        }
+        throw new BadMethodCallException("Task function available are 'delete' or 'restore'");   
+    }
+
+    /**
+     * Add a new delete task
+     * 
+     * @param string $sessionId The session id to delete.
+     * @param object task
+     */
+    public function addDeleteTask($sessionId)
+    {
+        return json_decode(self::getClient()->createPcaDeleteTask($this->pp, $this->sn, $sessionId));
+    }
+
+    /**
+     * Add a new restore task
+     * 
+     * @param string $sessionId The session id to restore.
+     * @param object task
+     */
+    public function addRestoreTask($sessionId)
+    {
+        return json_decode(self::getClient()->createPcaRestoreTask($this->pp, $this->sn, $sessionId));
     }
 
     /**

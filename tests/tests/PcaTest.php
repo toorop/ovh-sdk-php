@@ -194,6 +194,42 @@ class PcaTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * We will test delete task
+     *
+     * @depends testGetSessions
+     */
+    public function testDeleteSession($session)
+    {
+        if($session) {
+            $t = $this->pca->addDeleteTask($session);
+            $this->assertTrue(is_object($t), "Returned value must be an object");
+            $this->assertCount(7, (array)$t, "Returned object must have 7 attributes");
+            foreach (array('function', 'comment', 'status', 'todoDate', 'ipAddress', 'id', 'login') as $attr) {
+                $this->assertObjectHasAttribute($attr, $t, "PCA task must have attribute '$attr'");
+            }
+            $this->assertTrue($t->status=='todo');
+        }
+    }
+
+    /**
+     * We will test restore task
+     *
+     * @depends testGetSessions
+     */
+    public function testRestoreSession($session)
+    {
+        if($session) {
+            $t = $this->pca->addRestoreTask($session);
+            $this->assertTrue(is_object($t), "Returned value must be an object");
+            $this->assertCount(7, (array)$t, "Returned object must have 7 attributes");
+            foreach (array('function', 'comment', 'status', 'todoDate', 'ipAddress', 'id', 'login') as $attr) {
+                $this->assertObjectHasAttribute($attr, $t, "PCA task must have attribute '$attr'");
+            }
+            $this->assertTrue($t->status=='todo');
+        }
+    }
+
     public function testGetUsage(){
         $u=$this->pca->getUsage();
         $this->assertTrue(is_int($u));
