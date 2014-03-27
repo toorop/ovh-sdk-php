@@ -29,6 +29,7 @@ use Ovh\Common\OvhClient;
 use Ovh\Sms\Sms;
 use Ovh\Telephony\Telephony;
 use Ovh\Vps\Vps;
+use Ovh\Vrack\Vrack;
 use Ovh\Xdsl\Xdsl;
 use Ovh\Cloud\Cloud;
 
@@ -102,6 +103,29 @@ class Ovh
 	public function getDedicatedServer($domain){
 		return new Server($domain);
 	}
+	
+	
+	/**
+	 * Return list of Vrack owned by user
+	 *
+	 * @return mixed
+	 */
+	public function getVrackList()
+	{
+		return json_decode(self::getOvhClient()->getVrackList());
+	}
+	
+	
+	/**
+	 * Return a Vrack object
+	 *
+	 * @param $domain
+	 * @return \Ovh\Vrack\Vrack
+	 */
+	public function getVrack($domain){
+		return new Vrack($domain);
+	}
+	
 
 
 
