@@ -57,10 +57,15 @@ require_once 'vendor/autoload.php';
 use \Ovh\Common\Ovh;
 
 // Populate your keyring
+/** RG : APPLICATION REGION
+* 'FR' => 'https://api.ovh.com/1.0/'
+* 'CA' => 'https://ca.api.ovh.com/1.0/'
+*/
 $config=array(
     'AK' => 'YOUR APPLICATION KEY',
     'AS' => 'YOUR APPLICATION SECRET',
-    'CK' => 'YOUR CONSUMER KEY'
+    'CK' => 'YOUR CONSUMER KEY',
+    'RG' => 'YOUR APPLICATION REGION' 
 );
 
 // Init your OVH instance
