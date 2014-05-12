@@ -2,6 +2,11 @@
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
+ * Authors :
+ *  - Stéphane Depierrepont (aka Toorop)
+ *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16) 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
@@ -31,6 +36,8 @@ class Keyring
     static private $appKey = null;
     static private $appSecret = null;
     static private $consumerKey = null;
+    //Le paramètre "appUrlRegion" permet de choisir avec quelle API on veut travailler (FR ou CA)
+    static private $appUrlRegion = null;
 
 
     public static function setAppKey($key)
@@ -63,4 +70,24 @@ class Keyring
         return self::$consumerKey;
     }
 
+    /** Paramètre "UrlRegion"  
+    * FR = api.ovh.com
+    * CA = ca.api.ovh.com
+    */
+    public static function setAppUrlRegion($Region){
+		self::$appUrlRegion = self::getUrlApi($Region);
+	}
+	
+	public static function getAppUrlRegion(){
+		return self::$appUrlRegion;
+	}
+
+	public static function getUrlApi($Region){
+		if($Region == 'FR'){
+			return 'https://api.ovh.com/1.0/';
+		}
+		elseif($Region == 'CA'){
+			return 'https://ca.api.ovh.com/1.0/';    
+		}
+	}
 }

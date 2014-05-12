@@ -2,6 +2,11 @@
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
+ * Authors :
+ *  - Stéphane Depierrepont (aka Toorop)
+ *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16) 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
@@ -32,7 +37,7 @@ class AbstractClient extends Client
 
     public function __construct()
     {
-        parent::__construct('https://api.ovh.com/1.0/');
+        parent::__construct(Keyring::getAppUrlRegion());
     }
 
 
