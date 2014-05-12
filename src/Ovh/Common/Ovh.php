@@ -5,7 +5,7 @@
  * Authors :
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
- *  - Gillardeau Thibaut (aka Thibautg16) 
+ *  - Gillardeau Thibaut (aka Thibautg16)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class Ovh
     const VERSION = '0.1.1';
 
     // Client
-    private static $ovhClient=null;
+    private static $ovhClient = null;
 
     /**
      * Constructor
@@ -51,12 +51,12 @@ class Ovh
     public function __construct(array $config = array())
     {
         // Populate keyring
-        Keyring::setAppKey($config['AK']);             // Application Key
-        Keyring::setAppSecret($config['AS']);          // Application Secret
-        Keyring::setConsumerKey($config['CK']);        // Consumer Key
+        Keyring::setAppKey($config['AK']); // Application Key
+        Keyring::setAppSecret($config['AS']); // Application Secret
+        Keyring::setConsumerKey($config['CK']); // Consumer Key
         // Backward compatibility
-        if(array_key_exists('RG',$config)){
-            keyring::setAppUrlRegion($config['RG']);   // Region
+        if (array_key_exists('RG', $config)) {
+            keyring::setAppUrlRegion($config['RG']); // Region
         } else {
             keyring::setAppUrlRegion("FR");
         }
@@ -73,65 +73,65 @@ class Ovh
      *
      * @return null|OvhClient
      */
-    private static function getOvhClient(){
-        if (!self::$ovhClient instanceof OvhClient){
-            self::$ovhClient=new OvhClient();
+    private static function getOvhClient()
+    {
+        if (!self::$ovhClient instanceof OvhClient) {
+            self::$ovhClient = new OvhClient();
         };
         return self::$ovhClient;
     }
 
 
+    /**
+     *
+     *          Dedicated Server
+     *
+     */
 
-	/**
-	 *
-	 *          Dedicated Server
-	 *
-	 */
+
+    /**
+     * Return list of Dedicated Servers owned by user
+     *
+     * @return mixed
+     */
+    public function getDedicatedServerList()
+    {
+        return json_decode(self::getOvhClient()->getDedicatedServerList());
+    }
+
+    /**
+     * Return a Dedicated Server object
+     *
+     * @param $domain
+     * @return \Ovh\Dedicated\Server\Server
+     */
+    public function getDedicatedServer($domain)
+    {
+        return new Server($domain);
+    }
 
 
-	/**
-	 * Return list of Dedicated Servers owned by user
-	 *
-	 * @return mixed
-	 */
-	public function getDedicatedServerList()
-	{
-		return json_decode(self::getOvhClient()->getDedicatedServerList());
-	}
+    /**
+     * Return list of Vrack owned by user
+     *
+     * @return mixed
+     */
+    public function getVrackList()
+    {
+        return json_decode(self::getOvhClient()->getVrackList());
+    }
 
-	/**
-	 * Return a Dedicated Server object
-	 *
-	 * @param $domain
-	 * @return \Ovh\Dedicated\Server\Server
-	 */
-	public function getDedicatedServer($domain){
-		return new Server($domain);
-	}
-	
-	
-	/**
-	 * Return list of Vrack owned by user
-	 *
-	 * @return mixed
-	 */
-	public function getVrackList()
-	{
-		return json_decode(self::getOvhClient()->getVrackList());
-	}
-	
-	
-	/**
-	 * Return a Vrack object
-	 *
-	 * @param $domain
-	 * @return \Ovh\Vrack\Vrack
-	 */
-	public function getVrack($domain){
-		return new Vrack($domain);
-	}
-	
 
+    /**
+     * Return a Vrack object
+     *
+     * @param $domain
+     * @return \Ovh\Vrack\Vrack
+     */
+    public function getVrack($domain)
+    {
+        return new Vrack($domain);
+    }
 
 
     /**
@@ -157,7 +157,8 @@ class Ovh
      * @param $domain
      * @return \Ovh\Vps\Vps
      */
-    public function getVps($domain){
+    public function getVps($domain)
+    {
         return new Vps($domain);
     }
 
@@ -173,7 +174,8 @@ class Ovh
      *
      * @return array
      */
-    public function getXdslServices(){
+    public function getXdslServices()
+    {
         return json_decode(self::getOvhClient()->getXdslServices());
     }
 
@@ -181,7 +183,8 @@ class Ovh
      * @param $serviceId
      * @return \Ovh\Xdsl\Xdsl
      */
-    public function getXdsl($serviceId){
+    public function getXdsl($serviceId)
+    {
         return new Xdsl($serviceId);
     }
 
@@ -194,7 +197,8 @@ class Ovh
      * Return SMS subscriptions/Service (list of 'domains')
      * @return array
      */
-    public function getSmsServices(){
+    public function getSmsServices()
+    {
         return json_decode(self::getOvhClient()->getSmsServices());
     }
 
@@ -204,20 +208,22 @@ class Ovh
      * @param $domain
      * @return Sms
      */
-    public function getSms($domain){
+    public function getSms($domain)
+    {
         return new Sms($domain);
     }
 
     /**
      *
      *      Telephony
-     * 
+     *
      */
     /**
      * Return Tekphony subscriptions/Service (list of 'domains')
      * @return array
      */
-    public function getTelephonyServices(){
+    public function getTelephonyServices()
+    {
         return json_decode(self::getOvhClient()->getTelephonyServices());
     }
 
@@ -243,7 +249,8 @@ class Ovh
      *
      * @return array
      */
-    public function getCdnServices(){
+    public function getCdnServices()
+    {
         return json_decode(self::getOvhClient()->getCdnServices());
     }
 
@@ -252,7 +259,8 @@ class Ovh
      *
      * @return array
      */
-    public function getCdnPops(){
+    public function getCdnPops()
+    {
         return json_decode(self::getOvhClient()->getCdnPops());
     }
 
@@ -262,7 +270,8 @@ class Ovh
      * @param string $pop (as returned by getCdnPops)
      * @return object
      */
-    public function getCdnPopDetails($pop){
+    public function getCdnPopDetails($pop)
+    {
         return json_decode(self::getOvhClient()->getCdnPopDetails($pop));
     }
 
@@ -272,10 +281,10 @@ class Ovh
      * @param $serviceName
      * @return object Cdn
      */
-    public function getCdn($serviceName){
+    public function getCdn($serviceName)
+    {
         return new Cdn($serviceName);
     }
-
 
 
     /**
@@ -302,7 +311,8 @@ class Ovh
      * @param string $passport (OVH cloud passport)
      * @return Cloud instance
      */
-    public function getCloud($passport){
+    public function getCloud($passport)
+    {
         return new Cloud($passport);
     }
 
