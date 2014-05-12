@@ -51,14 +51,16 @@ class Ovh
     public function __construct(array $config = array())
     {
         // Populate keyring
-        Keyring::setAppKey($config['AK']);
-        Keyring::setAppSecret($config['AS']);
-        Keyring::setConsumerKey($config['CK']);
-	keyring::setAppUrlRegion($config['RG']);
-
+        Keyring::setAppKey($config['AK']);             // Application Key
+        Keyring::setAppSecret($config['AS']);          // Application Secret
+        Keyring::setConsumerKey($config['CK']);        // Consumer Key
+        // Backward compatibility
+        if(array_key_exists('RG',$config)){
+            keyring::setAppUrlRegion($config['RG']);   // Region
+        } else {
+            keyring::setAppUrlRegion("FR");
+        }
     }
-
-
 
     /**
      *
