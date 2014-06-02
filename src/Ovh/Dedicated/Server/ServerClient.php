@@ -5,6 +5,7 @@
  * Authors :
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -531,4 +532,638 @@ class serverClient extends AbstractClient
         return $r->getBody(true);
     }
 
+    /*********** Statistics (RTM) ***********/
+    /**
+    * Get Statistics (RTM)
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatistics($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Statistics Chart Values
+    * Ajout by @Thibautg16 le 01/06/2014
+    * 
+    * @param string $domain
+    * @param string $period
+    * @param string $type
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsChart($domain, $period='daily', $type='cpu'){
+        $domain = (string)$domain;
+        $period = (string)$period;
+        $type   = (string)$type;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/chart?period='.$period.'&type='.$type)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Statistics Connection
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsConnection($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/connection')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Statistics Cpu
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsCpu($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/cpu')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Serveur Disks
+    * GET /dedicated/server/{serviceName}/statistics/disk
+    * Liste des disques
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsDisk($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/disk')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Disk Properties
+    * GET /dedicated/server/{serviceName}/statistics/disk/{disk}
+    * Informtation sur le disque
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    * 
+    * @param string $domain
+    * @param string $disk
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsDiskProperties($domain, $disk='disk-0'){
+        $domain = (string)$domain;
+        $disk   = (string)$disk;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/disk/'.$disk)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Disk Smart
+    * GET /dedicated/server/{serviceName}/statistics/disk/{disk}/smart
+    * Informtation SMART sur le disque
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    * 
+    * @param string $domain
+    * @param string $disk
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsDiskSmart($domain, $disk='disk-0'){
+        $domain = (string)$domain;
+        $disk   = (string)$disk;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/disk/'.$disk.'/smart')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Load
+    * GET /dedicated/server/{serviceName}/statistics/load
+    * Information sur la charge du serveur
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsLoad($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/load')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Memory Information
+    * GET /dedicated/server/{serviceName}/statistics/memory
+    * Information sur la memoire 
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsMemory($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/memory')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Motherboard Information
+    * GET /dedicated/server/{serviceName}/statistics/motherboard
+    * Information sur la carte-mère
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsMotherboard($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/motherboard')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Os Informations
+    * GET /dedicated/server/{serviceName}/statistics/os
+    * Information sur la carte-mère
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsOs($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/os')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Partition
+    * GET /dedicated/server/{serviceName}/statistics/partition
+    * Information sur les partitions
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsPartition($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/partition')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Partition Properties
+    * GET/dedicated/server/{serviceName}/statistics/partition/{partition}
+    * Informtation sur la partition
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    * 
+    * @param string $domain
+    * @param string $partition
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsPartitionProperties($domain, $partition){
+        $domain    = (string)$domain;
+        $partition = (string)$partition;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/partition/'.$partition)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Partition Properties
+    * GET/dedicated/server/{serviceName}/statistics/partition/{partition}/chart
+    * Informtation graphique sur la partition
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    * 
+    * @param string $domain
+    * @param string $partition
+    * @param string $period
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsPartitionChart($domain, $partition, $period='daily'){
+        $domain    = (string)$domain;
+        $partition = (string)$partition;
+        $period    = (string)$period;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/partition/'.$partition.'/chart?period='.$period)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server PCI Devices Informations
+    * GET /dedicated/server/{serviceName}/statistics/pci
+    * Informations sur périphériques PCI
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsPci($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/pci')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Process
+    * GET /dedicated/server/{serviceName}/statistics/process
+    * Informations sur les process du serveur
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsProcess($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/process')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Raid
+    * GET /dedicated/server/{serviceName}/statistics/raid
+    * Informations sur les volumes RAID
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsRaid($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/raid')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Raid Properties
+    * GET /dedicated/server/{serviceName}/statistics/raid/{unit}
+    * Propriétés d'un RAID
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    * @param string $unit
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsRaidProperties($domain,$unit){
+        $domain = (string)$domain;
+        $unit   = (string)$unit;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/raid/'.$unit)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Raid Volumes
+    * GET /dedicated/server/{serviceName}/statistics/raid/{unit}/volume
+    * Liste des volumes présent sur le RAID
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    * @param string $unit
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsRaidVolume($domain,$unit){
+        $domain = (string)$domain;
+        $unit   = (string)$unit;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/raid/'.$unit.'/volume')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Raid Volume Properties
+    * GET /dedicated/server/{serviceName}/statistics/raid/{unit}/volume/{volume}
+    * Propriétes du volume RAID
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    * @param string $unit
+    * @param string $volume
+    *
+    * @return Object
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsRaidVolumeProperties($domain,$unit,$volume){
+        $domain = (string)$domain;
+        $unit   = (string)$unit;
+        $volume = (string)$volume;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/raid/'.$unit.'/volume/'.$volume)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Raid Volume Ports
+    * GET /dedicated/server/{serviceName}/statistics/raid/{unit}/volume/{volume}/port
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    * @param string $unit
+    * @param string $volume
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsRaidVolumePort($domain,$unit,$volume){
+        $domain = (string)$domain;
+        $unit   = (string)$unit;
+        $volume = (string)$volume;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/raid/'.$unit.'/volume/'.$volume.'/port')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Get Server Raid Volume Ports Properties
+    * GET /dedicated/server/{serviceName}/statistics/raid/{unit}/volume/{volume}/port/{port}
+    * 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+    * @param string $domain
+    * @param string $unit
+    * @param string $volume
+    * @param string $port
+    *
+    * @return Array
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getStatisticsRaidVolumePortProperties($domain,$unit,$volume,$port){
+        $domain = (string)$domain;
+        $unit   = (string)$unit;
+        $volume = (string)$volume;
+        $port   = (string)$port;
+
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/statistics/raid/'.$unit.'/volume/'.$volume.'/port/'.$port)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
 }

@@ -5,6 +5,7 @@
  * Authors :
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -327,4 +328,302 @@ class Server
                 return json_decode(self::getClient()->getInterventionProperties($this->getDomain(), $interventionId));
         }
 
+    	/*********** Statistics (RTM) ***********/
+	/**
+	* Get Statistics (RTM)
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+   	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+   	* @return object
+    	*/
+	public function getStatistics(){
+        	return json_decode(self::getClient()->getStatistics($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Statistics Chart Values
+    	* Ajout by @Thibautg16 le 11/11/2013
+	*
+	* @param $period
+	* @param $type
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return object
+    	*/
+    	public function getStatisticsChart($period,$type){
+      		return json_decode(self::getClient()->getStatisticsChart($this->getDomain(),$period,$type));
+    	}
+	
+	/**
+    	* Get Statistics Connection
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return array
+    	*/
+	public function getStatisticsConnection(){
+        	return json_decode(self::getClient()->getStatisticsConnection($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Statistics Cpu
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsCpu(){
+        	return json_decode(self::getClient()->getStatisticsCpu($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Statistics Disk
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsDisk(){
+        	return json_decode(self::getClient()->getStatisticsDisk($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Disk Properties
+    	* Ajout by @Thibautg16 le 01/06/2014
+	*
+	* @param $disk
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsDiskProperties($disk){
+        	return json_decode(self::getClient()->getStatisticsDiskProperties($this->getDomain(),$disk));
+    	}
+	
+	/**
+    	* Get SMART Disk Informations
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+	* @param $disk
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsDiskSmart($disk){
+        	return json_decode(self::getClient()->getStatisticsDiskSmart($this->getDomain(),$disk));
+    	}
+	
+	/**
+    	* Get Statistics Load
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsLoad(){
+        	return json_decode(self::getClient()->getStatisticsLoad($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Statistics Memory
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsMemory(){
+        	return json_decode(self::getClient()->getStatisticsMemory($this->getDomain()));
+	}
+	
+	/**
+    	* Get Motherboard Informations
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsMotherboard(){
+        	return json_decode(self::getClient()->getStatisticsMotherboard($this->getDomain()));
+    	}
+
+	/**
+    	* Get Os Informations
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsOs(){
+        	return json_decode(self::getClient()->getStatisticsOs($this->getDomain()));
+    	}
+
+	/**
+    	* Get Partitions Informations
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsPartition(){
+        	return json_decode(self::getClient()->getStatisticsPartition($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Partition Properties
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+	* @param $partition
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsPartitionProperties($partition){
+        	return json_decode(self::getClient()->getStatisticsPartitionProperties($this->getDomain(),$partition));
+    	}
+	
+	/**
+    	* Get Disk Properties
+    	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+	* @param $partition
+	* @param $period
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsPartitionChart($partition, $period){
+        	return json_decode(self::getClient()->getStatisticsPartitionChart($this->getDomain(),$partition, $period));
+    	}
+	
+	/**
+    	* Get PCI Devices Informations
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsPci(){
+        	return json_decode(self::getClient()->getStatisticsPci($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Process
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsProcess(){
+        	return json_decode(self::getClient()->getStatisticsProcess($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Server Raid Informations
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsRaid(){
+        	return json_decode(self::getClient()->getStatisticsRaid($this->getDomain()));
+    	}
+	
+	/**
+    	* Get Raid Properties
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsRaidProperties($unit){
+        	return json_decode(self::getClient()->getStatisticsRaidProperties($this->getDomain(),$unit));
+    	}
+	
+	/**
+    	* Get Raid Volumes
+	* Ajout by @Thibautg16 le 01/06/2014
+   	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsRaidVolume($unit){
+        	return json_decode(self::getClient()->getStatisticsRaidVolume($this->getDomain(),$unit));
+    	}
+	
+	/**
+    	* Get Raid Volume Properties
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Object
+    	*/
+	public function getStatisticsRaidVolumeProperties($unit,$volume){
+        	return json_decode(self::getClient()->getStatisticsRaidVolumeProperties($this->getDomain(),$unit,$volume));
+    	}
+	
+	/**
+    	* Get Raid Volume Ports
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsRaidVolumePort($unit,$volume){
+        	return json_decode(self::getClient()->getStatisticsRaidVolumePort($this->getDomain(),$unit,$volume));
+    	}
+	
+	/**
+    	* Get Raid Volume Ports Properties
+	* Ajout by @Thibautg16 le 01/06/2014
+    	*
+    	* @throws Exception\ServerException
+    	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    	* @return Array
+    	*/
+	public function getStatisticsRaidVolumePortProperties($unit,$volume,$port){
+        	return json_decode(self::getClient()->getStatisticsRaidVolumePortProperties($this->getDomain(),$unit,$volume,$port));
+    	}
 }
