@@ -442,5 +442,18 @@ class Vps
         return;
     }
 
+	/**
+    * Get Distribution Properties
+	* Ajout by @Thibautg16 le 12/06/2014
+    *
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+    * @return Object
+    */
+	public function getDistribution(){
+        return json_decode(self::getClient()->getDistribution($this->getDomain()));
+    }
+}
 
 }
