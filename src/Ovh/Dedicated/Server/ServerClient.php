@@ -1166,4 +1166,32 @@ class serverClient extends AbstractClient
         }
         return $r->getBody(true);
     }
+	
+	/**
+    * Get Hardware Specifications 
+	* GET /dedicated/server/{serviceName}/specifications/hardware
+	* Informations sur les spécifications hardware du serveur
+	* 
+    * Ajout by @Thibautg16 le 01/06/2014
+    *
+	* @param string $domain
+	*
+	* @return Object
+	*
+    * @throws Exception\ServerException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getSpecificationsHardware($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/specifications/hardware')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
 }

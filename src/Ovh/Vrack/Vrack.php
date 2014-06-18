@@ -88,7 +88,10 @@ class Vrack
 	 *
 	 *  @return object
 	 *
-	 */
+	*/
+	public function getProperties(){
+        return json_decode(self::getClient()->getProperties($this->getDomain()));
+    }
 	    
     /*********** MRTG ***********/
 	
