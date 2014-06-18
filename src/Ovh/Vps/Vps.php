@@ -455,5 +455,3 @@ class Vps
         return json_decode(self::getClient()->getDistribution($this->getDomain()));
     }
 }
-
-}
