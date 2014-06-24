@@ -29,7 +29,7 @@ use Ovh\Vps\Exception\VpsNotFoundException;
 use Ovh\Vps\Exception\VpsException;
 
 
-class vpsClient extends AbstractClient
+class VpsClient extends AbstractClient
 {
 
     /**

@@ -37,7 +37,7 @@ use Ovh\Common\Exception\BadMethodCallException;
 use Ovh\Vrack\Exception\VrackException;
 
 
-class vrackClient extends AbstractClient
+class VrackClient extends AbstractClient
 {
 
     /**
@@ -57,7 +57,32 @@ class vrackClient extends AbstractClient
         }
         return $r->getBody(true);
     }
-
+	
+	/*********** DedicatedServer ***********/
+	
+    /**
+     * Get dedicatedServer
+     * Ajout by @Thibautg16 le 24/06/2014
+     * 
+     * @return array of strings
+	 *
+     * @throws Exception\VrackException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getdedicatedServer($domain){
+        $domain  = (string)$domain;
+	
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('vrack/'.$domain.'/dedicatedServer')->send();
+        } catch (\Exception $e) {
+            throw new VrackException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+	
     /**
      * Get MRTG
      * Ajout by @Thibautg16 le 26/06/2014
@@ -82,6 +107,54 @@ class vrackClient extends AbstractClient
         
         try {
             $r = $this->get('vrack/'.$domain.'/dedicatedServer/'.$serveur.'/mrtg?period='.$period.'&type='.$type)->send();
+        } catch (\Exception $e) {
+            throw new VrackException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+	
+	/*********** DedicatedCloud ***********/
+	/**
+     * Get dedicatedCloud
+     * Ajout by @Thibautg16 le 24/06/2014
+     * 
+     * @return array of strings
+	 *
+     * @throws Exception\VrackException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getdedicatedCloud($domain){
+        $domain  = (string)$domain;
+	
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('vrack/'.$domain.'/dedicatedCloud')->send();
+        } catch (\Exception $e) {
+            throw new VrackException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+	
+	/*********** Ip ***********/
+	/**
+     * Get ip
+     * Ajout by @Thibautg16 le 24/06/2014
+     * 
+     * @return array of strings
+	 *
+     * @throws Exception\VrackException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getIp($domain){
+        $domain  = (string)$domain;
+	
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('vrack/'.$domain.'/ip')->send();
         } catch (\Exception $e) {
             throw new VrackException($e->getMessage(), $e->getCode(), $e);
         }

@@ -93,7 +93,21 @@ class Vrack
         return json_decode(self::getClient()->getProperties($this->getDomain()));
     }
 	    
-    /*********** MRTG ***********/
+    /*********** DedicatedServer ***********/
+	
+    /**
+     * Get dedicatedServer
+	 * Retourne les serveurs dédiés actuellement dans le vrack
+     * Ajout by @Thibautg16 le 24/06/2014
+     *
+     * @throws Exception\VrackException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @return array of strings
+     */
+    public function getdedicatedServer()
+    {
+        return json_decode(self::getClient()->getdedicatedServer($this->getDomain()));
+    }	
 	
     /**
      * Get MRTG
@@ -107,5 +121,37 @@ class Vrack
     public function getMrtg($serveur,$period,$type)
     {
         return json_decode(self::getClient()->getMrtg($this->getDomain(),$serveur,$period,$type));
+    }
+	
+	/*********** dedicatedCloud ***********/
+	
+    /**
+     * Get dedicatedCloud
+	 * Retourne les Cloud dédié actuellement dans le vrack
+     * Ajout by @Thibautg16 le 24/06/2014
+     *
+     * @throws Exception\VrackException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @return array of strings
+     */
+    public function getdedicatedCloud()
+    {
+        return json_decode(self::getClient()->getdedicatedCloud($this->getDomain()));
+    }	
+	
+	/*********** Ip ***********/
+	
+    /**
+     * Get ip
+	 * Retourne les blocs IP actuellement dans le vrack
+     * Ajout by @Thibautg16 le 24/06/2014
+     *
+     * @throws Exception\VrackException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     * @return array of strings
+     */
+    public function getIp()
+    {
+        return json_decode(self::getClient()->getIp($this->getDomain()));
     }
 }
