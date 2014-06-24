@@ -37,7 +37,7 @@ use Ovh\Common\Exception\BadMethodCallException;
 use Ovh\Dedicated\Server\Exception\ServerException;
 
 
-class serverClient extends AbstractClient
+class ServerClient extends AbstractClient
 {
 
     /**
