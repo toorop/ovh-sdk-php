@@ -87,7 +87,10 @@ class Keyring
 			return 'https://api.ovh.com/1.0/';
 		}
 		elseif($Region == 'CA'){
-			return 'https://ca.api.ovh.com/1.0/';    
+			return 'https://ca.api.ovh.com/1.0/';
+		}
+		elseif($Region == 'CASYS') {
+			return 'https://ca.soyoustart.com/fr/manager/api/1.0/';
 		}
 	}
 }

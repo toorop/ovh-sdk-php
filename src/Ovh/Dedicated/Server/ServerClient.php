@@ -16,7 +16,7 @@
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
+ * permissions and limitations under the License.	
  */
 
 
@@ -73,7 +73,139 @@ class ServerClient extends AbstractClient
 			throw new ServerException($e->getMessage(), $e->getCode(), $e);
 		}
 		return $r->getBody(true);
+	}
 
+	/**
+	 * Get backupFTP
+	 */
+	/// dedicated/server/{serviceName}/features/backupFTP
+	public function getbackupFTP($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		try {
+			$r = $this->get('dedicated/server/' . $domain . '/features/backupFTP')->send();
+		} catch (\Exception $e) {
+			throw new ServerException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $r->getBody(true);
+	}
+	
+	// /dedicated/server/{serviceName}/features/backupFTP
+	public function createBackupFTP($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->post('dedicated/server/' . $domain . '/features/backupFTP')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+	
+	// /dedicated/server/{serviceName}/features/backupFTP
+	public function deleteBackupFTPAccess($domain)
+	{
+		throw new NotImplementedYetException('not yet implemented');
+	}
+	
+	// dedicated/server/{serviceName}/features/backupFTP/access
+	public function getBackupFTPAccess($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/features/backupFTP/access')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+	
+	public function createBackupFTPAccess($domain, $ipBlock)
+	{
+	//	$domain = (string)$domain;
+	//	$ipBlock= (string)$ipBlock;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		if (!$ipBlock)
+			throw new BadMethodCallException('Parameter $ipBlock is missing.');
+		$payload = array(
+			'ftp' => (1==1), 
+			'ipBlock' => $ipBlock,
+			'nfs' => (1==0),
+			'cifs' => (1==0)
+		 );
+		try {
+            $r = $this->post('dedicated/server/' . $domain . '/features/backupFTP/access', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+	
+	public function getBackupFTPAuthorizableBlocks($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/features/backupFTP/authorizableBlocks')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+
+	public function getBackupFTPaccessBlock($domain,$ipBlock)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		if (!$ipBlock)
+			throw new BadMethodCallException('Parameter $ipBlock is missing.');
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/features/backupFTP/access/'.urlencode($ipBlock))->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+	
+	public function deleteBackupFTPaccessBlock($domain,$ipBlock)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		if (!$ipBlock)
+			throw new BadMethodCallException('Parameter $ipBlock is missing.');
+        try {
+            $r = $this->delete('dedicated/server/' . $domain . '/features/backupFTP/access/'.urlencode($ipBlock))->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+
+	public function setBackupFTPaccessBlock($domain,$ipBlock, $ftp, $nfs, $cifs)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+		if (!$ipBlock)
+			throw new BadMethodCallException('Parameter $ipBlock is missing.');
+		$payload = array('ftp' => ($ftp=='on') , 'nfs' => ($nfs=='on') , 'cifs' => ($cifs=='on') );
+			
+        try {
+            $r = $this->put('dedicated/server/' . $domain . '/features/backupFTP/access/'.urlencode($ipBlock),array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
 	}
 
 	/**
@@ -145,7 +277,26 @@ class ServerClient extends AbstractClient
 		return $r->getBody(true);
 	}
 
-
+	/**
+     * Get Burst
+     *
+     * @param $domain
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws Exception\ServerException
+     * @throws \Ovh\Common\Exception\BadMethodCallException
+     */
+    public function getBurst($domain)
+    {
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        $domain = (string)$domain;
+        try {
+           $r = $this->get('dedicated/server/' . $domain . '/burst/' )->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
 
 
 	/**
@@ -183,16 +334,21 @@ class ServerClient extends AbstractClient
      * @throws Exception\ServerException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
-    public function setMonitoring($domain, $enable)
-    {
+    public function setMonitoring($domain, $_enable)
+    {	
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         $domain = (string)$domain;
-        if (!$enable)
-            throw new BadMethodCallException('Parameter enable is missing.');
+		if ($_enable == "on") {
+			$enable = true;
+		} else {
+			$enable = false;
+		}
+
+//        if (!$enable)
+//            throw new BadMethodCallException('Parameter enable is missing.');
         if (!is_bool($enable)) {
             throw new BadMethodCallException('Parameter $enable must be a boolean');
-
         }
         $payload = array('monitoring' => $enable);
         try {
@@ -265,6 +421,7 @@ class ServerClient extends AbstractClient
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
     public function getMrtg($domain, $period='daily', $type='traffic:download'){
+
         $domain = (string)$domain;
         $period = (string)$period;
         $type   = (string)$type;
@@ -437,7 +594,15 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
     }
 
-
+	public function getNetworkSpecifications($domain)
+	{
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/specifications/network')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
     /**
      * Tasks associated to this server
      *
@@ -1194,4 +1359,98 @@ class ServerClient extends AbstractClient
         }
         return $r->getBody(true);
     }
+	
+	public function getOrderableBackupFTP($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/orderable/backupStorage')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+		
+	var_dump($r->getBody(true));
+        return $r->getBody(true);
+
+	}
+	
+	public function getOrderableUSB($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/orderable/usbKey')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+
+	}
+	
+	public function getOrderableProfessionalUse($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/orderable/professionalUse')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+
+	}
+	
+	public function getCompatibleTemplates($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/install/compatibleTemplates')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+
+	}
+	
+	public function getCompatibleTemplatePartitionSchemes($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/compatibleTemplatePartitionSchemes')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+
+	}
+
+	public function getServerIPs($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/ips')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+
+	}
+	
+
 }

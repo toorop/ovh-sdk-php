@@ -33,6 +33,8 @@ use Ovh\Vps\Vps;
 use Ovh\Vrack\Vrack;
 use Ovh\Xdsl\Xdsl;
 use Ovh\Cloud\Cloud;
+use Ovh\Ip\Ip;
+use Ovh\Dedicated\Nasha\Nasha;
 
 
 class Ovh
@@ -316,5 +318,32 @@ class Ovh
         return new Cloud($passport);
     }
 
+// IP heirarchy
+	/*
+     * Return list of IPs owned by user
+     *
+     * @return mixed
+     */
+    public function getIPsList($domain="", $ipblock="", $type="")
+    {
+        return json_decode(self::getOvhClient()->getIPsList($domain, $ipblock, $type));
+    }
+	
+	public function getIp($domain)
+    {
+        return new Ip($domain);
+    }
+	
+	
+// Dedicated/Nasha heirarchy
 
+    public function getNashaList()
+    {
+        return json_decode(self::getOvhClient()->getnashaList());
+    }
+	
+	public function getnasha($domain)
+    {
+        return new Nasha($domain);
+    }
 }

@@ -88,13 +88,71 @@ class Server
 	{
 		return json_decode(self::getClient()->getProperties($this->getDomain()));
 	}
-
+	
 	/**
 	 * @return mixed
 	 */
 	public function getBoot()
 	{
 		return json_decode(self::getClient()->getBoot($this->getDomain()));
+	}
+	
+/** BackupFTP **/
+
+	/**
+	 * @return mixed
+	 */
+	public function getbackupFTP()
+	{
+		return json_decode(self::getClient()->getBackupFTP($this->getDomain()));
+	}
+	
+	public function createBackupFTP()
+	{
+		return json_decode(self::getClient()->createBackupFTP($this->getDomain()));
+	}
+	
+	public function deleteBackupFTPAccess()
+	{
+		return json_decode(self::getClient()->deleteBackupFTPAccess($this->getDomain()));
+	}
+	
+	public function getBackupFTPAccess()
+	{
+		return json_decode(self::getClient()->getBackupFTPAccess($this->getDomain()));
+	}
+
+	public function createBackupFTPAccess($ipBlock)
+	{
+		return json_decode(self::getClient()->createBackupFTPAccess($this->getDomain(), $ipBlock));
+	}
+
+	public function getBackupFTPAuthorizableBlocks()
+	{
+		return json_decode(self::getClient()->getBackupFTPAuthorizableBlocks($this->getDomain()));
+	}
+	
+	public function getBackupFTPaccessBlock($ipBlock)
+	{
+		return json_decode(self::getClient()->getBackupFTPaccessBlock($this->getDomain(),$ipBlock));
+	}
+	
+	public function deleteBackupFTPaccessBlock($ipBlock)
+	{
+		return json_decode(self::getClient()->deleteBackupFTPaccessBlock($this->getDomain(),$ipBlock));
+	}
+	
+	public function setBackupFTPaccessBlock($ipBlock, $ftp, $nfs, $cifs)
+	{
+		return json_decode(self::getClient()->setBackupFTPaccessBlock($this->getDomain(),$ipBlock, $ftp, $nfs, $cifs));
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getBurst()
+	{
+		return json_decode(self::getClient()->getBurst($this->getDomain()));
 	}
 
 	/**
@@ -121,6 +179,8 @@ class Server
 		return json_decode(self::getClient()->getBootOptionsProperties($this->getDomain(), $bootId, $option));
 	}
 
+
+	
 	/**
      * @param $bootDevice
      * @return bool true
@@ -267,6 +327,11 @@ class Server
 	public function  getServiceInfos()
 	{
 		return json_decode(self::getClient()->getServiceInfos($this->getDomain()));
+	}
+
+	public function  getNetworkSpecifications()
+	{
+		return json_decode(self::getClient()->getNetworkSpecifications($this->getDomain()));
 	}
 
 
@@ -628,4 +693,30 @@ class Server
 	public function getSpecificationsHardware(){
         return json_decode(self::getClient()->getSpecificationsHardware($this->getDomain()));
     }
+	
+	public function getOrderableBackupFTP() {
+        return json_decode(self::getClient()->getOrderableBackupFTP($this->getDomain()));
+    }
+	
+	public function getOrderableUSB(){
+        return json_decode(self::getClient()->getOrderableUSB($this->getDomain()));
+    }
+	
+	public function getOrderableProfessionalUse(){
+        return json_decode(self::getClient()->getOrderableProfessionalUse($this->getDomain()));
+    }
+	
+	public function getCompatibleTemplates() {
+		return json_decode(self::getClient()->getCompatibleTemplates($this->getDomain()));
+	}
+	
+	public function getCompatibleTemplatePartitionSchemes($domain) {
+		return json_decode(self::getClient()->getCompatibleTemplatePartitionSchemes($this->getDomain()));
+
+	}
+	
+	public function getServerIPs($domain) {
+		return json_decode(self::getClient()->getCompatibleTemplatePartitionSchemes($this->getDomain()));
+
+	}	
 }

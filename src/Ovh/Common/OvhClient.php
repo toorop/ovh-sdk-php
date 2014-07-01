@@ -38,9 +38,7 @@ class OvhClient extends AbstractClient {
 	 * @return mixed
 	 */
 	public function getVrackList(){
-		$request = $this->get('vrack');
-		$response=$request->send();
-		return $response->getBody(true);
+		return $this->get('vrack')->send()->getBody(true);
 	}
 	
 
@@ -123,7 +121,64 @@ class OvhClient extends AbstractClient {
        return $this->get('cloud')->send()->getBody(true);
     }
 
+	/* 
+	* stub for NASAH
+	*/
+	public function getNashaList()
+	{
+		return $this->get('dedicated/nasha')->send()->getBody(true);
+	}
+	
+	public function getIPsList($serverdomain="", $ipblock="", $type="")
+	{
+		if ($type!= "") {
+			switch ($type) {
+				case "cdn":
+				case "dedicated":
+				case "failover":
+				case "hosted_ssl":
+				case "loadBalancing":
+				case "mail":
+				case "pcc":
+				case "pci":
+				case "private":
+				case "vpn":
+				case "vps":
+				case "vrack":
+				case "xdsl":
+					break;
+				default:
+					throw new InvalidArgumentException('Parameter $type is invalid.');
+			}
+		}
 
+		$qualifier = "";
+		if ($serverdomain!="") {
+			$qualifier="routedTo.serviceName=$serverdomain";
+		}
+		if ($ipblock!="") {
+			if (isset($qualifier)) {
+				$qualifier .= "&";
+			}
+			$qualifier .= "ip=".urlencode($ipblock);
+		}
+		if ($type!="")
+		{
+			if (isset($qualifier)) {
+				$qualifier .= "&";
+			}
+			$qualifier .= "type=$type";
+		}
+		if ($qualifier != "") {
+			$qualifier = "?$qualifier";
+		}
+		
+//	echo $qualifier;
+		return $this->get("ip$qualifier")->send()->getBody(true);
+	}
+	
+
+	
 }
 
 
