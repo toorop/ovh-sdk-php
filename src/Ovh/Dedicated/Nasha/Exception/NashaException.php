@@ -18,16 +18,12 @@
  * permissions and limitations under the License.
  */
 
-// @todo create a common exception client and extends from it
+// cloned from vrack 2014-06-29
 
 namespace Ovh\Dedicated\Nasha\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
-
-//use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
-//use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
-//use Ovh\Vps\Exception\TaskDoesNotExistsException;
 
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
@@ -36,14 +32,9 @@ class ServerException extends \RuntimeException
 {
 	public function __construct($message = '', $code = 0, $prev)
 	{
-		#$pe=$this->getPrevious();
-		#var_dump(get_class($prev));
-		$request = $prev->getRequest();
-		#print $request->getResource();
-		#die();
-		$response = $prev->getResponse();
-		#var_dump($response->getBody());
 
+		$request = $prev->getRequest();
+		$response = $prev->getResponse();
 		$statusCode = $response->getStatusCode();
 		switch ($statusCode) {
 			case 404 :

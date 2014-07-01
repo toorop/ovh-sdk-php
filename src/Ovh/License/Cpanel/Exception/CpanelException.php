@@ -19,9 +19,9 @@
  * permissions and limitations under the License.
  */
 
-// cloned from VPS // Slartibardfast / 2014-06-30
+// Cloned from Vrack - 2014-07-01
 
-namespace Ovh\Ip\IpException;
+namespace Ovh\License\Cpanel\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
@@ -29,7 +29,7 @@ use Ovh\Common\Exception\InvalidSignatureException;
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
-class IpException extends \RuntimeException
+class VrackException extends \RuntimeException
 {
 	public function __construct($message = '', $code = 0, $prev)
 	{
@@ -49,10 +49,10 @@ class IpException extends \RuntimeException
 					throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
 
 				// Task does not exists
-				if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
+				if ($response->getReasonPhrase() == "The requested object (Licence) does not exist") {
 					$d = explode("/", $request->getPath());
 					$taskId = $d[5];
-					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for IPs ' . $this->getDomain($request->getPath()), 404);
+					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for Vrack ' . $this->getDomain($request->getPath()), 404);
 				} else throw $prev;
 
 
@@ -76,11 +76,11 @@ class IpException extends \RuntimeException
 	 * @param string $path
 	 * @return string domain
 	 */
-	//private function getDomain($path)
-	//{
-	//	$d = explode("/", $path);
-	//	return $d[3];
-	//}
+	private function getDomain($path)
+	{
+		$d = explode("/", $path);
+		return $d[3];
+	}
 
 
 	public function debug()

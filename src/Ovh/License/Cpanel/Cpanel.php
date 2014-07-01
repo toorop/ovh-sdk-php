@@ -6,6 +6,7 @@
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
  *  - Gillardeau Thibaut (aka Thibautg16) 
+ *  - Scott Brown (aka Slartibardfast)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -19,46 +20,42 @@
  * permissions and limitations under the License.
  */
 
-// cloned from VPS // Slartibardfast / 2014-06-30
+namespace Ovh\License\Cpanel;
 
-namespace Ovh\Ip;
 
 use Ovh\Common\Exception\NotImplementedYetException;
 use Ovh\Common\Exception\NotImplementedYetByOvhException;
 
 use Ovh\Common\Ovh;
-use Ovh\Ip\IpClient;
+use Ovh\License\Cpanel\CpanelClient;
 use Ovh\Common\Task;
 
-/* 
- *
- * Class  for the /ip/.. heirarchy
-*/
-class Ip
+
+class Cpanel
 {
 	private $domain = null;
-	private static $IPClient = null;
+	private static $CpanelClient = null;
 
 	/**
 	 * @param string $domain
 	 */
 	public function __construct($domain)
 	{
-		$this->setIP($domain);
+		$this->setDomain($domain);
 	}
 
 
 	/**
 	 * Return Vrack client
 	 *
-	 * @return null|vrackClient
+	 * @return null|CpanelClient
 	 */
 	private static function getClient()
 	{
-		if (!self::$IPClient instanceof IPClient){
-			self::$IPClient=new IPClient();
+		if (!self::$CpanelClient instanceof CpanelClient){
+			self::$CpanelClient=new CpanelClient();
 		};
-		return self::$IPClient;
+		return self::$CpanelClient;
 	}
 
 	/**
@@ -66,7 +63,7 @@ class Ip
 	 *
 	 * @param string $domain
 	 */
-	public function setIP($domain)
+	public function setDomain($domain)
 	{
 		$this->domain = $domain;
 	}
@@ -76,53 +73,35 @@ class Ip
 	 *
 	 * @return null | string domain
 	 */
-	public function getIP()
+	public function getDomain()
 	{
 		return $this->domain;
 	}
+
+
 
 	###
 	# Mains methods from OVH Rest API
 	##
 
 	/**
-	 *  Get ipblock properties
+	 *  Get Orderable Versions
+	 *
+	 *  @param  ip - Ip on which to placel license
+	 *  @return object
+	 *
+	*/
+	public function getOrderableVersions($ip){
+        return json_decode(self::getClient()->getProperties($this->getDomain(),$ip));
+    }
+	    
+    /**
+	 *  Get Properties of supplied licence
 	 *
 	 *  @return object
 	 *
 	*/
-	public function getIPBlockProperties(){
-        return json_decode(self::getClient()->getIPBlockProperties($this->getIP()));
+	public function getProperties(){
+        return json_decode(self::getClient()->getProperties($this->getDomain()));
     }
-	    
-	/**
-	 *  set ipblock properties (only description allowed at this time)
-	 *
-	 *  @return NULL ??
-	 *
-	*/
-	public function setIPBlockProperties($description) {
-		return json_decode(self::getClient()->setIPBlockProperties($this->getIP(),$description));
-	}
-	
-	
-	/**
-	 *  get ips in the current block which are blocked (for spam, etc...)
-	 *
-	 *  @return list of IPv4
-	 *
-	*/
-	public function getIPBlockArp() {
-		return json_decode(self::getClient()->getIPBlockArp($this->getIP()));
-	}
-	
-	/*
-	 * get details about the specific IP that is blocked
-	 *
-	 * return mixed detail 
-	*/
-	public function getIPBlockedInfo($domain) {
-		return json_decode(self::getClient()->getIPBlockArp($this->getIP(),$domain));
-	}
-	
 }

@@ -19,36 +19,31 @@
  * permissions and limitations under the License.
  */
 
+/*
+ * cloned from VPS - Slartibardfast - 2014-06-30
+*/
 
 namespace Ovh\Ip;
 
-#use Guzzle\Http\Exception\ClientErrorResponseException;
-
-#use Guzzle\Http\Exception\BadResponseException;
-#use Guzzle\Http\Exception\CurlException;
 use Guzzle\Http\Message\Response;
 
 use Ovh\Common\AbstractClient;
 use Ovh\Common\Exception\BadMethodCallException;
 
-#use Ovh\Common\Exception\NotImplementedYetException;
-
-//use Ovh\Vps\Exception\VpsNotFoundException;
 use Ovh\Ip\Exception\IpException;
 
 class IPClient extends AbstractClient
 {
 
     /**
-     * Get properties
+     * Get IPBlockProperties
      *
-     * @param string $domain
+     * @param string $ipBlock
      * @return string Json
-     * @throws Exception\VrackException
-     * @throws Exception\VrackNotFoundException
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
      */ 
-	
-    public function getIPBlockProperties($ipblock)
+	public function getIPBlockProperties($ipblock)
     {
         try {
             $r = $this->get('ip/' . urlencode($ipblock))->send();
@@ -58,6 +53,17 @@ class IPClient extends AbstractClient
         return $r->getBody(true);
     }
 	
+    /**
+     * set IPBlockProperties
+     *
+     * @param string $description
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+
+only seems to return null on success
+
+     */ 
     public function setIPBlockProperties($ipblock,$description)
     {
 		$payload = array(
@@ -72,6 +78,15 @@ class IPClient extends AbstractClient
         return $r->getBody(true);
     }
 	
+	
+    /**
+     * Get IPBlockArp
+     *
+     * @param string $ipBlock
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+     */ 
 	public function getIPBlockArp($ipblock)
     {
         try {
@@ -82,6 +97,15 @@ class IPClient extends AbstractClient
         return $r->getBody(true);
     }
 	
+    /**
+     * Get IPBlockedInfo - returns information about the specific IP in the IPBlock
+     *
+     * @param string $ipBlock
+	 * @param string $ip 
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+     */ 
 	public function getIPBlockedInfo($ipblock, $ip)
     {
         try {
@@ -92,6 +116,4 @@ class IPClient extends AbstractClient
         return $r->getBody(true);
     }
 	
-
-
 }

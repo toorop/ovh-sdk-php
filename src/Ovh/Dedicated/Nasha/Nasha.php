@@ -17,6 +17,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * Cloned from vrack code - 2014-06-30 - Slartibardfast
  */
 
 namespace Ovh\Dedicated\Nasha;
@@ -92,27 +94,27 @@ class Nasha
 
 
 /*
-{get}	/dedicated/nasha/{serviceName}
-{put}	/dedicated/nasha/{serviceName}
-{get}	/dedicated/nasha/{serviceName}/partition
-{post}	/dedicated/nasha/{serviceName}/partition
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}
-{put}	/dedicated/nasha/{serviceName}/partition/{partitionName}
-{delete}/dedicated/nasha/{serviceName}/partition/{partitionName}
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/access
-{post}	/dedicated/nasha/{serviceName}/partition/{partitionName}/access
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/access/{ip}
-{delete}/dedicated/nasha/{serviceName}/partition/{partitionName}/access/{ip}
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/authorizableBlocks
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/authorizableIps
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot
-{post}	/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot
-{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot/{snapshotType}
-{delete}/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot/{snapshotType}
-{get}	/dedicated/nasha/{serviceName}/serviceInfos
-{put}	/dedicated/nasha/{serviceName}/serviceInfos
-{get}	/dedicated/nasha/{serviceName}/task
-{get}	/dedicated/nasha/{serviceName}/task/{taskId}
+done	{get}	/dedicated/nasha/{serviceName}
+		{put}	/dedicated/nasha/{serviceName}
+		{get}	/dedicated/nasha/{serviceName}/partition
+		{post}	/dedicated/nasha/{serviceName}/partition
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}
+		{put}	/dedicated/nasha/{serviceName}/partition/{partitionName}
+		{delete}/dedicated/nasha/{serviceName}/partition/{partitionName}
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/access
+		{post}	/dedicated/nasha/{serviceName}/partition/{partitionName}/access
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/access/{ip}
+		{delete}/dedicated/nasha/{serviceName}/partition/{partitionName}/access/{ip}
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/authorizableBlocks
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/authorizableIps
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot
+		{post}	/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot
+		{get}	/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot/{snapshotType}
+		{delete}/dedicated/nasha/{serviceName}/partition/{partitionName}/snapshot/{snapshotType}
+		{get}	/dedicated/nasha/{serviceName}/serviceInfos
+		{put}	/dedicated/nasha/{serviceName}/serviceInfos
+		{get}	/dedicated/nasha/{serviceName}/task
+		{get}	/dedicated/nasha/{serviceName}/task/{taskId}
 */
 
 

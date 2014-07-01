@@ -6,6 +6,7 @@
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
  *  - Gillardeau Thibaut (aka Thibautg16)
+ *  - Scott Brown (aka Slartibardfast)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -77,6 +78,12 @@ class ServerClient extends AbstractClient
 
 	/**
 	 * Get backupFTP
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server is not defined
+	 * 		usual handling for 400/404 errors
 	 */
 	/// dedicated/server/{serviceName}/features/backupFTP
 	public function getbackupFTP($domain)
@@ -91,7 +98,16 @@ class ServerClient extends AbstractClient
 		}
 		return $r->getBody(true);
 	}
-	
+
+	/**
+	 * Create new backupFTP
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server is not defined
+	 * 		usual handling for 400/404 errors
+	 */
 	// /dedicated/server/{serviceName}/features/backupFTP
 	public function createBackupFTP($domain)
 	{
@@ -106,11 +122,30 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	}
 	
+	/**
+	 * delete backupFTP
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 *
+	 *** Throws NotImplementedYetException... not ready to try this out :)
+	 *
+	 */
 	// /dedicated/server/{serviceName}/features/backupFTP
 	public function deleteBackupFTPAccess($domain)
 	{
 		throw new NotImplementedYetException('not yet implemented');
 	}
+	
+	
+	/**
+	 * Get backupFTP ACL list
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server is not defined
+	 * 		usual handling for 400/404 errors
+	 */
 	
 	// dedicated/server/{serviceName}/features/backupFTP/access
 	public function getBackupFTPAccess($domain)
@@ -126,6 +161,20 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	}
 	
+	/**
+	 * Creatge backupFTP ACL
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @param	$ipBlock -> ipblock that is being granted access
+	 *
+	 * this requires that one type of access be set - and since this is called backuipFTP - I chose the FTP as default
+	 * a second call to set actual desired ACL will be required
+	 *
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server is not defined
+	 * 		usual handling for 400/404 errors
+	 */
 	public function createBackupFTPAccess($domain, $ipBlock)
 	{
 	//	$domain = (string)$domain;
@@ -148,6 +197,17 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	}
 	
+	/**
+	 * Get backupFTP Authorizable IPBlocks
+	 *
+	 * only the IP blocks associated with your server can access yout FTP space - this returns the valid list.
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server is not defined
+	 * 		usual handling for 400/404 errors
+	 */
 	public function getBackupFTPAuthorizableBlocks($domain)
 	{
 		$domain = (string)$domain;
@@ -161,6 +221,16 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	}
 
+	/**
+	 * Get backupFTP ACL for specified ipBlock
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @param 	$ipblock -> ipblock this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server or ipblock is not defined
+	 * 		usual handling for 400/404 errors
+	 */
 	public function getBackupFTPaccessBlock($domain,$ipBlock)
 	{
 		$domain = (string)$domain;
@@ -176,6 +246,16 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	}
 	
+	/**
+	 * delete backupFTP ACL for specified IPblock
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @param	$ipblock -> Ipblock that this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if server or ipblock is not defined
+	 * 		usual handling for 400/404 errors
+	 */
 	public function deleteBackupFTPaccessBlock($domain,$ipBlock)
 	{
 		$domain = (string)$domain;
@@ -191,6 +271,16 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	}
 
+	/**
+	 * Get Set backupFTP ACL
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @param	$ipblock -> ip block this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if any param is not defined
+	 * 		usual handling for 400/404 errors
+	*/
 	public function setBackupFTPaccessBlock($domain,$ipBlock, $ftp, $nfs, $cifs)
 	{
 		$domain = (string)$domain;
@@ -198,6 +288,13 @@ class ServerClient extends AbstractClient
 			throw new BadMethodCallException('Parameter $domain is missing.');
 		if (!$ipBlock)
 			throw new BadMethodCallException('Parameter $ipBlock is missing.');
+		if (!$ftp)
+			throw new BadMethodCallException('Parameter $ftp is missing.');
+		if (!$nfs)
+			throw new BadMethodCallException('Parameter $nfs is missing.');
+		if (!$cifs)
+			throw new BadMethodCallException('Parameter $cifs is missing.');
+
 		$payload = array('ftp' => ($ftp=='on') , 'nfs' => ($nfs=='on') , 'cifs' => ($cifs=='on') );
 			
         try {
@@ -258,6 +355,17 @@ class ServerClient extends AbstractClient
 		return $r->getBody(true);
 	}
 
+	/**
+	 * Get defintion of BootID options - added but not used... not tested
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 * @param	$bootid -> ip block this applies to
+	 * @param	$option -> option this applies to
+	 * @return 	object result set
+	 *
+	 * throws BadMethodCallException if any param is not defined
+	 * 		usual handling for 400/404 errors
+	*/
 	public function getBootOptionsProperties($domain, $bootId, $option)
 	{
 		$domain = (string)$domain;
@@ -334,6 +442,15 @@ class ServerClient extends AbstractClient
      * @throws Exception\ServerException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
+	/**********************************************
+	*
+	*	This didmt work passing bools though as $enable - testing logic on bools is a PITA.
+	*
+	*	if (!var) when var == false => true, and that was tossing missing paramaeter messages.
+	*
+	*	modified to pass on/off instead
+	*
+	*/
     public function setMonitoring($domain, $_enable)
     {	
         if (!$domain)
@@ -594,6 +711,14 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
     }
 
+
+	/**
+     * Get Network Specs - internal/external speeds and limits
+     *
+     * @param string $domain
+     * @return mixed
+     * normal handling of 400/404s
+     */
 	public function getNetworkSpecifications($domain)
 	{
         try {
@@ -1360,6 +1485,15 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
     }
 	
+	/* 
+	 * Gets list of the sizes of backupFTP that can be ordered for the server
+	 *
+	 * @param 	$domain -> server
+	 * @returns json list of valid backup sizes for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
 	public function getOrderableBackupFTP($domain) {
 		$domain = (string)$domain;
         
@@ -1372,11 +1506,20 @@ class ServerClient extends AbstractClient
             throw new ServerException($e->getMessage(), $e->getCode(), $e);
         }
 		
-	var_dump($r->getBody(true));
+	//var_dump($r->getBody(true));
         return $r->getBody(true);
 
 	}
 	
+	/* 
+	 * Gets list of the sizes of USBKeys that can be ordered for the server
+	 *
+	 * @param 	$domain -> server
+	 * @returns json list of USBKey sizes for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
 	public function getOrderableUSB($domain) {
 		$domain = (string)$domain;
         
@@ -1392,6 +1535,15 @@ class ServerClient extends AbstractClient
 
 	}
 	
+	/* 
+	 * Gets list of the sizes of USBKeys that can be ordered for the server
+	 *
+	 * @param 	$domain -> server
+	 * @returns list of USBKey sizes for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
 	public function getOrderableProfessionalUse($domain) {
 		$domain = (string)$domain;
         
@@ -1407,6 +1559,15 @@ class ServerClient extends AbstractClient
 
 	}
 	
+	/* 
+	 * Gets list of templates that can be installed onto server
+	 *
+	 * @param 	$domain -> server
+	 * @returns object list of ovh and personal templates valid for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
 	public function getCompatibleTemplates($domain) {
 		$domain = (string)$domain;
         
@@ -1422,6 +1583,15 @@ class ServerClient extends AbstractClient
 
 	}
 	
+	/* 
+	 * Gets list of partitioning schemes that can be installed onto server -- untested
+	 *
+	 * @param 	$domain -> server
+	 * @returns object list partitioning schemes valid for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
 	public function getCompatibleTemplatePartitionSchemes($domain) {
 		$domain = (string)$domain;
         
@@ -1437,6 +1607,16 @@ class ServerClient extends AbstractClient
 
 	}
 
+/********* may be duplicated functionality *********/
+	/* 
+	 * Gets list of assopciated with server
+	 *
+	 * @param 	$domain -> server
+	 * @returns object list IPs (Ipv4 and IPv6) valid for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
 	public function getServerIPs($domain) {
 		$domain = (string)$domain;
         
