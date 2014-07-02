@@ -19,21 +19,16 @@
  * permissions and limitations under the License.
  */
 
-// @todo create a common exception client and extends from it
+// cloned from vRack
 
-namespace Ovh\Vrack\Exception;
+namespace Ovh\License\Virtuozzo\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
-
-//use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
-//use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
-//use Ovh\Vps\Exception\TaskDoesNotExistsException;
-
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
-class VrackException extends \RuntimeException
+class VirtuozzoException extends \RuntimeException
 {
 	public function __construct($message = '', $code = 0, $prev)
 	{
@@ -56,7 +51,7 @@ class VrackException extends \RuntimeException
 				if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
 					$d = explode("/", $request->getPath());
 					$taskId = $d[5];
-					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for Vrack ' . $this->getDomain($request->getPath()), 404);
+					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for Virtuozzo ' . $this->getDomain($request->getPath()), 404);
 				} else throw $prev;
 
 

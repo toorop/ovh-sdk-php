@@ -28,7 +28,7 @@ namespace Ovh\License\Cpanel;
 use Guzzle\Http\Message\Response;
 use Ovh\Common\AbstractClient;
 use Ovh\Common\Exception\BadMethodCallException;
-use Ovh\Licemse\Cpanel\Exception\CpanelException;
+use Ovh\License\Cpanel\Exception\CpanelException;
 
 class CpanelClient extends AbstractClient
 {

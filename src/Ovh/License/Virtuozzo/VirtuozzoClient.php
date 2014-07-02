@@ -20,143 +20,60 @@
  */
 
 
-namespace Ovh\Vrack;
+namespace Ovh\License\Virtuozzo;
 
-#use Guzzle\Http\Exception\ClientErrorResponseException;
-
-#use Guzzle\Http\Exception\BadResponseException;
-#use Guzzle\Http\Exception\CurlException;
 use Guzzle\Http\Message\Response;
-
 use Ovh\Common\AbstractClient;
 use Ovh\Common\Exception\BadMethodCallException;
-
-#use Ovh\Common\Exception\NotImplementedYetException;
-
-//use Ovh\Vps\Exception\VpsNotFoundException;
-use Ovh\Vrack\Exception\VrackException;
+use Ovh\License\Virtuozzo\Exception\VirtuozzoException;
 
 
-class VrackClient extends AbstractClient
+class VirtuozzoClient extends AbstractClient
 {
+ 
+    /**
+     * Get Orderable Versions of plesk on an IP -- untested
+     *
+     * @param string $domain
+	 * @param string $ip
+     * @return string Json
+     * @throws Exception\VirtuozzoException
+     * @throws Exception\VirtuozzoNotFoundException
+	 * @throws Exception\BadMethodCallException
+     */
+    public function getOrderableVersions($domain,$ip)
+    {
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing');
+		if (!$ip)
+			throw new BadMethodCallException('Parameter $ip is missing');
+
+        try {
+            $r = $this->get('license/virtuozzo/' . $domain .'?'.$ip)->send();
+        } catch (\Exception $e) {
+            throw new VirtuozzoException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
 
     /**
-     * Get properties
+     * Get properties of license
      *
      * @param string $domain
      * @return string Json
-     * @throws Exception\VrackException
-     * @throws Exception\VrackNotFoundException
+     * @throws Exception\VirtuozzoException
+     * @throws Exception\VirtuozzoNotFoundException
+	 * @throws Exception\BatMethodCallException
      */
     public function getProperties($domain)
     {
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing');
         try {
-            $r = $this->get('vrack/' . $domain)->send();
+            $r = $this->get('license/virtuozzo/' . $domain)->send();
         } catch (\Exception $e) {
-            throw new VrackException($e->getMessage(), $e->getCode(), $e);
-        }
-        return $r->getBody(true);
-    }
-	
-	/*********** DedicatedServer ***********/
-	
-    /**
-     * Get dedicatedServer
-     * Ajout by @Thibautg16 le 24/06/2014
-     * 
-     * @return array of strings
-	 *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     */
-    public function getdedicatedServer($domain){
-        $domain  = (string)$domain;
-	
-        if (!$domain)
-            throw new BadMethodCallException('Parameter $domain is missing.');
-        
-        try {
-            $r = $this->get('vrack/'.$domain.'/dedicatedServer')->send();
-        } catch (\Exception $e) {
-            throw new VrackException($e->getMessage(), $e->getCode(), $e);
-        }
-        return $r->getBody(true);
-    }
-	
-    /**
-     * Get MRTG
-     * Ajout by @Thibautg16 le 26/06/2014
-     * 
-     * @param string $domain
-	 * @param string $serveur
-     * @param string $period
-     * @param string $type
-     * 
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     */
-    public function getMrtg($domain, $serveur, $period='daily', $type='traffic:download'){
-        $domain  = (string)$domain;
-		$serveur = (string)$serveur;
-        $period  = (string)$period;
-        $type    = (string)$type;
-		
-        if (!$domain)
-            throw new BadMethodCallException('Parameter $domain is missing.');
-        
-        try {
-            $r = $this->get('vrack/'.$domain.'/dedicatedServer/'.$serveur.'/mrtg?period='.$period.'&type='.$type)->send();
-        } catch (\Exception $e) {
-            throw new VrackException($e->getMessage(), $e->getCode(), $e);
-        }
-        return $r->getBody(true);
-    }
-	
-	/*********** DedicatedCloud ***********/
-	/**
-     * Get dedicatedCloud
-     * Ajout by @Thibautg16 le 24/06/2014
-     * 
-     * @return array of strings
-	 *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     */
-    public function getdedicatedCloud($domain){
-        $domain  = (string)$domain;
-	
-        if (!$domain)
-            throw new BadMethodCallException('Parameter $domain is missing.');
-        
-        try {
-            $r = $this->get('vrack/'.$domain.'/dedicatedCloud')->send();
-        } catch (\Exception $e) {
-            throw new VrackException($e->getMessage(), $e->getCode(), $e);
-        }
-        return $r->getBody(true);
-    }
-	
-	/*********** Ip ***********/
-	/**
-     * Get ip
-     * Ajout by @Thibautg16 le 24/06/2014
-     * 
-     * @return array of strings
-	 *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     */
-    public function getIp($domain){
-        $domain  = (string)$domain;
-	
-        if (!$domain)
-            throw new BadMethodCallException('Parameter $domain is missing.');
-        
-        try {
-            $r = $this->get('vrack/'.$domain.'/ip')->send();
-        } catch (\Exception $e) {
-            throw new VrackException($e->getMessage(), $e->getCode(), $e);
+            throw new VirtuozzoException($e->getMessage(), $e->getCode(), $e);
         }
         return $r->getBody(true);
     }

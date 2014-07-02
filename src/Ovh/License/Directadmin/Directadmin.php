@@ -19,21 +19,21 @@
  * permissions and limitations under the License.
  */
 
-namespace Ovh\Vrack;
+namespace Ovh\License\Directadmin;
 
 
 use Ovh\Common\Exception\NotImplementedYetException;
 use Ovh\Common\Exception\NotImplementedYetByOvhException;
 
 use Ovh\Common\Ovh;
-use Ovh\Vrack\VrackClient;
+use Ovh\License\Directadmin\DirectadminClient;
 use Ovh\Common\Task;
 
 
-class Vrack
+class Directadmin
 {
 	private $domain = null;
-	private static $vrackClient = null;
+	private static $DirectadminClient = null;
 
 	/**
 	 * @param string $domain
@@ -45,16 +45,16 @@ class Vrack
 
 
 	/**
-	 * Return Vrack client
+	 * Return Directadmin client
 	 *
-	 * @return null|vrackClient
+	 * @return null|DirectadminClient
 	 */
 	private static function getClient()
 	{
-		if (!self::$vrackClient instanceof VrackClient){
-			self::$vrackClient=new VrackClient();
+		if (!self::$DirectadminClient instanceof DirectadminClient){
+			self::$DirectadminClient=new DirectadminClient();
 		};
-		return self::$vrackClient;
+		return self::$DirectadminClient;
 	}
 
 	/**
@@ -84,7 +84,18 @@ class Vrack
 	##
 
 	/**
-	 *  Get Dedicated Vrack properties
+	 *  Get Orderable Versions
+	 *
+	 *  @param  ip - Ip on which to place license
+	 *  @return object
+	 *
+	*/
+	public function getOrderableVersions($ip){
+        return json_decode(self::getClient()->getProperties($this->getDomain(),$ip));
+    }
+	    
+    /**
+	 *  Get Properties of supplied licence
 	 *
 	 *  @return object
 	 *
@@ -92,66 +103,5 @@ class Vrack
 	public function getProperties(){
         return json_decode(self::getClient()->getProperties($this->getDomain()));
     }
-	    
-    /*********** DedicatedServer ***********/
 	
-    /**
-     * Get dedicatedServer
-	 * Retourne les serveurs dédiés actuellement dans le vrack
-     * Ajout by @Thibautg16 le 24/06/2014
-     *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     * @return array of strings
-     */
-    public function getdedicatedServer()
-    {
-        return json_decode(self::getClient()->getdedicatedServer($this->getDomain()));
-    }	
-	
-    /**
-     * Get MRTG
-	 * Retourne les valeurs du graphique de trafic du vRack pour un serveur
-     * Ajout by @Thibautg16 le 26/03/2014
-     *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     * @return array of strings
-     */
-    public function getMrtg($serveur,$period,$type)
-    {
-        return json_decode(self::getClient()->getMrtg($this->getDomain(),$serveur,$period,$type));
-    }
-	
-	/*********** dedicatedCloud ***********/
-	
-    /**
-     * Get dedicatedCloud
-	 * Retourne les Cloud dédié actuellement dans le vrack
-     * Ajout by @Thibautg16 le 24/06/2014
-     *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     * @return array of strings
-     */
-    public function getdedicatedCloud()
-    {
-        return json_decode(self::getClient()->getdedicatedCloud($this->getDomain()));
-    }	
-	
-	/*********** Ip ***********/
-	
-    /**
-     * Get ip
-	 * Retourne les blocs IP actuellement dans le vrack
-     * Ajout by @Thibautg16 le 24/06/2014
-     *
-     * @throws Exception\VrackException
-     * @throws \Ovh\Common\Exception\BadMethodCallException
-     * @return array of strings
-     */
-    public function getIp()
-    {
-        return json_decode(self::getClient()->getIp($this->getDomain()));
-    }
-}
+ }

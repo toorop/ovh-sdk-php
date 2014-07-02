@@ -797,8 +797,8 @@ class Server
 	*
 	* @returns array of IPs assigned (IPv4 and IPv6)
 	*/
-	public function getServerIPs($domain) {
-		return json_decode(self::getClient()->getCompatibleTemplatePartitionSchemes($this->getDomain()));
+	public function getServerIPs() {
+		return json_decode(self::getClient()->getServerIPs($this->getDomain()));
 
 	}	
 }
