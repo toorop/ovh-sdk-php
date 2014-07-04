@@ -36,8 +36,8 @@ class PleskClient extends AbstractClient
      * @param string $domain
 	 * @param string $ip
      * @return string Json
-     * @throws Exception\CpanelException
-     * @throws Exception\CpanelNotFoundException
+     * @throws Exception\PleskException
+     * @throws Exception\PleskNotFoundException
 	 * @throws Exception\BadMethodCallException
      */
     public function getOrderableVersions($domain,$ip)

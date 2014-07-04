@@ -29,7 +29,7 @@ use Ovh\Common\Exception\InvalidSignatureException;
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
-class VrackException extends \RuntimeException
+class CpanelException extends \RuntimeException
 {
 	public function __construct($message = '', $code = 0, $prev)
 	{
