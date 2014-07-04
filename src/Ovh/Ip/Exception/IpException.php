@@ -5,7 +5,6 @@
  * Authors :
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
- *  - Gillardeau Thibaut (aka Thibautg16) 
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -19,12 +18,16 @@
  * permissions and limitations under the License.
  */
 
-// cloned from VPS // Slartibardfast / 2014-06-30
+// @todo create a common exception client and extends from it
 
-namespace Ovh\Ip\IpException;
+namespace Ovh\Ip\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
+
+//use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
+//use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
+//use Ovh\Vps\Exception\TaskDoesNotExistsException;
 
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
@@ -42,17 +45,31 @@ class IpException extends \RuntimeException
 		#var_dump($response->getBody());
 
 		$statusCode = $response->getStatusCode();
+		
+//print $statusCode;
 		switch ($statusCode) {
+			case 409 :
+				// Reverse already set
+				if (stristr((string)$response->getBody(), 'Reverse')&& stristr((string)$response->getBody(),'is already set')) {
+					throw new ServiceResponseException('Resource  ' . $request->getMethod() . ' ' . $request->getResource() . ' Already Updated', 409);
+				} else throw $prev;
+				
 			case 404 :
+			//print $response->getBody()."\n";
+			//print stristr((string)$response->getBody(), 'The requested object')."\n";
+			//print stristr((string)$response->getBody(), 'does not exist')."\n";
+			//print $request;
+			//print $response;
 				// Bad Method or Ressource not available
-				if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist'))
-					throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
-
+				if (stristr((string)$response->getBody(), 'The requested object') && stristr((string)$response->getBody(), 'does not exist')) {
+					throw new InvalidResourceException('The requested Object ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
+				}
+echo "got here\n";
 				// Task does not exists
 				if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
 					$d = explode("/", $request->getPath());
 					$taskId = $d[5];
-					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for IPs ' . $this->getDomain($request->getPath()), 404);
+					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for Dedicated Server ' . $this->getDomain($request->getPath()), 404);
 				} else throw $prev;
 
 
@@ -76,11 +93,11 @@ class IpException extends \RuntimeException
 	 * @param string $path
 	 * @return string domain
 	 */
-	//private function getDomain($path)
-	//{
-	//	$d = explode("/", $path);
-	//	return $d[3];
-	//}
+	private function getDomain($path)
+	{
+		$d = explode("/", $path);
+		return $d[3];
+	}
 
 
 	public function debug()

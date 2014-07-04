@@ -25,7 +25,6 @@ namespace Ovh\Ip;
 
 use Ovh\Common\Exception\NotImplementedYetException;
 use Ovh\Common\Exception\NotImplementedYetByOvhException;
-
 use Ovh\Common\Ovh;
 use Ovh\Ip\IpClient;
 use Ovh\Common\Task;
@@ -49,9 +48,9 @@ class Ip
 
 
 	/**
-	 * Return Vrack client
+	 * Return IP client
 	 *
-	 * @return null|vrackClient
+	 * @return null|IPClient
 	 */
 	private static function getClient()
 	{
@@ -124,5 +123,32 @@ class Ip
 	public function getIPBlockedInfo($domain) {
 		return json_decode(self::getClient()->getIPBlockArp($this->getIP(),$domain));
 	}
-	
+
+	/*
+	 * get ReverseIP
+	 *
+	 * return mixed detail 
+	*/
+	public function getReverse() {
+		return json_decode(self::getClient()->getReverse($this->getIP()));
+	}
+
+	/*
+	 * get details about the ReverseIP
+	 *
+	 * return mixed detail 
+	*/
+	public function getReverseProperties($ipv4) {
+		return json_decode(self::getClient()->getReverseProperties($this->getIP(),$ipv4));
+	}
+
+	/*
+	 * get details about the ReverseIP
+	 *
+	 * return mixed detail 
+	*/
+	public function setReverseProperties($ipv4,$reverse) {
+		return json_decode(self::getClient()->setReverseProperties($this->getIP(),$ipv4,$reverse));
+	}
+
 }
