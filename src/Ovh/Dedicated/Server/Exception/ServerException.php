@@ -46,6 +46,11 @@ class ServerException extends \RuntimeException
 
 		$statusCode = $response->getStatusCode();
 		switch ($statusCode) {
+			case 403 :
+				// forbidden action - found on vmac activities
+				if (stristr((string)$response->getBody(), 'A Virtual Mac already exists on')) {
+					throw new ServiceResponseException($response, 404 , $prev);
+				} else throw $prev;
 			case 404 :
 				// Bad Method or Ressource not available
 				if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist'))

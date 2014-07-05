@@ -155,7 +155,7 @@ only seems to return null on success
     }
 
     /**
-     * Get ReverseProperties - returns information about the specific IP Reverse
+     * Set ReverseProperties - returns information about the specific IP Reverse
      *
      * @param string $ipBlock
 	 * @param string $ip 
@@ -187,6 +187,111 @@ only seems to return null on success
         return $r->getBody(true);
     }
 
+    /**
+     * Get Spam  - returns list of IPs on spam control in block
+     *
+     * @param string $ipBlock
+	 * @param string $spamstate { "blockedForSpam", "unblocked", "unblocking"}
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+     */ 
+	public function getSpam($ipblock, $spamstate)
+    {
+		if (!$ipblock)
+			throw new BadMethodCallException('Parameter $ipblock is missing.');
+		if (!$spamstate)
+			throw new BadMethodCallException('Parameter $spamstate is missing.');
+		switch ($spamstate) {
+			case "blockedForSpam":
+			case "unblocked":
+			case "unblocking":
+				break;
+			default:
+				throw new BadMethodCallException('Parameter $spamstate is invalid.');
+		}
+        try {
+            $r = $this->get('ip/' . urlencode($ipblock) . '/spam/?state=' . $spamstate)->send();
+        } catch (\Exception $e) {
+            throw new IpException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+	
+	/**
+     * Get SpamProperties  - returns Properties of IP on Spam
+     *
+     * @param string $ipBlock
+	 * @param string $ipv4 
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+     */ 
+	public function getSpamProperties($ipblock, $spamstate)
+    {
+		if (!$ipblock)
+			throw new BadMethodCallException('Parameter $ipblock is missing.');
+		if (!$ipv4)
+			throw new BadMethodCallException('Parameter $ipv4 is missing.');
+        try {
+            $r = $this->get('ip/' . urlencode($ipblock) . '/spam/' . $ipv4)->send();
+        } catch (\Exception $e) {
+            throw new IpException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
+	/**
+     * Get SpamStats  - returns Statistics of IP on Spam
+     *
+     * @param string $ipBlock
+	 * @param string $ipv4 
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+     */ 
+	public function getSpamStats($ipblock, $spamstate, $fromdate, $todate)
+    {
+		if (!$ipblock)
+			throw new BadMethodCallException('Parameter $ipblock is missing.');
+		if (!$ipv4)
+			throw new BadMethodCallException('Parameter $ipv4 is missing.');
+		if (!$fromdate)
+			throw new BadMethodCallException('Parameter $fromdate is missing.');
+		if (!$todate)
+			throw new BadMethodCallException('Parameter $todate is missing.');
+        try {
+            $r = $this->get('ip/' . urlencode($ipblock) . '/spam/' . $ipv4 .'/stats?from='.urlencode($fromdate).'&to='.urlencode($todate))->send();
+        } catch (\Exception $e) {
+            throw new IpException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
+    /**
+     * Set UnblockSpam - Trigger unblocking of IP on Spam block
+     *
+     * @param string $ipBlock
+	 * @param string $ipv4 
+     * @return string Json
+     * @throws Exception\IpException
+     * @throws Exception\IpNotFoundException
+     */ 
+	public function setUnblockSpam($ipblock,$ipv4)
+    {
+		if (!$ipblock)
+			throw new BadMethodCallException('Parameter $ipblock is missing.');
+		if (!$ipv4)
+			throw new BadMethodCallException('Parameter $ipv4 is missing.');
+		
+        try {
+            $r = $this->post('ip/' . urlencode($ipblock) . '/spam/' . $ipv4 .'/unblock' )->send();
+        } catch (\Exception $e) {
+            throw new IpException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+
 
 /*
 		/ip/{ip}/firewall/*				not implemented
@@ -203,7 +308,6 @@ g/p		/ip/{ip}/mitigationProfiles		TODO
 post	/ip/{ip}/move					TODO
 post	/ip/{ip}/park					TODO
 g/p		/ip/{ip}/reverse/*				TODO
-g/p		/ip/{ip}/spam/*					TODO
 g/p		/ip/{ip}/task/p					TODO
 p		/ip/{ip}/terminate				TODO
 

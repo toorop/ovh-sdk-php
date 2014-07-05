@@ -151,4 +151,42 @@ class Ip
 		return json_decode(self::getClient()->setReverseProperties($this->getIP(),$ipv4,$reverse));
 	}
 
+	/*
+	 * get IPs in block on SPAM
+	 *
+	 * return array IPv4 
+	*/
+	public function getSpam($spamstate="blockedForSpam") {
+		return json_decode(self::getClient()->getSpam($this->getIP(),$spamstate));
+	}
+	
+	/*
+	 * get properties of IP on SPAM
+	 *
+	 * return mixed
+	*/
+	public function getSpamProperties($ipv4) {
+		return json_decode(self::getClient()->getSpamProperties($this->getIP(),$ipv4));
+	}
+	
+	/*
+	 * get stats of IP on SPAM
+	 *
+	 * return mixed
+	*/
+	public function getSpamStats($ipv4, $fromdate="2000-01-01 00:00:00", $todate="") {
+		if ($todate=="") $todate=date("Y-m-d 23:59:59",time());
+		return json_decode(self::getClient()->getSpamStats($this->getIP(),$ipv4, $fromdate, $todate));
+	}
+	
+	/*
+	 * get stats of IP on SPAM
+	 *
+	 * return mixed
+	*/
+	public function setUnblockSpam($ipv4) {
+		return json_decode(self::getClient()->setUnblockSpam($this->getIP(),$ipv4));
+	}
+	
+	
 }

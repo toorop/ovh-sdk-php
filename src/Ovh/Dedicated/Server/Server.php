@@ -800,5 +800,93 @@ class Server
 	public function getServerIPs() {
 		return json_decode(self::getClient()->getServerIPs($this->getDomain()));
 
-	}	
+	}
+
+// virtual MAC API
+	
+	/*
+	* Get list of vMac addresses assigned to server
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac
+	public function getVmacs() {
+		return json_decode(self::getClient()->getVmacs($this->getDomain()));
+	}
+	
+	/*
+	* assign vMac to an IP
+	*
+	* @returns task (array of mixed) :
+	*
+	*	{
+	*		"taskId": 123456,
+	*		"function": "virtualMacAdd",
+	*		"lastUpdate": "2014-07-04T19:28:52-04:00",
+	*		"comment": "Create a virtual mac for ip a.b.c.d",
+	*  		"status": "init",
+	*  		"startDate": "2014-07-04T19:28:52-04:00",
+	*  		"doneDate": null
+	*	}
+	*
+	*/
+// POST	/dedicated/server/{serviceName}/virtualMac
+	public function createVmac($ip,$type,$vmname) {
+		return json_decode(self::getClient()->assignVmac($this->getDomain(),$ip, $type, $vmname));
+	}
+
+	/*
+	* Get list of vMac addresses assigned to server
+	*
+	* @returns array of vMacs assigned 
+	*/
+// GET	/dedicated/server/{serviceName}/virtualMac/{virtualmac}
+	public function getVmacProperties($vmac) {
+		return json_decode(self::getClient()->getVmacProperties($this->getDomain(),$vmac));
+	}
+	
+	/*
+	* Get list of IPs addresses assigned to vMAC 
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function getVmacIPAddresses($vmac) {
+		return json_decode(self::getClient()->getVmacIPAddresses($this->getDomain(),$vmac));
+	}
+	
+	/*
+	* add an IP addresses to vMAC 
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function setVmacIPAddresses($vmac, $ip, $vmname) {
+		return json_decode(self::getClient()->getVmacIPAddress($this->getDomain(),$vmac, $ip, $vmname));
+	}
+	
+	/*
+	* add an IP addresses to vMAC 
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function deleteVmacIPAddress($vmac, $ip) {
+		return json_decode(self::getClient()->deleteVmacIPAddress($this->getDomain(),$vmac, $ip));
+	}
+	
+	public function findVmac($ipv4) {
+		$vmacs = json_decode(self::getClient()->getVmacs($this->getDomain()));
+		//var_dump($vmacs);
+		foreach($vmacs as $vmac) {
+			//echo "vmac-->$vmac\n";
+			$test_ip = json_decode(self::getClient()->getVmacIPAddresses($this->getDomain(),$vmac));
+			//echo "testip---->$test_ip[0]\n";
+			if ($test_ip[0] == $ipv4)
+				return $vmac;
+		}
+		return "";
+	}
+	
+	
 }

@@ -1632,5 +1632,196 @@ class ServerClient extends AbstractClient
 
 	}
 	
+	/* 
+	 * Gets list of vMacs associated with server
+	 *
+	 * @param 	$domain -> server
+	 * @returns object list vMacs valid for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
+	//	get /dedicated/server/{serviceName}/virtualMac
+	public function getVmacs($domain) {
+		$domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/virtualMac')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
 
+	}
+	
+	/* 
+	 * Set vMacs associated with a server and IP
+	 *
+	 * @param 	$domain -> server
+	 * @returns object list vMacs valid for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
+	// POST	/dedicated/server/{serviceName}/virtualMac
+	public function createVmac($domain,$ipaddress,$type,$vmname) {
+		$domain 	=(string)$domain;
+		$ipaddress	=(string)$ipaddress;
+		$type		=(string)$type;
+		$vmname		=(string)$vmname;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$ipaddress)
+            throw new BadMethodCallException('Parameter $ipaddress is missing.');
+        if (!$type)
+            throw new BadMethodCallException('Parameter $type is missing.');
+		if (($type != "ovh") && ($type != "vmware")) 
+			throw new BadMethodCallException('Parameter $type must be "ovh" or "vmware"');
+        if (!$vmname)
+            throw new BadMethodCallException('Parameter $vmname is missing.');
+        
+		$payload=array(
+			"ipAddress"=>$ipaddress,
+			"virtualMachineName"=>$vmname
+  		);
+		
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/virtualMac/' . $ip , array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+
+	}
+	
+	/* 
+	 * Gets list of vMacs associated with server
+	 *
+	 * @param 	$domain -> server
+	 * @returns object list vMacs valid for this server
+	 *
+	 * @throws BadMedhodCallException if no domain
+	 * 			normal handling of 400/404's
+	*/
+	// GET	/dedicated/server/{serviceName}/virtualMac/{virtualmac}
+	public function getVmacProperties($domain,$vmac) {
+		$domain = (string)$domain;
+        $vmac 	= (string)$vmac;
+		 
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$vmac)
+            throw new BadMethodCallException('Parameter $vmac is missing.');
+			
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/virtualMac/'. $vmac)->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+	
+	/*
+	* Get list of IPs addresses assigned to vMAC 
+	*
+	* @param $domain ->server
+	* @param $vmac -> vmac
+	*
+	* @returns array of IPv4s assigned 
+	*/
+	//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function getVmacIPAddresses($domain,$vmac) {
+		$domain = (string)$domain;
+        $vmac 	= (string)$vmac;
+		
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$vmac)
+            throw new BadMethodCallException('Parameter $vmac is missing.');
+			
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/virtualMac/'. $vmac. '/virtualAddress')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+	
+	/*
+	* add an IP addresses to vMAC 
+	*
+	* @param $domain -> server to add to
+	* @param $vmac	 -> vmac being added to
+	* @param $ip 		-> IPv4 being added
+	* @param $vmname	-> vmname to associate
+	*
+	* @returns task
+	*/
+//	POST /dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function setVmacIPAddresses($domain, $vmac, $ip, $vmname) {
+		$domain 	=(string)$domain;
+		$vmac		=(string)$vmac;
+		$ip			=(string)$ip;
+		$vmname		=(string)$vmname;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$ip)
+            throw new BadMethodCallException('Parameter $ip is missing.');
+        if (!$vmac)
+            throw new BadMethodCallException('Parameter $vmac is missing.');
+        if (!$vmname)
+            throw new BadMethodCallException('Parameter $vmname is missing.');
+
+		$payload=array(
+			"ipAddress"=>$ip,
+			"virtualMachineName"=>$vmname
+  		);
+		
+        try {
+            $r = $this->post('dedicated/server/' . $domain . '/virtualMac/' . $vmac . '/virtualAddress' , array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	
+	}
+	
+	/*
+	* delete an IP addresses from vMAC 
+	*
+	* @param $domain -> server to add to
+	* @param $vmac	 -> vmac being added to
+	* @param $ip 		-> IPv4 being added
+	* @param $vmname	-> vmname to associate
+	*
+	* @returns task
+	*/
+//	DELETE /dedicated/server/{serviceName}/virtualMac/{macAddress}/virtualAddress/{ipAddress}
+	public function deleteVmacIPAddress($domain, $vmac, $ip) {
+		$domain =(string)$domain;
+		$vmac	=(string)$vmac;
+		$ip		=(string)$ip;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        if (!$ip)
+            throw new BadMethodCallException('Parameter $ip is missing.');
+        if (!$vmac)
+            throw new BadMethodCallException('Parameter $vmac is missing.');
+
+		
+        try {
+            $r = $this->delete('dedicated/server/' . $domain . '/virtualMac/' . $vmac . '/virtualAddress/' . $ip )->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	
+	}
+	
 }
