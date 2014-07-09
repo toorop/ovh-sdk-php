@@ -163,24 +163,46 @@ only seems to return null on success
      * @throws Exception\IpException
      * @throws Exception\IpNotFoundException
      */ 
-	public function SetReverseProperties($ipblock,$ip,$reverse)
+	public function setReverseProperties($ipblock,$ip,$reverse)
     {
 		if (!$ipblock)
 			throw new BadMethodCallException('Parameter $ipblock is missing.');
 		if (!$ip)
 			throw new BadMethodCallException('Parameter $ip is missing.');
-		if (!$reverse)
-			throw new BadMethodCallException('Parameter $reverse is missing.');
-		if (inet_pton($ip) !== false)
-			throw new BadMethodCallException('Parameter $ip is invalid.');
-		if (substr($reverse, -1) != ".")
-			throw new BadMethodCallException('Parameter $reverse must end in ".".');
+	//	if (!$reverse)
+	//		throw new BadMethodCallException('Parameter $reverse is missing.');
+	//	if (inet_pton($ip) !== false)
+	//		throw new BadMethodCallException('Parameter $ip is invalid.');
+	//	if (substr($reverse, -1) != ".")
+	//		throw new BadMethodCallException('Parameter $reverse must end in ".".');
 		$payload = array(
 			'ipReverse' => $ip, 
 			'reverse' => $reverse
 		 );
         try {
             $r = $this->post('ip/' . urlencode($ipblock) . '/reverse', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
+        } catch (\Exception $e) {
+            throw new IpException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+	
+	/*
+	* deleteReverseProperties
+	*
+	* @param string ipblock 
+	* @param string ip
+	*
+	* @returns mixed
+	*/
+	public function deleteReverseProperties($ipblock,$ip)
+    {
+		if (!$ipblock)
+			throw new BadMethodCallException('Parameter $ipblock is missing.');
+		if (!$ip)
+			throw new BadMethodCallException('Parameter $ip is missing.');
+        try {
+            $r = $this->delete('ip/' . urlencode($ipblock) . '/reverse/' . $ip)->send();
         } catch (\Exception $e) {
             throw new IpException($e->getMessage(), $e->getCode(), $e);
         }

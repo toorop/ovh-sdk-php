@@ -49,7 +49,7 @@ class ServerException extends \RuntimeException
 			case 403 :
 				// forbidden action - found on vmac activities
 				if (stristr((string)$response->getBody(), 'A Virtual Mac already exists on')) {
-					throw new ServiceResponseException($response, 404 , $prev);
+					throw new ServiceResponseException($response, 403 , $prev);
 				} else throw $prev;
 			case 404 :
 				// Bad Method or Ressource not available

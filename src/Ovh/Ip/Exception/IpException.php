@@ -25,6 +25,7 @@ namespace Ovh\Ip\Exception;
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
 
+
 //use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
 //use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
 //use Ovh\Vps\Exception\TaskDoesNotExistsException;
@@ -46,25 +47,20 @@ class IpException extends \RuntimeException
 
 		$statusCode = $response->getStatusCode();
 		
-//print $statusCode;
+//print "status $statusCode\n";
 		switch ($statusCode) {
 			case 409 :
 				// Reverse already set
 				if (stristr((string)$response->getBody(), 'Reverse')&& stristr((string)$response->getBody(),'is already set')) {
-					throw new ServiceResponseException('Resource  ' . $request->getMethod() . ' ' . $request->getResource() . ' Already Updated', 409);
+					throw new InvalidResourceException('Reverse Already Set', 409);
 				} else throw $prev;
 				
 			case 404 :
-			//print $response->getBody()."\n";
-			//print stristr((string)$response->getBody(), 'The requested object')."\n";
-			//print stristr((string)$response->getBody(), 'does not exist')."\n";
-			//print $request;
-			//print $response;
 				// Bad Method or Ressource not available
 				if (stristr((string)$response->getBody(), 'The requested object') && stristr((string)$response->getBody(), 'does not exist')) {
 					throw new InvalidResourceException('The requested Object ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
 				}
-echo "got here\n";
+// "got here\n";
 				// Task does not exists
 				if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
 					$d = explode("/", $request->getPath());
@@ -75,11 +71,17 @@ echo "got here\n";
 
 			case 400 :
 				// Bad signature
-				if ($response->getReasonPhrase() == "Bad Request - Invalid signature")
+				if ($response->getReasonPhrase() == "Bad Request - Invalid signature") {
 					throw new InvalidSignatureException('The request signature is not valid.', 400);
-
-				else throw $prev;
-
+				}
+				if (stristr((string)$response->getReasonPhrase(), "Cannot check if ") && 
+					stristr((string)$response->getReasonPhrase(), " resolves to ") 	) {
+					throw new InvalidSignatureException($response->getReasonPhrase(), 400);
+				}
+				else
+				{ 
+				 throw $prev;
+				}
 
 			default :
 				throw $prev;

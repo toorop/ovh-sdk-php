@@ -875,15 +875,21 @@ class Server
 		return json_decode(self::getClient()->deleteVmacIPAddress($this->getDomain(),$vmac, $ip));
 	}
 	
+	/*
+	* function to lookup a vMac based on an IP address - why dont they include this in the API?
+	*
+	*@param $ipv4 - IPv4 to lookup
+	*
+	*@returns vmac or null string if not found
+	*/
 	public function findVmac($ipv4) {
 		$vmacs = json_decode(self::getClient()->getVmacs($this->getDomain()));
-		//var_dump($vmacs);
 		foreach($vmacs as $vmac) {
-			//echo "vmac-->$vmac\n";
 			$test_ip = json_decode(self::getClient()->getVmacIPAddresses($this->getDomain(),$vmac));
-			//echo "testip---->$test_ip[0]\n";
-			if ($test_ip[0] == $ipv4)
-				return $vmac;
+			foreach($test_ip as $ip) {
+				if ($ip == $ipv4)
+					return $vmac;
+			}
 		}
 		return "";
 	}

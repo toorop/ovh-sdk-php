@@ -143,12 +143,28 @@ class Ip
 	}
 
 	/*
-	 * get details about the ReverseIP
+	 * get set the ReverseIP pointer on an IP
+	 *
+	 * automatically falls into a delete of IPreverse if passed reverse is empty string
+	 * (Avoids unnecessary error at API level)
 	 *
 	 * return mixed detail 
 	*/
 	public function setReverseProperties($ipv4,$reverse) {
-		return json_decode(self::getClient()->setReverseProperties($this->getIP(),$ipv4,$reverse));
+		if ($reverse > "") {
+			return json_decode(self::getClient()->setReverseProperties($this->getIP(),$ipv4,$reverse));
+		} else {
+			return json_decode(self::getClient()->deleteReverseProperties($this->getIP(),$ipv4));
+		}
+	}
+	
+	/*
+	 * clear the ReverseIP pointer on an IP
+	 *
+	 * return mixed detail 
+	*/
+	public function deleteReverseProperties($ipv4) {
+		return json_decode(self::getClient()->deleteReverseProperties($this->getIP(),$ipv4));
 	}
 
 	/*
