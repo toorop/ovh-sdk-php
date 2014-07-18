@@ -121,12 +121,21 @@ class Server
 	}
 	
 	/*
-	* Delete backup FTP   ** NOT IMPLEMENTED IN CLIENT ** Shell only
+	* Delete backup FTP 
 	*
 	*/
-	public function deleteBackupFTPAccess()
+	public function deleteBackupFTP()
 	{
 		return json_decode(self::getClient()->deleteBackupFTPAccess($this->getDomain()));
+	}
+	
+	/*
+	* Change backup FTP Password
+	*
+	*/
+	public function changeBackupFTPPassword()
+	{
+		return json_decode(self::getClient()->changeBackupFTPPassword($this->getDomain()));
 	}
 	
 	/* 
@@ -221,7 +230,13 @@ class Server
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
     public function setBootdevice($bootDevice){
-        self::getClient()->setBootDevice($this->getDomain(),$bootDevice);
+		// ugly alert - the OVH API assumes any values not passed as part of the "PUT" are null/blank/0.
+		// so when we reset the boot device, we need to capture the current state of =monitoring= , =rootdevice= and =state= from 
+		// getProperties and pass those along too... easiest way is to call getProperties as part of the setBootDevice call, and
+		// update hoping that nothing else is updating in the intervening nanoseconds
+		
+	
+        self::getClient()->setBootDevice($this->getDomain(), $this->getProperties(), $bootDevice);
         return true;
     }
 

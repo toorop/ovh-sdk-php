@@ -127,16 +127,44 @@ class ServerClient extends AbstractClient
 	 * 
 	 * @param 	$domain -> Server that this applies to
 	 *
-	 *** Throws NotImplementedYetException... not ready to try this out :)
+	 * @returns @array
 	 *
 	 */
 	// /dedicated/server/{serviceName}/features/backupFTP
-	public function deleteBackupFTPAccess($domain)
+	public function deleteBackupFTP($domain)
 	{
-		throw new NotImplementedYetException('not yet implemented');
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->delete('dedicated/server/' . $domain . '/features/backupFTP')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
 	}
-	
-	
+
+	/**
+	 * delete backupFTP
+	 * 
+	 * @param 	$domain -> Server that this applies to
+	 *
+	 * @return Task object
+	 *
+	 */
+	public function changeBackupFTPPassword($domain)
+	{
+		$domain = (string)$domain;
+		if (!$domain)
+			throw new BadMethodCallException('Parameter $domain is missing.');
+        try {
+            $r = $this->post('dedicated/server/' . $domain . '/features/backupFTP/password')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+	}
+
 	/**
 	 * Get backupFTP ACL list
 	 * 
@@ -168,7 +196,7 @@ class ServerClient extends AbstractClient
 	 * @param	$ipBlock -> ipblock that is being granted access
 	 *
 	 * this requires that one type of access be set - and since this is called backuipFTP - I chose the FTP as default
-	 * a second call to set actual desired ACL will be required
+	 * a second call to set actual desired ACL will be required to set acl to what is desired
 	 *
 	 * @return 	object result set
 	 *
@@ -184,7 +212,7 @@ class ServerClient extends AbstractClient
 		if (!$ipBlock)
 			throw new BadMethodCallException('Parameter $ipBlock is missing.');
 		$payload = array(
-			'ftp' => (1==1), 
+			'ftp' => (1==1),  // why does this want a class specific variant of $true??
 			'ipBlock' => $ipBlock,
 			'nfs' => (1==0),
 			'cifs' => (1==0)
@@ -416,15 +444,22 @@ class ServerClient extends AbstractClient
      * @throws Exception\ServerException
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
-    public function setBootDevice($domain, $bootDevice)
+    public function setBootDevice($domain, $currentState, $bootDevice)
     {
+	//var_dump($currentState);
         if (!$domain)
             throw new BadMethodCallException('Parameter $domain is missing.');
         $domain = (string)$domain;
         if (!$bootDevice)
-            throw new BadMethodCallException('Parameter $bootDeevice is missing.');
+            throw new BadMethodCallException('Parameter $bootDevice is missing.');
         $bootDevice = (string)$bootDevice;
-        $payload = array('bootDevice' => $bootDevice);
+        $payload = array(
+			'bootId' => $bootDevice,
+			'monitoring' => $currentState->monitoring,
+			'rootDevice' => $currentState->rootDevice
+		);
+//			'state' =>$currentState->state
+// dont try and set 'state' unless the machine is in 'hacked' state.... ugh
         try {
             $r = $this->put('dedicated/server/' . $domain, array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($payload))->send();
         } catch (\Exception $e) {

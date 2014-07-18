@@ -5,6 +5,8 @@
  * Authors :
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16)
+ *  - Scott Brown (aka Slartibardfast)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
