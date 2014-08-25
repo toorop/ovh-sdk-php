@@ -6,6 +6,7 @@
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
  *  - Gillardeau Thibaut (aka Thibautg16)
+ *  - Scott Brown (aka Slartibardfast)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -17,13 +18,15 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * 2014-06-30 - Slartibardfast - extend for /dedicated/nasha and /ip
  */
 
 namespace Ovh\Common;
 
 use Guzzle\Http\Client;
 
-use Ovh\Dedicated\Server\Server;
+use Ovh\Dedicated\Server\Server;		// extended with 0.1.2
 use Ovh\Cdn\Cdn;
 use Ovh\Common\Auth\Keyring;
 use Ovh\Common\OvhClient;
@@ -34,11 +37,20 @@ use Ovh\Vrack\Vrack;
 use Ovh\Xdsl\Xdsl;
 use Ovh\Cloud\Cloud;
 
+// New with 0.1.2 -- tentative numbering
+use Ovh\Ip\Ip;
+use Ovh\Dedicated\Nasha\Nasha;
+use Ovh\License\Cpanel;
+use Ovh\License\Directadmin;
+use Ovh\License\Plesk;
+use Ovh\License\Virtuozzo;
+use Ovh\License\Windows;
+Use Ovh\License\Worklight;
 
 class Ovh
 {
     // Version
-    const VERSION = '0.1.1';
+    const VERSION = '0.1.2';
 
     // Client
     private static $ovhClient = null;
@@ -316,5 +328,184 @@ class Ovh
         return new Cloud($passport);
     }
 
+// IP heirarchy
+	/*
+     * Return list of IP blocks owned by user
+	 * Optional Args (positional)
+	 * 1. specific server
+	 * 2. specific ipblock
+	 * 3. specific type of IP (type validated inside client)
+     *
+     * @return mixed
+     */
+    public function getIPsList($domain="", $ipblock="", $type="")
+    {
+        return json_decode(self::getOvhClient()->getIPsList($domain, $ipblock, $type));
+    }
+
+	/*
+     * Instaniate new IP Client, and Return structure of IP block owned by user
+     *
+     * @return mixed
+     */
+	public function getIp($domain)
+    {
+        return new Ip($domain);
+    }
+	
+	
+// Dedicated/Nasha heirarchy
+	/*
+     * Return list of high availability NAS owned by user
+     *
+     * @return mixed
+     */
+    public function getNashaList()
+    {
+        return json_decode(self::getOvhClient()->getnashaList());
+    }
+	
+	/*
+     * Instantiate new nasha object and return structure of specific hanas owned by user
+     *
+     * @return mixed
+     */
+	public function getnasha($domain)
+    {
+        return new Nasha($domain);
+    }
+	
+// License/Cpanel heirarchy
+
+	/*
+	 * returns list of Cpanel licenses associatd with user account
+	 *
+	 * @return json string[]
+	*/
+	public function getCpanelList()
+	{
+		return json_decode(self::getOvhClient()->getCpanelList());
+	}
+	
+
+	/*
+	 * Instantiates a mew cPanel licence object and returns an object of the specific id
+	 *
+	 * returns Object
+	*/
+	public function getCpanelLicence($domain)
+	{
+		return new Cpanel($domain);
+	}
+
+	// License/Directadmin heirarchy
+
+	/*
+	 * returns list of Directadmin licenses associatd with user account
+	 *
+	 * @return json string[]
+	*/
+	public function getDirectadminList()
+	{
+		return json_decode(self::getOvhClient()->getDirectadminList());
+	}
+	
+	/*
+	 * Instantiates a new DirectAdmin licence object and returns an object of the specific id
+	 *
+	 * returns Object
+	*/
+	public function getDirectadminLicence($domain)
+	{
+		return new Cpanel($domain);
+	}
+	
+	// License/Plesk heirarchy
+
+	/*
+	 * returns list of Plesk licenses associatd with user account
+	 *
+	 * @return json string[]
+	*/
+	public function getPleskList()
+	{
+		return json_decode(self::getOvhClient()->getPleskList());
+	}
+	
+	/*
+	 * Instantiates a new Plesk licence object and returns an object of the specific id
+	 *
+	 * returns Object
+	*/
+	public function getPleskLicence($domain)
+	{
+		return new Plesk($domain);
+	}
+	
+	// License/Virtuozzo heirarchy
+
+	/*
+	 * returns list of Virtuozzo licenses associatd with user account
+	 *
+	 * @return json string[]
+	*/
+	public function getVirtuozzoList()
+	{
+		return json_decode(self::getOvhClient()->getVirtuozzoList());
+	}
+	
+	/*
+	 * Instantiates a new Virtuozzo licence object and returns an object of the specific id
+	 *
+	 * returns Object
+	*/
+	public function getVirtuozzoLicence($domain)
+	{
+		return new Virtuozzo($domain);
+	}
+
+	// License/Windows heirarchy
+
+	/*
+	 * returns list of Windows licenses associatd with user account
+	 *
+	 * @return json string[]
+	*/
+	public function getWindowsList()
+	{
+		return json_decode(self::getOvhClient()->getWindowsList());
+	}
+	
+	/*
+	 * Instantiates a new Windows licence object and returns an object of the specific id
+	 *
+	 * returns Object
+	*/
+	public function getWindowsLicence($domain)
+	{
+		return new Windows($domain);
+	}
+
+	// License/Worklight heirarchy
+
+	/*
+	 * returns list of Worklight licenses associatd with user account
+	 *
+	 * @return json string[]
+	*/
+	public function getWorklightList()
+	{
+		return json_decode(self::getOvhClient()->getWorklightList());
+	}
+	
+	/*
+	 * Instantiates a new Worklight licence object and returns an object of the specific id
+	 *
+	 * returns Object
+	*/
+	public function getWorklightLicence($domain)
+	{
+		return new Worklight($domain);
+	}
 
 }
