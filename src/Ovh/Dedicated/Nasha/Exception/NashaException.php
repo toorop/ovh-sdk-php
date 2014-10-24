@@ -18,16 +18,12 @@
  * permissions and limitations under the License.
  */
 
-// @todo create a common exception client and extends from it
+// cloned from vrack 2014-06-29
 
-namespace Ovh\Dedicated\Server\Exception;
+namespace Ovh\Dedicated\Nasha\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
-
-//use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
-//use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
-//use Ovh\Vps\Exception\TaskDoesNotExistsException;
 
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
@@ -36,21 +32,11 @@ class ServerException extends \RuntimeException
 {
 	public function __construct($message = '', $code = 0, $prev)
 	{
-		#$pe=$this->getPrevious();
-		#var_dump(get_class($prev));
-		$request = $prev->getRequest();
-		#print $request->getResource();
-		#die();
-		$response = $prev->getResponse();
-		#var_dump($response->getBody());
 
+		$request = $prev->getRequest();
+		$response = $prev->getResponse();
 		$statusCode = $response->getStatusCode();
 		switch ($statusCode) {
-			case 403 :
-				// forbidden action - found on vmac activities
-				if (stristr((string)$response->getBody(), 'A Virtual Mac already exists on')) {
-					throw new ServiceResponseException($response, 403 , $prev);
-				} else throw $prev;
 			case 404 :
 				// Bad Method or Ressource not available
 				if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist'))
@@ -60,7 +46,7 @@ class ServerException extends \RuntimeException
 				if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
 					$d = explode("/", $request->getPath());
 					$taskId = $d[5];
-					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for Dedicated Server ' . $this->getDomain($request->getPath()), 404);
+					throw new TaskDoesNotExistsException('There is no task with ID : ' . $taskId . '. for nasha' . $this->getNasna($request->getPath()), 404);
 				} else throw $prev;
 
 

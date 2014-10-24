@@ -6,6 +6,7 @@
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
  *  - Gillardeau Thibaut (aka Thibautg16)
+ *  - Scott Brown (aka Slartibardfast)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -88,7 +89,7 @@ class Server
 	{
 		return json_decode(self::getClient()->getProperties($this->getDomain()));
 	}
-
+	
 	/**
 	 * @return mixed
 	 */
@@ -96,6 +97,107 @@ class Server
 	{
 		return json_decode(self::getClient()->getBoot($this->getDomain()));
 	}
+	
+/** BackupFTP - added in 0.1.2 **/
+
+	/*
+	* Get backup FTP assigned to server
+	*
+	* @return mixed
+	*/
+	public function getbackupFTP()
+	{
+		return json_decode(self::getClient()->getBackupFTP($this->getDomain()));
+	}
+	
+	/*
+	* Create Backup FTP on server
+	*
+	* @return mixed
+	*/
+	public function createBackupFTP()
+	{
+		return json_decode(self::getClient()->createBackupFTP($this->getDomain()));
+	}
+	
+	/*
+	* Delete backup FTP 
+	*
+	*/
+	public function deleteBackupFTP()
+	{
+		return json_decode(self::getClient()->deleteBackupFTPAccess($this->getDomain()));
+	}
+	
+	/*
+	* Change backup FTP Password
+	*
+	*/
+	public function changeBackupFTPPassword()
+	{
+		return json_decode(self::getClient()->changeBackupFTPPassword($this->getDomain()));
+	}
+	
+	/* 
+	* Get backup FTP ACL list
+	*
+	* @returns object (array of ACL)
+	*/
+	public function getBackupFTPAccess()
+	{
+		return json_decode(self::getClient()->getBackupFTPAccess($this->getDomain()));
+	}
+
+	/*
+	* Create backup FTP ACL for IPBlock (creates with default ACL)
+	*
+	* @returns mixed
+	*/
+	public function createBackupFTPAccess($ipBlock)
+	{
+		return json_decode(self::getClient()->createBackupFTPAccess($this->getDomain(), $ipBlock));
+	}
+
+	/*
+	* Get Authorizable IPblocks on this backup FTP space (IPblocks assoc with the server)
+	*
+	* @returns object (array of IPblocks)
+	*/
+	public function getBackupFTPAuthorizableBlocks()
+	{
+		return json_decode(self::getClient()->getBackupFTPAuthorizableBlocks($this->getDomain()));
+	}
+	
+	/*
+	* Get BackupFTPAccessBlock - Get ACL for specific IPBlock
+	*
+	* @returns object (ACL information)
+	*/
+	public function getBackupFTPaccessBlock($ipBlock)
+	{
+		return json_decode(self::getClient()->getBackupFTPaccessBlock($this->getDomain(),$ipBlock));
+	}
+	
+	/*
+	* delete backup FTP ACL for IPBlock
+	*
+	* @returns object
+	*/
+	public function deleteBackupFTPaccessBlock($ipBlock)
+	{
+		return json_decode(self::getClient()->deleteBackupFTPaccessBlock($this->getDomain(),$ipBlock));
+	}
+	
+	/*
+	* Set backup FTP ACL for IPblock
+	*
+	* returns object (null??)
+	*/
+	public function setBackupFTPaccessBlock($ipBlock, $ftp, $nfs, $cifs)
+	{
+		return json_decode(self::getClient()->setBackupFTPaccessBlock($this->getDomain(),$ipBlock, $ftp, $nfs, $cifs));
+	}
+
 
 	/**
 	 * @param $bootId
@@ -128,7 +230,13 @@ class Server
      * @throws \Ovh\Common\Exception\BadMethodCallException
      */
     public function setBootdevice($bootDevice){
-        self::getClient()->setBootDevice($this->getDomain(),$bootDevice);
+		// ugly alert - the OVH API assumes any values not passed as part of the "PUT" are null/blank/0.
+		// so when we reset the boot device, we need to capture the current state of =monitoring= , =rootdevice= and =state= from 
+		// getProperties and pass those along too... easiest way is to call getProperties as part of the setBootDevice call, and
+		// update hoping that nothing else is updating in the intervening nanoseconds
+		
+	
+        self::getClient()->setBootDevice($this->getDomain(), $this->getProperties(), $bootDevice);
         return true;
     }
 
@@ -269,6 +377,26 @@ class Server
 		return json_decode(self::getClient()->getServiceInfos($this->getDomain()));
 	}
 
+// Network additions in v.1.0.2
+	/*
+	* Get Network Configuration details 
+	* 
+	* @ returns object containing network params
+	*/
+	public function  getNetworkSpecifications()
+	{
+		return json_decode(self::getClient()->getNetworkSpecifications($this->getDomain()));
+	}
+	
+	/*
+	* Get Network Burst setting
+	*
+	* @return mixed
+	 */
+	public function getBurst()
+	{
+		return json_decode(self::getClient()->getBurst($this->getDomain()));
+	}
 
 	#Task
 	/**
@@ -628,4 +756,158 @@ class Server
 	public function getSpecificationsHardware(){
         return json_decode(self::getClient()->getSpecificationsHardware($this->getDomain()));
     }
+	
+// Orderables -- added in v1.0.2
+	/*
+	* Get list of orderable FTP Backup sizes for the specific server
+	*
+	* @return Object (Array of valid sizes)
+	*/
+	public function getOrderableBackupFTP() {
+        return json_decode(self::getClient()->getOrderableBackupFTP($this->getDomain()));
+    }
+	
+	/*
+	* Get list of orderable USB keys for the specific server
+	*
+	* @return Object (array of valid key sizes)
+	*/
+	public function getOrderableUSB(){
+        return json_decode(self::getClient()->getOrderableUSB($this->getDomain()));
+    }
+	
+	/*
+	* Determins if "professionalUse" is available for order on specific server
+	*
+	* @returns object (contains boolean value)
+	*/
+	public function getOrderableProfessionalUse(){
+        return json_decode(self::getClient()->getOrderableProfessionalUse($this->getDomain()));
+    }
+
+// Installation information -- added in v0.1.2
+	/* 
+	* Get list of installation templates compatible with server
+	*
+	* @returns object (multi-d-array of templates)
+	*/
+	public function getCompatibleTemplates() {
+		return json_decode(self::getClient()->getCompatibleTemplates($this->getDomain()));
+	}
+	
+	/*
+	* Get list of partition schemes available with specific template
+	*
+	* @returns object (array of partition schemes)
+	*/
+	public function getCompatibleTemplatePartitionSchemes($domain) {
+		return json_decode(self::getClient()->getCompatibleTemplatePartitionSchemes($this->getDomain()));
+
+	}
+
+// IPs list -- overlaps with /ips/ heirarchy, but this is available in the /dedicated/server heirarchy
+
+	/*
+	* Get list of Ips assined to server
+	*
+	* @returns array of IPs assigned (IPv4 and IPv6)
+	*/
+	public function getServerIPs() {
+		return json_decode(self::getClient()->getServerIPs($this->getDomain()));
+
+	}
+
+// virtual MAC API
+	
+	/*
+	* Get list of vMac addresses assigned to server
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac
+	public function getVmacs() {
+		return json_decode(self::getClient()->getVmacs($this->getDomain()));
+	}
+	
+	/*
+	* assign vMac to an IP
+	*
+	* @returns task (array of mixed) :
+	*
+	*	{
+	*		"taskId": 123456,
+	*		"function": "virtualMacAdd",
+	*		"lastUpdate": "2014-07-04T19:28:52-04:00",
+	*		"comment": "Create a virtual mac for ip a.b.c.d",
+	*  		"status": "init",
+	*  		"startDate": "2014-07-04T19:28:52-04:00",
+	*  		"doneDate": null
+	*	}
+	*
+	*/
+// POST	/dedicated/server/{serviceName}/virtualMac
+	public function createVmac($ip,$type,$vmname) {
+		return json_decode(self::getClient()->assignVmac($this->getDomain(),$ip, $type, $vmname));
+	}
+
+	/*
+	* Get list of vMac addresses assigned to server
+	*
+	* @returns array of vMacs assigned 
+	*/
+// GET	/dedicated/server/{serviceName}/virtualMac/{virtualmac}
+	public function getVmacProperties($vmac) {
+		return json_decode(self::getClient()->getVmacProperties($this->getDomain(),$vmac));
+	}
+	
+	/*
+	* Get list of IPs addresses assigned to vMAC 
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function getVmacIPAddresses($vmac) {
+		return json_decode(self::getClient()->getVmacIPAddresses($this->getDomain(),$vmac));
+	}
+	
+	/*
+	* add an IP addresses to vMAC 
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function setVmacIPAddresses($vmac, $ip, $vmname) {
+		return json_decode(self::getClient()->getVmacIPAddress($this->getDomain(),$vmac, $ip, $vmname));
+	}
+	
+	/*
+	* add an IP addresses to vMAC 
+	*
+	* @returns array of vMacs assigned 
+	*/
+//	/dedicated/server/{serviceName}/virtualMac/{virtualmac}/virtualAddress
+	public function deleteVmacIPAddress($vmac, $ip) {
+		return json_decode(self::getClient()->deleteVmacIPAddress($this->getDomain(),$vmac, $ip));
+	}
+	
+	/*
+	* function to lookup a vMac based on an IP address - why dont they include this in the API?
+	*
+	*@param $ipv4 - IPv4 to lookup
+	*
+	*@returns vmac or null string if not found
+	*/
+	public function findVmac($ipv4) {
+		$vmacs = json_decode(self::getClient()->getVmacs($this->getDomain()));
+		foreach($vmacs as $vmac) {
+			$test_ip = json_decode(self::getClient()->getVmacIPAddresses($this->getDomain(),$vmac));
+			foreach($test_ip as $ip) {
+				if ($ip == $ipv4)
+					return $vmac;
+			}
+		}
+		return "";
+	}
+	
+	
 }

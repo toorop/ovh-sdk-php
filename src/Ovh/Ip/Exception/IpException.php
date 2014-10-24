@@ -5,6 +5,8 @@
  * Authors :
  *  - Stéphane Depierrepont (aka Toorop)
  *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16)
+ *  - Scott Brown (aka Slartibardfast)
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -20,10 +22,11 @@
 
 // @todo create a common exception client and extends from it
 
-namespace Ovh\Dedicated\Server\Exception;
+namespace Ovh\Ip\Exception;
 
 use Ovh\Common\Exception\InvalidResourceException;
 use Ovh\Common\Exception\InvalidSignatureException;
+
 
 //use Ovh\Vps\Exception\VpsSnapshotDoesNotExistsException;
 //use Ovh\Vps\Exception\VpsSnapshotIsOnlyForCloudException;
@@ -32,7 +35,7 @@ use Ovh\Common\Exception\InvalidSignatureException;
 use Guzzle\Http\Message\Response; // for debugging only
 use Guzzle\Http\Message\Request;
 
-class ServerException extends \RuntimeException
+class IpException extends \RuntimeException
 {
 	public function __construct($message = '', $code = 0, $prev)
 	{
@@ -45,17 +48,21 @@ class ServerException extends \RuntimeException
 		#var_dump($response->getBody());
 
 		$statusCode = $response->getStatusCode();
+		
+//print "status $statusCode\n";
 		switch ($statusCode) {
-			case 403 :
-				// forbidden action - found on vmac activities
-				if (stristr((string)$response->getBody(), 'A Virtual Mac already exists on')) {
-					throw new ServiceResponseException($response, 403 , $prev);
+			case 409 :
+				// Reverse already set
+				if (stristr((string)$response->getBody(), 'Reverse')&& stristr((string)$response->getBody(),'is already set')) {
+					throw new InvalidResourceException('Reverse Already Set', 409);
 				} else throw $prev;
+				
 			case 404 :
 				// Bad Method or Ressource not available
-				if (stristr((string)$response->getBody(), 'The object') && stristr((string)$response->getBody(), 'does not exist'))
-					throw new InvalidResourceException('Ressource ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
-
+				if (stristr((string)$response->getBody(), 'The requested object') && stristr((string)$response->getBody(), 'does not exist')) {
+					throw new InvalidResourceException('The requested Object ' . $request->getMethod() . ' ' . $request->getResource() . ' does not exist', 404);
+				}
+// "got here\n";
 				// Task does not exists
 				if ($response->getReasonPhrase() == "The requested object (Tasks) does not exist") {
 					$d = explode("/", $request->getPath());
@@ -66,11 +73,17 @@ class ServerException extends \RuntimeException
 
 			case 400 :
 				// Bad signature
-				if ($response->getReasonPhrase() == "Bad Request - Invalid signature")
+				if ($response->getReasonPhrase() == "Bad Request - Invalid signature") {
 					throw new InvalidSignatureException('The request signature is not valid.', 400);
-
-				else throw $prev;
-
+				}
+				if (stristr((string)$response->getReasonPhrase(), "Cannot check if ") && 
+					stristr((string)$response->getReasonPhrase(), " resolves to ") 	) {
+					throw new InvalidSignatureException($response->getReasonPhrase(), 400);
+				}
+				else
+				{ 
+				 throw $prev;
+				}
 
 			default :
 				throw $prev;
