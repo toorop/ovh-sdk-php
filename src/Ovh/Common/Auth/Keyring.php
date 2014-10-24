@@ -30,14 +30,12 @@
 
 namespace Ovh\Common\Auth;
 
-class Keyring
-{
+class Keyring{
 
-    static private $appKey = null;
-    static private $appSecret = null;
-    static private $consumerKey = null;
-    //Le paramètre "appUrlRegion" permet de choisir avec quelle API on veut travailler (FR ou CA)
-    static private $appUrlRegion = null;
+    static private $appKey = null;         // OVH Application Key
+    static private $appSecret = null;      // OVH Application Secret
+    static private $consumerKey = null;    // OVH Consumer Key
+    static private $appUrlRegion = null;   // Choix API (FR, CA, SYSCA, SYSFR, KIMSUFIFR, KIMSUFICA)
 
 
     public static function setAppKey($key)
@@ -71,8 +69,12 @@ class Keyring
     }
 
     /** Paramètre "UrlRegion"  
-    * FR = api.ovh.com
+    * FR = eu.api.ovh.com
     * CA = ca.api.ovh.com
+	* KIMSUFIFR = eu.api.kimsufi.com
+	* KIMSUFICA = ca.api.kimsufi.com
+	* SYSFR = eu.api.soyoustart.com
+	* SYSCA = ca.api.soyoustart.com
     */
     public static function setAppUrlRegion($Region){
 		self::$appUrlRegion = self::getUrlApi($Region);
@@ -84,13 +86,22 @@ class Keyring
 
 	public static function getUrlApi($Region){
 		if($Region == 'FR'){
-			return 'https://api.ovh.com/1.0/';
+			return 'https://eu.api.ovh.com/1.0/';
 		}
 		elseif($Region == 'CA'){
 			return 'https://ca.api.ovh.com/1.0/';
 		}
-		elseif($Region == 'CASYS') {
-			return 'https://ca.soyoustart.com/fr/manager/api/1.0/';
+		elseif($Region == 'KIMSUFIFR'){
+			return 'https://eu.api.kimsufi.com/1.0/';
+		}
+		elseif($Region == 'KIMSUFICA'){
+			return 'https://ca.api.kimsufi.com/1.0/';
+		}
+		elseif($Region == 'SYSFR'){
+			return 'https://eu.api.soyoustart.com/1.0/';
+		}
+		elseif($Region == 'KIMSUFICA'){
+			return 'https://ca.api.soyoustart.com/1.0/';
 		}
 	}
 }
