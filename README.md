@@ -57,10 +57,14 @@ require_once 'vendor/autoload.php';
 use \Ovh\Common\Ovh;
 
 // Populate your keyring
-/** RG : APPLICATION REGION
-* 'FR' => 'https://api.ovh.com/1.0/'
-* 'CA' => 'https://ca.api.ovh.com/1.0/'
-*/
+/** RG : APPLICATION REGION :
+ * FR = eu.api.ovh.com
+ * CA = ca.api.ovh.com
+ * KIMSUFIFR = eu.api.kimsufi.com
+ * KIMSUFICA = ca.api.kimsufi.com
+ * SYSFR = eu.api.soyoustart.com
+ * SYSCA = ca.api.soyoustart.com
+ */
 $config=array(
     'AK' => 'YOUR APPLICATION KEY',
     'AS' => 'YOUR APPLICATION SECRET',
