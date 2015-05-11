@@ -100,7 +100,7 @@ class Keyring{
 		elseif($Region == 'SYSFR'){
 			return 'https://eu.api.soyoustart.com/1.0/';
 		}
-		elseif($Region == 'KIMSUFICA'){
+		elseif($Region == 'SYSCA'){
 			return 'https://ca.api.soyoustart.com/1.0/';
 		}
 	}
