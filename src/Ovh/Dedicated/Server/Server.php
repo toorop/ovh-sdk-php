@@ -909,5 +909,14 @@ class Server
 		return "";
 	}
 	
-	
+	/*********** VRACK ***********/	
+	/**
+	* Get Serveur Vrack
+	* Ajout by @Thibautg16 le 17/05/2015
+	*
+	* @return String 
+	*/
+	public function getServerVrack(){
+		return json_decode(self::getClient()->getServerVrack($this->getDomain()));
+	}	
 }

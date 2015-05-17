@@ -1858,5 +1858,33 @@ class ServerClient extends AbstractClient
         return $r->getBody(true);
 	
 	}
+    
+	/*********** VRACK ***********/	
+	/**
+	* Get Server Vracks
+	* GET /dedicated/server/{serviceName}/vrack
+	*
+	* Ajout by @Thibautg16 le 17/05/2015
+	*
+	* @param string $domain -> Nom du Serveur 
+	*
+	* @throws Exception\ServerException
+	* @throws \Ovh\Common\Exception\BadMethodCallException
+	*
+	* @return String
+	*/
 	
+	public function getServerVrack($domain){
+        $domain = (string)$domain;
+        
+        if (!$domain)
+            throw new BadMethodCallException('Parameter $domain is missing.');
+        
+        try {
+            $r = $this->get('dedicated/server/' . $domain . '/vrack')->send();
+        } catch (\Exception $e) {
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }			
 }
