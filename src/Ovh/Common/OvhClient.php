@@ -2,6 +2,12 @@
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
+ * Authors :
+ *  - Stéphane Depierrepont (aka Toorop)
+ *  - Florian Jensen (aka flosoft) : https://github.com/flosoft
+ *  - Gillardeau Thibaut (aka Thibautg16)
+ *  - Scott Brown (aka Slartibardfast)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
@@ -14,6 +20,7 @@
  * permissions and limitations under the License.
  *
  * 2014-06-30 - Slartibardfast - extend for /dedicated/nasha and /ip
+ * 2015-05-22 - Thibautg16 - ajout "new" /cloud : http://www.ovh.com/fr/cloud/
  */
 
 namespace Ovh\Common;
@@ -123,6 +130,16 @@ class OvhClient extends AbstractClient {
        return $this->get('cloud')->send()->getBody(true);
     }
 
+    /**
+     * Get Cloud projects
+     *
+     * @return string projects (json encoded)
+     */
+    public function getCloudProjects()
+    {
+       return $this->get('cloud/project')->send()->getBody(true);
+    }
+	
 	/* 
 	* Get list of nasha devices
 	*

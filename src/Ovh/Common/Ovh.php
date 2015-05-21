@@ -20,6 +20,7 @@
  * permissions and limitations under the License.
  *
  * 2014-06-30 - Slartibardfast - extend for /dedicated/nasha and /ip
+ * 2015-05-22 - Thibautg16 - ajout "new" /cloud : http://www.ovh.com/fr/cloud/
  */
 
 namespace Ovh\Common;
@@ -317,6 +318,17 @@ class Ovh
         return json_decode(self::getOvhClient()->getCloudPassports());
     }
 
+    /**
+     * Return Cloud Services (cloud project)
+     * OVH Cloud : http://www.ovh.com/fr/cloud/
+     *
+     * @return array of services (project)
+     */
+    public function getCloudProjects()
+    {
+        return json_decode(self::getOvhClient()->getCloudProjects());
+    }
+    
     /**
      * Return a cloud instance
      *
