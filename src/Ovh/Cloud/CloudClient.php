@@ -2,7 +2,11 @@
 /**
  * Copyright 2013 Stéphane Depierrepont (aka Toorop)
  *
- * Licensed under the Apache License, Version 2.0 (the "License").
+ * Authors :
+ *  - Stéphane Depierrepont (aka Toorop)
+ *  - Gillardeau Thibaut (aka Thibautg16)
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
  *
@@ -12,9 +16,11 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * 2015-05-22 - Thibautg16 - ajout "new" /cloud : http://www.ovh.com/fr/cloud/
  */
 
-namespace ovh\Cloud;
+namespace Ovh\Cloud;
 
 use Ovh\Common\AbstractClient;
 use Ovh\Common\Exception\BadMethodCallException;
@@ -348,6 +354,163 @@ class CloudClient extends AbstractClient
         }
         return $r->getBody(true);
     }
+    
+    /***** OVH Cloud *****/
+    /**
+    * Get Project Properties
+    * GET /cloud/project/{serviceName}
+    *
+    * @return 
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getProjectProperties($serviceName){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        try {
+            $r = $this->get('cloud/project/'.$serviceName)->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+    
+    /**
+    * Delete Instances of Project Cloud Public
+    * DELETE /cloud/project/{serviceName}/instance/{instanceId}
+    *
+    * @return 
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function deleteInstance($serviceName, $idInstance){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        if (!$idInstance)
+            throw new BadMethodCallException('Missing parameter $idInstance (OVH Cloud Project Instance ID).');
+       
+       try {
+            $r = $this->delete('cloud/project/'.$serviceName.'/instance/'.$idInstance)->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }       
+    
+    /**
+    * POST Reboot Instance
+    * POST /cloud/project/{serviceName}/instance/{instanceId}/reboot
+    *
+    * @return null
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function postInstanceReboot($serviceName, $idInstance, $type='soft'){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        if (!$idInstance)
+            throw new BadMethodCallException('Missing parameter $idInstance (OVH Cloud Instance ID).');           
+        
+        $post = array(
+            'type' => $type
+		);
+         
+        try {
+            $r = $this->post('cloud/project/'.$serviceName.'/instance/'.$idInstance.'/reboot', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($post))->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
 
+    /**
+    * POST Snapshot Instance
+    * POST /cloud/project/{serviceName}/instance/{instanceId}/snapshot
+    *
+    * @return null
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function postInstanceSnapshot($serviceName, $idInstance, $snapshotName){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        if (!$idInstance)
+            throw new BadMethodCallException('Missing parameter $idInstance (OVH Cloud Instance ID).');           
+        if (!$snapshotName)
+            throw new BadMethodCallException('Missing parameter $snapshotName (OVH Cloud Instance Snapshot Name).');          
+        $post = array(
+            'snapshotName' => $snapshotName
+		);
+         
+        try {
+            $r = $this->post('cloud/project/'.$serviceName.'/instance/'.$idInstance.'/snapshot', array('Content-Type' => 'application/json;charset=UTF-8'), json_encode($post))->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }    
+    
+    /**
+    * Get Project Balance
+    * GET /cloud/project/{serviceName}/balance
+    *
+    * @return 
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getProjectBalance($serviceName){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        try {
+            $r = $this->get('cloud/project/'.$serviceName.'/balance')->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
 
+    /**
+    * Get Project Quota
+    * GET /cloud/project/{serviceName}/quota
+    *
+    * @return 
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getProjectQuota($serviceName){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        try {
+            $r = $this->get('cloud/project/'.$serviceName.'/quota')->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }
+                      
+    /**
+    * Get Instances of Project Cloud Public
+    * GET /cloud/project/{serviceName}/instance
+    *
+    * @return 
+    * @throws \Ovh\Cloud\Exception\CloudException
+    * @throws \Ovh\Common\Exception\BadMethodCallException
+    */
+    public function getProjectInstance($serviceName){
+        if (!$serviceName)
+            throw new BadMethodCallException('Missing parameter $serviceName (OVH Cloud Project).');
+        try {
+            $r = $this->get('cloud/project/'.$serviceName.'/instance')->send();
+        }
+        catch (\Exception $e) {
+            throw new CloudException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $r->getBody(true);
+    }       
 }
